@@ -29,27 +29,18 @@ public class TableListControl {
             sc.nextLine();
         }
         int id = 1;
-        Set<Integer> tableID = TableList.getList().keySet();
+        Set<Integer> tableID = TableList.getTableList().getList().keySet();
         while(tableID.contains(id)){
             id++;
         }
-        TableList.getList().put(id, new Table(maxPax, id));
+        TableList.getTableList().addTable(new Table(maxPax, id));
 
-        ReservationListControl.addTable(id);
+        ReservationList.getReservationList().addTable(id);
 
         saveTableList();
 
         System.out.println("Table (Pax: " + maxPax + ") has been added!");
         System.out.println();
-    }
-
-    /**
-     * Adds a table into the list.
-     * @param table the <code>Table</code> object to add.
-     */
-    public static void addTable(Table table){
-        TableList.getList().put(table.getTableId(), table);
-        saveTableList();
     }
 
     /**
@@ -70,7 +61,7 @@ public class TableListControl {
             System.out.println("Table is currently occupied!");
         }else{
             if(ReservationListControl.checkDelete(table.getTableId())){
-                TableList.getTableList().remove(table.getTableId());
+                TableList.getTableList().removeTable(table.getTableId());
                 saveTableList();
                 ReservationListControl.deleteTable(table.getTableId());
             }else{
@@ -87,7 +78,7 @@ public class TableListControl {
      * @return the <code>Table</code> object.
      */
     public static Table getTable(int ID) {
-        return TableList.getList().getOrDefault(ID, null);
+        return TableList.getTableList().getList().getOrDefault(ID, null);
     }
 
     public static void allocateTable(){
@@ -120,7 +111,7 @@ public class TableListControl {
      */
     public static Table chooseTable(int pax){
         Table allocated = null;
-        for(Table table : TableList.getList().values()){
+        for(Table table : TableList.getTableList().getList().values()){
             if(table.isOccupied()||table.isReserved()){
                 continue;
             }
@@ -147,7 +138,7 @@ public class TableListControl {
      * @return <code>true</code> if all tables are available, <code>false</code> otherwise.
      */
     public static boolean allEmpty() {
-        for(Table table : TableList.getList().values()){
+        for(Table table : TableList.getTableList().getList().values()){
             if(table.isOccupied()){
                 return false;
             }
@@ -188,7 +179,7 @@ public class TableListControl {
         int count = 0;
         System.out.println("=================Occupied Tables==================");
         System.out.printf("|| %-8s|| %-20s|| %-4s|| %-4s||\n", "Table ID", "Status", "Pax", "Size");
-        for (Table table : TableList.getList().values()){
+        for (Table table : TableList.getTableList().getList().values()){
             if (table.isOccupied()){
                 count++;
                 printBasicDetails(table);
@@ -207,10 +198,10 @@ public class TableListControl {
         updateTables();
         System.out.println("======================Tables======================");
         System.out.printf("|| %-8s|| %-20s|| %-4s|| %-4s||\n", "Table ID", "Status", "Pax", "Size");
-        for (Table table: TableList.getList().values()){
+        for (Table table: TableList.getTableList().getList().values()){
             printBasicDetails(table);
         }
-        if(TableList.getList().size()==0){
+        if(TableList.getTableList().size()==0){
             System.out.println("||    There are no tables in the restaurant     ||");
         }
         System.out.println("==================================================");
@@ -326,7 +317,7 @@ public class TableListControl {
      * Saves the list of tables.
      */
     public static void saveTableList(){
-        FileEditor.writeTables(TableList.getList());
+        FileEditor.writeTables(TableList.getTableList().getList());
     }
 
 

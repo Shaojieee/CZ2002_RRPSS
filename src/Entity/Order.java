@@ -68,4 +68,12 @@ public class Order{
     public double getTotalPrice() {
         return this.totalPrice;
     }
+
+    public void addToOrder(){
+
+    }
+
+    public void removeFromOrder(){
+
+    }
 }

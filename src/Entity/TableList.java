@@ -42,13 +42,20 @@ public class TableList {
         return tableList;
     }
 
-    public static HashMap<Integer,Table> getList(){
+    public HashMap<Integer,Table> getList(){
         return list;
     }
 
-    public void remove(int tableID){
+    public void removeTable(int tableID){
         list.remove(tableID);
     }
 
+    public void addTable(Table table) {
+        list.put(table.getTableId(), table);
+    }
+
+    public int size(){
+        return list.size();
+    }
 }
 

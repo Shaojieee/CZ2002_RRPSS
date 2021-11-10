@@ -2,9 +2,6 @@ package Control;
 
 import Entity.*;
 
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
-import java.time.format.DateTimeParseException;
 import java.util.Scanner;
 
 public class ManagerControl extends StaffControl{
@@ -48,7 +45,6 @@ public class ManagerControl extends StaffControl{
      */
     private static void editTable() {
         Scanner sc = new Scanner(System.in);
-        TableList tableList = TableList.getTableList();
         int choice=-1;
 
         while(choice != 0) {
@@ -91,8 +87,7 @@ public class ManagerControl extends StaffControl{
      */
     private static void editStaff(int staffID) {
         Scanner sc = new Scanner(System.in);
-        StaffList staffList = StaffList.getStaffList();
-        int choice=-1;
+        int choice;
 
         while(true) {
             System.out.println("=======Edit List of Staffs========");
@@ -155,53 +150,36 @@ public class ManagerControl extends StaffControl{
                         System.out.print("Please enter your choice: ");
                         choice = sc.nextInt();
                         sc.nextLine();
-                        if(choice == MenuControl.BACK_OPTION){
+                        if (choice == MenuControl.BACK_OPTION) {
                             break;
                         }
                         FoodType action = MenuControl.getMenuAction(choice, true);
 
-                        if (action==null) {
+                        if (action == null) {
                             System.out.println("Invalid Option!");
                             System.out.println();
-                        }else{
+                        } else {
                             MenuControl.editMenu(action);
                         }
-
+                    }
                 }
                 case 6 -> {
-                    while(true){
+                    while(true) {
                         System.out.println("========Deleting Food=========");
-                        menu.printMenu(true);
+                        MenuControl.printMenu(true);
                         System.out.print("Please enter your choice: ");
                         choice = sc.nextInt();
                         sc.nextLine();
-                        if(choice==Menu.BACK_OPTION){
+                        if (choice == MenuControl.BACK_OPTION) {
                             break;
                         }
-                        FoodType action = menu.getMenuAction(choice, true);
-                        if (action==null){
+                        FoodType action = MenuControl.getMenuAction(choice, true);
+                        if (action == null) {
                             System.out.println("Invalid Option");
                             System.out.println();
-                            continue;
-                        }
-                        while (true) {
-                            System.out.println("===================Deleting Food====================");
-                            menu.printCurrentMenu(action);
-                            System.out.print("Select Food ID to delete or " + Menu.BACK_OPTION + " to go back: ");
-                            /* In specific food type menu page */
-                            choice = sc.nextInt();
-                            sc.nextLine();
-                            if (choice == Menu.BACK_OPTION) {
-                                break;
-                            }
-                            Food food = menu.getFood(choice, action);
-                            if (food == null) {
-                                System.out.println("Invalid Option!");
-                            } else {
-                                menu.deleteFood(food);
-                                System.out.println(food.getName() + " has been removed!");
-                            }
-                            System.out.println();
+
+                        } else {
+                            MenuControl.deleteFood(action);
                         }
                     }
                 }
@@ -215,11 +193,5 @@ public class ManagerControl extends StaffControl{
             }
         }
     }
-
-    /**
-     * Edit promotion set.
-     * @param newSet the promotion set being edited.
-     */
-    private void editPromoSet(PromoSet newSet){
 
 }

@@ -30,9 +30,7 @@ public class ReservationListControl {
         int maxpax=100;
         int reservationIndex=0;
         int index;
-        boolean last = false;
         boolean available_now = true;
-        TableList tableList = TableList.getTableList();
         long time_from_now = LocalDateTime.now().until(time, ChronoUnit.MINUTES);
         if(time_from_now<=30){
             available_now = (TableListControl.chooseTable(pax) != null);
@@ -41,7 +39,7 @@ public class ReservationListControl {
             return;
         }
 
-        for(HashMap.Entry<Integer, ArrayList<Reservation>> item : ReservationList.getList().entrySet()){
+        for(HashMap.Entry<Integer, ArrayList<Reservation>> item : ReservationList.getReservationList().getList().entrySet()){
             table = TableListControl.getTable(item.getKey());
             if(table.getMaxPax()>=pax && maxpax>table.getMaxPax()) {
                 ArrayList<Reservation> reservations = item.getValue();
@@ -49,7 +47,6 @@ public class ReservationListControl {
                     maxpax = table.getMaxPax();
                     tableID = item.getKey();
                     reservationIndex=0;
-                    last = false;
                     continue;
                 }
 
@@ -67,7 +64,6 @@ public class ReservationListControl {
                         tableID = item.getKey();
                         maxpax = table.getMaxPax();
                         reservationIndex = index;
-                        last = true;
                     }
                 }else if(index==0){
                     minutes = time.until(reservations.get(0).getTime(), ChronoUnit.MINUTES);
@@ -75,7 +71,6 @@ public class ReservationListControl {
                         tableID = item.getKey();
                         maxpax = table.getMaxPax();
                         reservationIndex = index;
-                        last = false;
                     }
                 }else{
                     minutes = time.until(reservations.get(index).getTime(), ChronoUnit.MINUTES);
@@ -84,17 +79,12 @@ public class ReservationListControl {
                         tableID = item.getKey();
                         maxpax = table.getMaxPax();
                         reservationIndex = index;
-                        last = false;
                     }
                 }
             }
         }
         if(tableID!=-1){
-            if(last){
-                ReservationList.getList().get(tableID).add(new Reservation(name, phone, pax, tableID, time));
-            }else{
-                ReservationList.getList().get(tableID).add(reservationIndex, new Reservation(name, phone, pax, tableID, time));
-            }
+            ReservationList.getReservationList().addToReservations(reservationIndex,new Reservation(name, phone, pax, tableID, time));
             saveReservationList();
         }
 
@@ -110,7 +100,6 @@ public class ReservationListControl {
         updateTableStatus();
         boolean result= false;
         boolean available_now = true;
-        TableList tableList = TableList.getTableList();
         long time_from_now = LocalDateTime.now().until(time, ChronoUnit.MINUTES);
         if(time_from_now<=30){
             available_now = (TableListControl.chooseTable(pax) != null);
@@ -119,7 +108,7 @@ public class ReservationListControl {
             return false;
         }
 
-        for(HashMap.Entry<Integer, ArrayList<Reservation>> table : ReservationList.getList().entrySet()){
+        for(HashMap.Entry<Integer, ArrayList<Reservation>> table : ReservationList.getReservationList().getList().entrySet()){
             if(TableListControl.getTable(table.getKey()).getMaxPax()>=pax) {
                 ArrayList<Reservation> reservations = table.getValue();
                 if(reservations.size()==0) {
@@ -237,13 +226,12 @@ public class ReservationListControl {
 
         LocalDateTime date_time = LocalDateTime.of(date, time);
 
-        for(ArrayList<Reservation> reservations : ReservationList.getList().values()){
+        for(ArrayList<Reservation> reservations : ReservationList.getReservationList().getList().values()){
             for(Reservation reservation : reservations){
                 if(reservation.getCustomer().equals(name,phone) && reservation.getTime().isEqual(date_time)){
                     reservations.remove(reservation);
                     long minutes = LocalDateTime.now().until(reservation.getTime(), ChronoUnit.MINUTES);
                     if(minutes<30){
-                        TableList tableList = TableList.getTableList();
                         TableListControl.unreserve(TableListControl.getTable(reservation.getTableID()));
                     }
                     saveReservationList();
@@ -261,10 +249,9 @@ public class ReservationListControl {
      * Updates the status of the tables and deletes any reservations that have exceeded 15 minutes.
      */
     public static void updateTableStatus(){
-        TableList tableList = TableList.getTableList();
         ArrayList<Reservation> reservations;
         Table table;
-        for (HashMap.Entry<Integer, ArrayList<Reservation>> tables : ReservationList.getList().entrySet()){
+        for (HashMap.Entry<Integer, ArrayList<Reservation>> tables : ReservationList.getReservationList().getList().entrySet()){
             table = TableListControl.getTable(tables.getKey());
             if(tables.getValue().size()!=0){
                 reservations = tables.getValue();
@@ -275,7 +262,7 @@ public class ReservationListControl {
                 /* Customer late by 15 mins */
                 if (time_diff>15){
                     TableListControl.unreserve(table);
-                    reservations.remove(reservation);
+                    ReservationList.getReservationList().removeFromReservations(reservation);
 
                     /*Upcoming Reservation*/
                 }else if(time_diff>-30){
@@ -297,8 +284,6 @@ public class ReservationListControl {
 
     /**
      * Checks if there is a reservation under the provided name and phone number.
-     * @param name the name of the customer.
-     * @param phone the phone number of the customer.
      * @return <code>true</code> if there is valid reservation, <code>false</code> otherwise.
      */
     public static boolean checkReservation(){
@@ -327,7 +312,7 @@ public class ReservationListControl {
         }
 
 
-        for(HashMap.Entry<Integer, ArrayList<Reservation>> item : ReservationList.getList().entrySet()){
+        for(HashMap.Entry<Integer, ArrayList<Reservation>> item : ReservationList.getReservationList().getList().entrySet()){
             for (Reservation reservation : item.getValue()) {
                 if (reservation.getCustomer().equals(name, phone)){
                     Table table = TableListControl.getTable(reservation.getTableID());
@@ -335,7 +320,7 @@ public class ReservationListControl {
                     if(minutes>-30 && minutes<15){
                         if(!table.isOccupied()){
                             TableListControl.assign(table, reservation.getCustomer());
-                            ReservationList.remove(table.getTableId(),reservation);
+                            ReservationList.getReservationList().removeFromReservations(reservation);
                             System.out.println("Table " + table.getTableId() + " has been assigned to " + name + "!");
                             saveReservationList();
                         }else{
@@ -351,15 +336,6 @@ public class ReservationListControl {
     }
 
     /**
-     * Adds the table ID to the reservation list
-     * @param ID the ID of the table to be added.
-     */
-    public static void addTable(int ID){
-        ReservationList.getList().put(ID, new ArrayList<Reservation>());
-        saveReservationList();
-    }
-
-    /**
      * Checks whether the reservations under a table can be allocated to other tables.<br>
      * Used when checking if table can be deleted.
      * @param ID the table ID to check.
@@ -367,21 +343,20 @@ public class ReservationListControl {
      */
     public static boolean checkDelete(int ID){
         updateTableStatus();
-        ArrayList<Reservation> table_reservation = ReservationList.getList().get(ID);
-        ReservationList.getList().remove(ID);
-        TableList tableList = TableList.getTableList();
+        ArrayList<Reservation> table_reservation = ReservationList.getReservationList().getReservations(ID);
+        ReservationList.getReservationList().removeTable(ID);
         Table table = TableListControl.getTable(ID);
-        TableList.getTableList().remove(ID);
+        TableList.getTableList().removeTable(ID);
 
         for(Reservation reservation : table_reservation){
             if(!checkAvailability(reservation)){
-                TableListControl.addTable(table);
-                ReservationList.getList().put(ID, table_reservation);
+                TableList.getTableList().addTable(table);
+                ReservationList.getReservationList().addTable(ID, table_reservation);
                 return false;
             }
         }
-        TableListControl.addTable(table);
-        ReservationList.getList().put(ID, table_reservation);
+        TableList.getTableList().addTable(table);
+        ReservationList.getReservationList().addTable(ID, table_reservation);
         return true;
     }
 
@@ -393,7 +368,6 @@ public class ReservationListControl {
     private static boolean checkAvailability(Reservation cur_reservation){
         int pax = cur_reservation.getCustomer().getPax();
         LocalDateTime time = cur_reservation.getTime();
-        TableList tableList = TableList.getTableList();
         boolean result = false;
         boolean available_now = true;
         long time_from_now = LocalDateTime.now().until(time, ChronoUnit.MINUTES);
@@ -404,7 +378,7 @@ public class ReservationListControl {
             return false;
         }
 
-        for(HashMap.Entry<Integer, ArrayList<Reservation>> table : ReservationList.getList().entrySet()){
+        for(HashMap.Entry<Integer, ArrayList<Reservation>> table : ReservationList.getReservationList().getList().entrySet()){
             if(TableListControl.getTable(table.getKey()).getMaxPax()>=pax) {
                 ArrayList<Reservation> reservations = table.getValue();
                 if(reservations.size()==0) {
@@ -445,8 +419,8 @@ public class ReservationListControl {
      * @param ID the table ID to delete.
      */
     public static void deleteTable(int ID){
-        ArrayList<Reservation> table_reservation = ReservationList.getList().get(ID);
-        ReservationList.getList().remove(ID);
+        ArrayList<Reservation> table_reservation = ReservationList.getReservationList().getReservations(ID);
+        ReservationList.getReservationList().removeTable(ID);
         int pax;
         String name;
         int phone;
@@ -465,7 +439,7 @@ public class ReservationListControl {
      * Saves the list of reservations.
      */
     public static void saveReservationList(){
-        FileEditor.writeReservations(ReservationList.getList());
+        FileEditor.writeReservations(ReservationList.getReservationList().getList());
     }
 
     /**
@@ -473,7 +447,6 @@ public class ReservationListControl {
      */
     public static void printReservations(){
         Scanner sc = new Scanner(System.in);
-        ReservationList reservationList = ReservationList.getReservationList();
         updateTableStatus();
         ArrayList<Reservation> reservations = sortReservations();
         System.out.println("==========================Reservation List===========================");
@@ -508,7 +481,7 @@ public class ReservationListControl {
     private static ArrayList<Reservation> sortReservations(){
         ArrayList<Reservation> reservations = new ArrayList<Reservation>();
 
-        for(ArrayList<Reservation> cur : ReservationList.getList().values()){
+        for(ArrayList<Reservation> cur : ReservationList.getReservationList().getList().values()){
             reservations.addAll(cur);
         }
         reservations.sort((Reservation x, Reservation y) -> x.getTime().isAfter(y.getTime()) ? 1 : -1);
@@ -608,7 +581,7 @@ public class ReservationListControl {
             }
         }
 
-        ReservationListControl.addReservation(name, phone, pax, date_time);
+        addReservation(name, phone, pax, date_time);
         System.out.println("Reservation for " + name + " at " + time_str + " on " + date_str + " has been recorded!");
         System.out.println();
     }

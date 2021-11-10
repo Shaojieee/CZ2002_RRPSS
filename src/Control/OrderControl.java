@@ -16,18 +16,8 @@ public class OrderControl {
     public static final int BACK_OPTION = 0;
 
 
-
-    public static void createOrder(Staff staff, Table table){
-        Scanner sc = new Scanner(System.in);
-        int choice;
-
-    }
-
     /**
      * Adds food items into this order.
-     * @param newOrder
-     * @param food the food item to add.
-     * @param quantity the quantity to add.
      */
     public static void addFood(Order order) {
         Scanner sc = new Scanner(System.in);
@@ -98,8 +88,6 @@ public class OrderControl {
 
     /**
      * Removes food item from this order.
-     * @param food the food item to remove.
-     * @param quantity the quantity to remove.
      */
     public static void removeFood(Order order) {
         Scanner sc = new Scanner(System.in);
@@ -157,7 +145,6 @@ public class OrderControl {
 
     /**
      * Checks if the food item is in this order.
-     *
      * @param order
      * @param food the food item to check.
      * @return <code>true</code> if the food item is in this order, <code>false</code> otherwise.
@@ -231,8 +218,6 @@ public class OrderControl {
      * @param member the membership status of the customer associated to this order.
      */
     public static void printInvoice(Order order, int tableID, boolean member) {
-
-
         System.out.println("=========================Invoice==========================");
         System.out.printf("|| %-25s|| %-25s||\n", "Date: " + LocalDate.now().format(DateTimeFormatter.ofPattern("dd MMM yyyy")), "Time: " + LocalTime.now().format(DateTimeFormatter.ofPattern("HH:mm")));
         System.out.printf("|| %-25s|| %-25s||\n", "Served by: " + order.getStaff().getName(), "Table ID: " + tableID);

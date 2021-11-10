@@ -28,7 +28,7 @@ public class ReservationList {
      * This constructor defines the list of reservations.
      */
     private ReservationList(){
-        this.list = FileEditor.loadReservations();
+        list = FileEditor.loadReservations();
     }
 
     /**
@@ -42,10 +42,34 @@ public class ReservationList {
         return reservationList;
     }
 
-    public static HashMap<Integer,ArrayList<Reservation>> getList(){ return list;}
+    public HashMap<Integer,ArrayList<Reservation>> getList(){ return list;}
 
-    public static void remove(int tableID, Reservation reservation) {
-        list.remove(tableID, reservation);
+    public void removeFromReservations(Reservation reservation) {
+        list.remove(reservation.getTableID(), reservation);
+    }
+
+    public void addToReservations(int index, Reservation reservation){
+        if(index == list.get(reservation.getTableID()).size()){
+            list.get(reservation.getTableID()).add(reservation);
+        }else{
+            list.get(reservation.getTableID()).add(index, reservation);
+        }
+    }
+
+    public void removeTable(int tableID){
+        list.remove(tableID);
+    }
+
+    public void addTable(int tableID){
+        list.put(tableID, new ArrayList<Reservation>());
+    }
+
+    public void addTable(int tableID, ArrayList<Reservation> reservations){
+        list.put(tableID, reservations);
+    }
+
+    public ArrayList<Reservation> getReservations(int tableID) {
+        return list.get(tableID);
     }
 }
 

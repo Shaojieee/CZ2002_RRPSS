@@ -64,7 +64,6 @@ public class Menu {
         return menu;
     }
 
-
     public HashMap<Integer, Food> getMainCourse() {
         return this.mainCourse;
     }
@@ -81,7 +80,8 @@ public class Menu {
         return promoSet;
     }
 
-    public void addToMenu(FoodType type, Food food){
+    public void addToMenu(Food food){
+        FoodType type = food.getFoodType();
         if (type==FoodType.DESSERT){
             desserts.put(food.getId(), food);
         }else if(type==FoodType.DRINK){
@@ -90,6 +90,19 @@ public class Menu {
             mainCourse.put(food.getId(), food);
         }else{
             promoSet.put(food.getId(), (PromoSet) food);
+        }
+    }
+
+    public void removeFromMenu(Food food){
+        FoodType type = food.getFoodType();
+        if (type==FoodType.DESSERT){
+            desserts.remove(food.getId(), food);
+        }else if(type==FoodType.DRINK){
+            drinks.remove(food.getId(), food);
+        }else if(type==FoodType.MAINCOURSE){
+            mainCourse.remove(food.getId(), food);
+        }else{
+            promoSet.remove(food.getId(), (PromoSet) food);
         }
     }
 }

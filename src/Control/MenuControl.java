@@ -29,8 +29,7 @@ public class MenuControl {
             System.out.println("|2. Remove Food          |" );
             System.out.println("|3. Set Price            |" );
             System.out.println("|4. View Set             |" );
-            System.out.println("|5. Save Set             |" );
-            System.out.println("|0. Back                 |");
+            System.out.println("|0. Back                 |" );
             System.out.println("==========================");
             System.out.print("Please enter your choice: ");
             choice = sc.nextInt();
@@ -77,7 +76,7 @@ public class MenuControl {
                                 System.out.println(quantity + " " + food.getName() + " has been added!");
                                 System.out.println();
                                 System.out.println("====================================================");
-                                newSet.printFood();
+                                printPromoSet(newSet);
                             }
                             System.out.println();
 
@@ -142,7 +141,7 @@ public class MenuControl {
                     sc.nextLine();
                     System.out.println();
                 }
-                case 5->{
+                case 0->{
                     boolean test = true;
                     if(newSet.getSize()==0){
                         test=false;
@@ -157,9 +156,6 @@ public class MenuControl {
                     }else{
                         System.out.println();
                     }
-                }
-                case 0 ->{
-                    return null;
                 }
                 default->{
                     System.out.println("Invalid Option!");
@@ -189,11 +185,6 @@ public class MenuControl {
         Food food;
         if(type==FoodType.PROMOTIONSET){
             food = editPromoSet(new PromoSet(name, newFoodID()));
-            if(food==null){
-                System.out.println(name+ " not added into menu!");
-                System.out.println();
-                return;
-            }
         }else{
             System.out.print("Enter Price: ");
             double price = sc.nextDouble();
@@ -207,7 +198,7 @@ public class MenuControl {
             food = new Food(name, Math.round(price*100.0)/100.0, newFoodID(), type);
 
         }
-        Menu.getMenu().addToMenu(type, food);
+        Menu.getMenu().addToMenu(food);
         saveMenu();
 
         System.out.println(name + " has been add to " + type + "!");
@@ -217,23 +208,33 @@ public class MenuControl {
 
     /**
      * Removes the food item from this menu.
-     * @param food the food item to remove.
      */
-    public static void deleteFood(Food food){
-        Menu menu = Menu.getMenu();
-        int ID = food.getId();
-        FoodType type = food.getFoodType();
-        if (type==FoodType.DESSERT){
-            menu.getDesserts().remove(ID);
-        }else if(type==FoodType.DRINK){
-            menu.getDrinks().remove(ID);
-        }else if(type==FoodType.MAINCOURSE){
-            menu.getMainCourse().remove(ID);
-        }else{
-            menu.getPromoSet().remove(ID);
+    public static void deleteFood(FoodType type){
+        Scanner sc = new Scanner(System.in);
+        int choice;
+        while (true) {
+            System.out.println("===================Deleting Food====================");
+            printCurrentMenu(type);
+            System.out.print("Select Food ID to delete or " + BACK_OPTION + " to go back: ");
+            /* In specific food type menu page */
+            choice = sc.nextInt();
+            sc.nextLine();
+            if (choice == BACK_OPTION) {
+                break;
+            }
+            Food food = getFood(choice, type);
+            if (food == null) {
+                System.out.println("Invalid Option!");
+            } else {
+                Menu.getMenu().removeFromMenu(food);
+                saveMenu();
+                System.out.println(food.getName() + " has been removed!");
+            }
+            System.out.println();
         }
-        saveMenu();
     }
+
+
 
     public static void editMenu(FoodType type){
         Scanner sc = new Scanner(System.in);
@@ -303,11 +304,9 @@ public class MenuControl {
                     }
                 }
             }else{
-                PromoSet set = editPromoSet((PromoSet) food);
+                editPromoSet((PromoSet) food);
             }
         }
-    }
-
     }
 
     /**
@@ -354,7 +353,7 @@ public class MenuControl {
         System.out.println("====================Main Course=====================");
         System.out.printf("|| %-3s|| %-30s|| %-8s||\n", "ID", "Name", "Price");
         for(HashMap.Entry<Integer, Food> item : mainCourse.entrySet()){
-            item.getValue().printFood();
+            printFood(item.getValue());
         }
         System.out.println("====================================================");
     }
@@ -367,7 +366,7 @@ public class MenuControl {
         System.out.println("=======================Drinks=======================");
         System.out.printf("|| %-3s|| %-30s|| %-8s||\n", "ID", "Name", "Price");
         for(HashMap.Entry<Integer, Food> item : drinks.entrySet()){
-            item.getValue().printFood();
+            printFood(item.getValue());
         }
         System.out.println("====================================================");
     }
@@ -380,7 +379,7 @@ public class MenuControl {
         System.out.println("======================Desserts======================");
         System.out.printf("|| %-3s|| %-30s|| %-8s||\n", "ID", "Name", "Price");
         for(HashMap.Entry<Integer, Food> item : desserts.entrySet()){
-            item.getValue().printFood();
+            printFood(item.getValue());
         }
         System.out.println("====================================================");
     }
@@ -394,7 +393,7 @@ public class MenuControl {
         System.out.printf("|| %-3s|| %-30s|| %-8s||\n", "ID", "Name", "Price");
 
         for(HashMap.Entry<Integer, PromoSet> set : promoSet.entrySet()){
-            set.getValue().printFood();
+            printPromoSet(set.getValue());
         }
         System.out.println("====================================================");
     }
@@ -423,6 +422,10 @@ public class MenuControl {
             System.out.printf("|| %-6s%3s   %-35s||\n", "", item.getValue(), item.getKey().getName());
         }
         System.out.println("====================================================");
+    }
+
+    public static void printFood(Food food){
+        System.out.printf("|| %-3s|| %-30s|| %-8s||\n", food.getId(), food.getName(), "$"+String.format("%.2f",food.getPrice()));
     }
 
     /**
