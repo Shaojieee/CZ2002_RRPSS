@@ -58,5 +58,13 @@ public class StaffList {
         System.out.println("===================================================");
     }
 
+    public void add(Staff staff){
+        list.put(staff.getID(), staff);
+    }
+
+    public void remove(int staffID){
+        list.remove(staffID);
+    }
+
 }
 

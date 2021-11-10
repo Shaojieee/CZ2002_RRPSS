@@ -10,13 +10,26 @@ import java.util.Scanner;
 import java.util.Set;
 
 public class TableListControl {
-    private static final int BACK_OPTION =0 ;
+
+
+    public static final int BACK_OPTION =0 ;
 
     /**
      * Create a new <code>Table</code> and adds it to the list.
      * @param maxPax the maximum number of people the new table can accommodate.
      */
-    public static void addTable(int maxPax){
+    public static void addTable(){
+        Scanner sc = new Scanner(System.in);
+        int maxPax;
+        System.out.print("Enter number of pax: ");
+        maxPax = sc.nextInt();
+        sc.nextLine();
+        while(maxPax%2!=0 || maxPax<2 || maxPax>10){
+            System.out.println("Invalid Pax");
+            System.out.print("Enter number of pax: ");
+            maxPax = sc.nextInt();
+            sc.nextLine();
+        }
         int id = 1;
         Set<Integer> tableID = TableList.getList().keySet();
         while(tableID.contains(id)){
@@ -24,9 +37,12 @@ public class TableListControl {
         }
         TableList.getList().put(id, new Table(maxPax, id));
 
-        ReservationListControl.getReservationList().addTable(id);
+        ReservationListControl.addTable(id);
 
         saveTableList();
+
+        System.out.println("Table (Pax: " + maxPax + ") has been added!");
+        System.out.println();
     }
 
     /**
@@ -42,9 +58,31 @@ public class TableListControl {
      * Remove table from the list according to the ID.
      * @param id the ID of the table to remove.
      */
-    public static void deleteTable(int id){
-        TableList.getList().remove(id);
-        saveTableList();
+    public static void deleteTable(){
+        Scanner sc = new Scanner(System.in);
+        int choice;
+        printAllTables();
+        System.out.print("Enter Table ID to delete: ");
+        choice = sc.nextInt();
+        sc.nextLine();
+        Table table = getTable(choice);
+        if(table==null){
+            System.out.println("Invalid Option!");
+            System.out.println();
+        }else if(table.isOccupied()){
+            System.out.println("Table is currently occupied!");
+        }else{
+            ReservationList reservationList = ReservationList.getReservationList();
+            if(ReservationListControl.checkDelete(table.getTableId())){
+                TableList.getTableList().remove(table.getTableId());
+                saveTableList();
+                ReservationListControl.deleteTable(table.getTableId());
+            }else{
+                System.out.println("Unable to delete table as there will be unallocated reservations!");
+            }
+        }
+        System.out.println();
+
     }
 
     /**
@@ -82,14 +120,7 @@ public class TableListControl {
      * Updates the status of the reservation according to the current time.
      */
     private static void updateTables(){
-        ReservationListControl.getReservationList().updateTableStatus();
-    }
-
-    /**
-     * Saves the list of tables.
-     */
-    public static void saveTableList(){
-        FileEditor.writeTables(TableList.getList());
+        ReservationListControl.updateTableStatus();
     }
 
     /**
@@ -130,7 +161,6 @@ public class TableListControl {
         }
     }
 
-
     /**
      * Prints the list of occupied tables.
      */
@@ -168,6 +198,33 @@ public class TableListControl {
     }
 
     /**
+     * Prints the invoice for this table.
+     * @param member <code>true</code> if customer is a member, <code>false</code> otherwise.
+     */
+    public static void generateInvoice(Table table,boolean member) {
+        if (table.getOrder()==null){
+            System.out.println("No order taken");
+        }else{
+            OrderControl.printInvoice(table.getOrder(),table.getTableId(), member);
+        }
+
+    }
+
+    /**
+     * Prints the basic details this table.
+     */
+    public static void printBasicDetails(Table table) {
+        if (table.isOccupied()){
+            System.out.printf("|| %-8s|| %-20s|| %-4s|| %-4s||\n", table.getTableId(), "Occupied", table.getPax(), table.getMaxPax());
+        }else if(table.isReserved()){
+            System.out.printf("|| %-8s|| %-20s|| %-4s|| %-4s||\n", table.getTableId(), "Reserved at " + table.getReservedTime().toLocalTime(),table.getPax(), table.getMaxPax());
+        }else{
+            System.out.printf("|| %-8s|| %-20s|| %-4s|| %-4s||\n", table.getTableId(), "Available", "-", table.getMaxPax());
+        }
+
+    }
+
+    /**
      * Prints more in-depth detail of the specified table.
      * @param table Contains the detail of the table to be printed.
      */
@@ -194,40 +251,12 @@ public class TableListControl {
             String time_str = time_format.format(time);
             System.out.println("||Status: Reserved                                      ||\n");
             System.out.printf("|| Date: %-11s Time: %-5s%-24s||\n", date_str, time_str, "");
-            System.out.printf("|| Name: %-15s Contact: %-10s Pax: %-2s%4s||\n",table.getCustomer().getName(), table.getCustomer().getPhone(), table.getPax());
+            System.out.printf("|| Name: %-15s Contact: %-10s Pax: %-2s%4s||\n",table.getCustomer().getName(), table.getCustomer().getPhone(), table.getPax(), "");
         }else{
-            System.out.printf("|| Status: %-20s Maximum Pax: %-4s%31s||\n", table.getTableId(), "Available", "-", table.getMaxPax(), "");
+            System.out.printf("|| Status: %-20s Maximum Pax: %-4s%31s||\n", "Available", table.getMaxPax(), "");
 
         }
         System.out.println("==========================================================");
-    }
-
-
-    /**
-     * Prints the invoice for this table.
-     * @param member <code>true</code> if customer is a member, <code>false</code> otherwise.
-     */
-    public static void generateInvoice(Table table,boolean member) {
-        if (table.getOrder()==null){
-            System.out.println("No order taken");
-        }else{
-            OrderControl.printInvoice(table.getOrder(),table.getTableId(), member);
-        }
-
-    }
-
-    /**
-     * Prints the basic details this table.
-     */
-    public static void printBasicDetails(Table table) {
-        if (table.isOccupied()){
-            System.out.printf("|| %-8s|| %-20s|| %-4s|| %-4s||\n", table.getTableId(), "Occupied", table.getPax(), table.getMaxPax());
-        }else if(table.isReserved()){
-            System.out.printf("|| %-8s|| %-20s|| %-4s|| %-4s||\n", table.getTableId(), "Reserved at " + table.getReservedTime().toLocalTime(),table.getPax(), table.getMaxPax());
-        }else{
-            System.out.printf("|| %-8s|| %-20s|| %-4s|| %-4s||\n", table.getTableId(), "Available", "-", table.getMaxPax());
-        }
-
     }
 
     /**
@@ -272,6 +301,13 @@ public class TableListControl {
         table.setCustomer(null);
         table.setOrder(null);
         table.setPax(0);
+    }
+
+    /**
+     * Saves the list of tables.
+     */
+    public static void saveTableList(){
+        FileEditor.writeTables(TableList.getList());
     }
 
 

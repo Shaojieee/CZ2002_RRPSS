@@ -6,10 +6,8 @@ import Entity.SalesReport;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.HashMap;
+import java.time.format.DateTimeParseException;
+import java.util.*;
 
 public class SalesReportControl {
 
@@ -47,22 +45,82 @@ public class SalesReportControl {
     /**
      * Prints the sales report according to the specified period.
      * Will not print days that have no recorded sales.
-     * @param start the start date of the sales report.
-     * @param end the end date of the sales report (inclusive).
-     * @param day <code>true</code> if print by day, <code>false</code> if print by month.
      */
-    public static void printRevenue(LocalDate start, LocalDate end, boolean day) {
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd MMM yyyy");
+    public static void printRevenue() {
+        Scanner sc = new Scanner(System.in);
+        int choice;
+        while(true){
+            System.out.println("==Generate Sales Report==");
+            System.out.println("|1. By Month            |");
+            System.out.println("|2. By Day              |");
+            System.out.println("|0. Back                |");
+            System.out.println("=========================");
+            System.out.print("Please enter your choice: ");
+            choice = sc.nextInt();
+            sc.nextLine();
 
-        String start_str = formatter.format(start);
-        String end_str = formatter.format(end);
+            switch(choice){
+                case 1 ->{
+                    try{
+                        System.out.print("Enter the start month (mm/yyyy): ");
+                        String start_str = sc.nextLine();
+                        System.out.print("Enter the end month(inclusive) (mm/yyyy): ");
+                        String end_str = sc.nextLine();
+                        DateTimeFormatter format = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+                        LocalDate start = LocalDate.parse("01/"+start_str, format);
+                        LocalDate end = LocalDate.parse("01/"+end_str, format);
+                        int last_day = end.lengthOfMonth();
+                        end = LocalDate.parse(last_day+"/"+end_str, format);
 
-        ArrayList<String> keys = sortCalendar(start_str, end_str);
+                        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd MMM yyyy");
 
-        if (day){
-            printRevenueByDay(keys, start_str, end_str);
-        }else{
-            printRevenueByMonth(keys, start_str, end_str);
+                        start_str = formatter.format(start);
+                        end_str = formatter.format(end);
+                        ArrayList<String> keys = sortCalendar(start_str, end_str);
+
+                        printRevenueByDay(keys, start_str, end_str);
+                        System.out.print("Press any key to back ");
+                        sc.nextLine();
+
+                    }catch(DateTimeParseException e){
+                        System.out.println("Invalid Format!");
+                        System.out.println();
+                    }
+                }
+                case 2->{
+                    try{
+                        System.out.print("Enter the start date (dd/mm/yyyy): ");
+                        String start_str = sc.nextLine();
+                        System.out.print("Enter the end date(inclusive) (dd/mm/yyyy): ");
+                        String end_str = sc.nextLine();
+                        DateTimeFormatter format = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+                        LocalDate start = LocalDate.parse(start_str, format);
+                        LocalDate end = LocalDate.parse(end_str, format);
+
+                        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd MMM yyyy");
+
+                        start_str = formatter.format(start);
+                        end_str = formatter.format(end);
+                        ArrayList<String> keys = sortCalendar(start_str, end_str);
+
+                        printRevenueByMonth(keys, start_str, end_str);
+                        System.out.print("Press any key to back ");
+                        sc.nextLine();
+
+                    }catch(DateTimeParseException e){
+                        System.out.println("Invalid Format!");
+                        System.out.println();
+                    }
+                }
+                case 0 -> {
+                    return;
+                }
+                default -> {
+                    System.out.println("Invalid Option!");
+                    System.out.println();
+                }
+            }
+
         }
     }
 

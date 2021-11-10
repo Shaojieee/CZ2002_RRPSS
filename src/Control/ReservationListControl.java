@@ -346,7 +346,7 @@ public class ReservationListControl {
      * Adds the table ID to the reservation list
      * @param ID the ID of the table to be added.
      */
-    public void addTable(int ID){
+    public static void addTable(int ID){
         ReservationList.getList().put(ID, new ArrayList<Reservation>());
         saveReservationList();
     }
@@ -357,13 +357,13 @@ public class ReservationListControl {
      * @param ID the table ID to check.
      * @return <code>true</code> if all the reservations can be allocated to other tables, <code>false</code> otherwise.
      */
-    public boolean checkDelete(int ID){
+    public static boolean checkDelete(int ID){
         updateTableStatus();
         ArrayList<Reservation> table_reservation = ReservationList.getList().get(ID);
         ReservationList.getList().remove(ID);
         TableList tableList = TableList.getTableList();
         Table table = TableListControl.getTable(ID);
-        TableListControl.deleteTable(ID);
+        TableList.getTableList().remove(ID);
 
         for(Reservation reservation : table_reservation){
             if(!checkAvailability(reservation)){
@@ -382,7 +382,7 @@ public class ReservationListControl {
      * @param cur_reservation the reservation to check.
      * @return <code>true</code> if the reservation can be allocated, <code>false</code> otherwise.
      */
-    private boolean checkAvailability(Reservation cur_reservation){
+    private static boolean checkAvailability(Reservation cur_reservation){
         int pax = cur_reservation.getCustomer().getPax();
         LocalDateTime time = cur_reservation.getTime();
         TableList tableList = TableList.getTableList();
@@ -436,7 +436,7 @@ public class ReservationListControl {
      * The existing reservations under the table will be transferred to other tables.
      * @param ID the table ID to delete.
      */
-    public void deleteTable(int ID){
+    public static void deleteTable(int ID){
         ArrayList<Reservation> table_reservation = ReservationList.getList().get(ID);
         ReservationList.getList().remove(ID);
         int pax;

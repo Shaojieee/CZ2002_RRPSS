@@ -12,7 +12,6 @@ import java.util.Set;
 public class TableList {
 
 
-
     /**
      * The HashMap containing the tables.
      * Key is the Table ID. Value is the <code>Table</code> object.
@@ -29,7 +28,7 @@ public class TableList {
      * Loads the tables' data into the HashMap.
      */
     private TableList(){
-        this.list = FileEditor.loadTables();
+        list = FileEditor.loadTables();
     }
 
     /**
@@ -45,6 +44,10 @@ public class TableList {
 
     public static HashMap<Integer,Table> getList(){
         return list;
+    }
+
+    public void remove(int tableID){
+        list.remove(tableID);
     }
 
 }
