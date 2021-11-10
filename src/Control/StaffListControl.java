@@ -1,6 +1,5 @@
 package Control;
 
-import Boundary.StaffListBoundary;
 import Entity.Role;
 import Entity.Staff;
 import Entity.StaffList;
@@ -17,42 +16,47 @@ public class StaffListControl {
         StaffList.getStaffList().printStaffList();
     }
 
-    public static void performActions(int staffID){
+    /**
+     * Add or remove staffs from the restaurant.
+     * This manager will not be able to remove himself.
+     */
+    public static void editStaff(int staffID) {
         Scanner sc = new Scanner(System.in);
-        Role role = StaffList.getStaffList().getRole(staffID);
         int choice;
-        boolean exit = false;
-        if(role==Role.Manager){
-            do{
-                StaffListBoundary.printManagerActions();
-                if(!sc.hasNextInt()){
-                    System.out.println("Please enter a number!");
-                    System.out.println();
-                    sc.nextLine();
-                }else{
-                    choice = sc.nextInt();
-                    sc.nextLine();
-                    exit = ManagerControl.getAction(choice,staffID);
-                }
-            }while(!exit);
 
-        }else if(role == Role.Staff){
-
-            do{
-                StaffListBoundary.printStaffActions();
-                if(!sc.hasNextInt()){
-                    System.out.println("Please enter a number!");
-                    System.out.println();
-                    sc.nextLine();
-                }else{
-                    choice = sc.nextInt();
-                    sc.nextLine();
-                    exit = StaffControl.getAction(choice, staffID);
+        while(true) {
+            System.out.println("=======Edit List of Staffs========");
+            System.out.println("|1. Add Staff                    |");
+            System.out.println("|2. Delete Staff                 |");
+            System.out.println("|3. Print Current Staff Details  |");
+            System.out.println("|0. Back                         |");
+            System.out.println("==================================");
+            System.out.print("Please enter your choice: ");
+            if(!sc.hasNextInt()){
+                System.out.println("Please enter a number!");
+                System.out.println();
+                sc.nextLine();
+            }else {
+                choice = sc.nextInt();
+                sc.nextLine();
+                switch (choice) {
+                    case 1 -> addStaff();
+                    case 2 -> removeStaff(staffID);
+                    case 3 -> {
+                        printStaffList();
+                        System.out.print("Press any key to go back ");
+                        sc.nextLine();
+                        System.out.println();
+                    }
+                    case 0 -> {
+                        return;
+                    }
+                    default -> {
+                        System.out.println("Invalid Option!");
+                        System.out.println();
+                    }
                 }
-            }while(!exit);
-        }else{
-            System.out.println("Invalid Option!");
-            System.out.println();
+            }
         }
     }
 
@@ -185,5 +189,52 @@ public class StaffListControl {
 
     public static void saveStaffList(){
         FileEditor.writeStaff(StaffList.getStaffList().getList());
+    }
+
+    public static Role getAction(int staffID) {
+        Role role;
+        if(StaffList.getStaffList().getList().containsKey(staffID)){
+            role = StaffList.getStaffList().getRole(staffID);
+        }else{
+            role = null;
+        }
+
+        if(role==Role.Staff){
+            System.out.println("=============Welcome=============");
+            System.out.println("|1. Take Order                  |");
+            System.out.println("|2. Clear Table                 |");
+            System.out.println("|3. Create Reservation          |");
+            System.out.println("|4. Delete Reservation          |");
+            System.out.println("|5. Print Reservation List      |");
+            System.out.println("|6. Check Table Details         |");
+            System.out.println("|7. Allocate Table              |");
+            System.out.println("|8. Edit Member List            |");
+            System.out.println("|9. Close Shop                  |");
+            System.out.println("|10. Log Out                    |");
+            System.out.println("=================================");
+            System.out.print("Please enter your choice: ");
+        }else if (role == Role.Manager){
+            System.out.println("=============Welcome=============");
+            System.out.println("|1. Take Order                  |");
+            System.out.println("|2. Clear Table                 |");
+            System.out.println("|3. Create Reservation          |");
+            System.out.println("|4. Delete Reservation          |");
+            System.out.println("|5. Print Reservation List      |");
+            System.out.println("|6. Check Table Details         |");
+            System.out.println("|7. Allocate Table              |");
+            System.out.println("|8. Edit Member List            |");
+            System.out.println("|9. Edit Menu                   |");
+            System.out.println("|10. Edit Staff List            |");
+            System.out.println("|11. Edit Table List            |");
+            System.out.println("|12. Generate Sales Report      |");
+            System.out.println("|13. Close Shop                 |");
+            System.out.println("|14. Log Out                    |");
+            System.out.println("=================================");
+            System.out.print("Please enter your choice: ");
+        }else{
+            System.out.println("Invalid Option!");
+            System.out.println();
+        }
+        return role;
     }
 }

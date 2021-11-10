@@ -16,6 +16,112 @@ public class OrderControl {
     public static final int BACK_OPTION = 0;
 
 
+
+    /**
+     * Creates an order for the chosen table.<br>
+     * Add or remove food from the order.
+     */
+    public static void createOrder(int staffID){
+        Scanner sc = new Scanner(System.in);
+        int choice;
+        Table table;
+
+        if(LocalTime.now().isAfter(LocalTime.of(20,40))){
+            System.out.println("Sorry kitchen has closed!");
+            System.out.println();
+            return;
+        }
+
+        /* Choosing table to take order */
+        while(true){
+            System.out.println("==================Creating Order==================");
+            TableListControl.printOccupied();
+            System.out.print("Select Table ID or " + TableListControl.BACK_OPTION + " to go back: ");
+            if(!sc.hasNextInt()){
+                System.out.println("Please enter a number!");
+                System.out.println();
+                sc.nextLine();
+                continue;
+            }else {
+                choice = sc.nextInt();
+                sc.nextLine();
+            }
+            if (choice == TableListControl.BACK_OPTION){
+                return;
+            }
+            table = TableListControl.getTable(choice);
+            if (table==null){
+                System.out.println("Invalid Option!");
+                System.out.println();
+            } else if (table.isOccupied()){
+                break;
+            }else{
+                System.out.println("Invalid Option!");
+                System.out.println();
+            }
+        }
+        Staff staff = StaffListControl.getStaff(staffID);
+        Order newOrder = new Order(staff);
+
+        /* Taking order */
+        while(true) {
+            System.out.println("=======Creating Order=======");
+            System.out.println("|1. Add Food               |");
+            System.out.println("|2. Remove Food            |");
+            System.out.println("|3. View Order             |");
+            System.out.println("|4. Send Order             |");
+            System.out.println("|0. Back                   |");
+            System.out.println("============================");
+            System.out.print("Please enter your choice: ");
+            if(!sc.hasNextInt()){
+                System.out.println("Please enter a number!");
+                System.out.println();
+                sc.nextLine();
+                continue;
+            }else {
+                choice = sc.nextInt();
+                sc.nextLine();
+            }
+            switch(choice){
+                case 1-> OrderControl.addFood(newOrder);
+                case 2-> OrderControl.removeFood(newOrder);
+                case 3->{
+                    OrderControl.printOrder(newOrder);
+                    System.out.print("Press any key to go back ");
+                    sc.nextLine();
+                    System.out.println();
+                }
+                case 4-> {
+                    if (newOrder.getSize()==0){
+                        System.out.println("Order has no item! Unable to submit order!");
+                        System.out.println();
+                        break;
+                    }
+
+                    if (table.hasOrder()){
+                        OrderControl.appendOrder(table.getOrder(), newOrder);
+                    }else{
+                        table.setOrder(newOrder);
+                    }
+
+                    System.out.println("Order has been successfully submitted!");
+                    System.out.println();
+                    return;
+                }
+                case 0->{
+                    System.out.println("Order not submitted!");
+                    System.out.println();
+                    return;
+                }
+                default->{
+                    System.out.println("Invalid Option!");
+                    System.out.println();
+                }
+            }
+        }
+
+    }
+
     /**
      * Adds food items into this order.
      */

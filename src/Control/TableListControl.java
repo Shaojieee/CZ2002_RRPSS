@@ -5,6 +5,7 @@ import Entity.*;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
+import java.util.InputMismatchException;
 import java.util.Scanner;
 import java.util.Set;
 
@@ -12,6 +13,53 @@ public class TableListControl {
 
 
     public static final int BACK_OPTION =0 ;
+
+
+    /**
+     * Add or remove tables from the restaurant.
+     */
+    public static void editTable() {
+        Scanner sc = new Scanner(System.in);
+        int choice=-1;
+
+        while(choice != 0) {
+            System.out.println("=======Edit List of Tables=======");
+            System.out.println("|1. Add Table                   |");
+            System.out.println("|2. Delete Table                |");
+            System.out.println("|3. Print Current Table Details |");
+            System.out.println("|0. Back                        |");
+            System.out.println("=================================");
+            System.out.print("Please enter your choice: ");
+            if(!sc.hasNextInt()){
+                System.out.println("Please enter a number!");
+                System.out.println();
+                sc.nextLine();
+            }else {
+                choice = sc.nextInt();
+                sc.nextLine();
+                switch (choice) {
+                    case 1:
+                        TableListControl.addTable();
+                    case 2:
+                        TableListControl.deleteTable();
+
+                    case 3:
+                        TableListControl.printAllTables();
+                        System.out.print("Press any key to go back ");
+                        sc.nextLine();
+                        System.out.println();
+                        break;
+
+                    case 0:
+                        break;
+                    default:
+                        System.out.println("Invalid Option!");
+                        System.out.println();
+                        break;
+                }
+            }
+        }
+    }
 
     /**
      * Create a new <code>Table</code> and adds it to the list.
@@ -98,34 +146,191 @@ public class TableListControl {
         return TableList.getTableList().getList().getOrDefault(ID, null);
     }
 
+    /**
+     * Allocates a table to a customer. <br>
+     * If customer has a reservation, the reserved table will the allocated. <br>
+     * Else, a table will only be allocated if there is an available table. <br>
+     */
     public static void allocateTable(){
         Scanner sc = new Scanner(System.in);
-        int pax;
-        System.out.print("Enter number of Pax: ");
-        while(true) {
+        int choice;
+
+        if(LocalTime.now().isAfter(LocalTime.of(20,40))){
+            System.out.println("Sorry kitchen has closed!");
+            System.out.println();
+            return;
+        }
+        while(true){
+            System.out.println("=Does the customer have a reservation?=");
+            System.out.println("|1. Yes                               |");
+            System.out.println("|2. No                                |");
+            System.out.println("|0. Back                              |");
+            System.out.println("=======================================");
+            System.out.print("Please enter your choice: ");
             if(!sc.hasNextInt()){
                 System.out.println("Please enter a number!");
                 System.out.println();
                 sc.nextLine();
+                continue;
             }else {
-                pax = sc.nextInt();
+                choice = sc.nextInt();
                 sc.nextLine();
-                if(pax<=0){
-                    System.out.println("Invalid Pax!");
+            }
+            switch(choice){
+                case 1->{
+                    if(!ReservationListControl.checkReservation()){
+                        System.out.println("No such reservation!");
+                        System.out.println();
+                    }
+                    return;
+                }
+                case 2->{
+                    int pax;
                     System.out.print("Enter number of Pax: ");
-                }else{
-                    break;
+                    while(true) {
+                        if(!sc.hasNextInt()){
+                            System.out.println("Please enter a number!");
+                            System.out.println();
+                            sc.nextLine();
+                        }else {
+                            pax = sc.nextInt();
+                            sc.nextLine();
+                            if(pax<=0){
+                                System.out.println("Invalid Pax!");
+                                System.out.print("Enter number of Pax: ");
+                            }else{
+                                break;
+                            }
+                        }
+                    }
+                    updateTables();
+                    Table table = TableListControl.chooseTable(pax);
+                    if(table!=null){
+                        assign(table, new Customer(pax));
+                        System.out.println("Table " + table.getTableId()+ " has been allocated!");
+                    }else{
+                        System.out.println("No available tables!");
+                    }
+                    System.out.println();
+                    return;
+                }
+                case 0->{
+                    return;
+                }
+                default->{
+                    System.out.println("Invalid Option!");
+                    System.out.println();
                 }
             }
         }
-        updateTables();
-        Table table = TableListControl.chooseTable(pax);
-        if(table!=null){
-            assign(table, new Customer(pax));
-            System.out.println("Table " + table.getTableId()+ " has been allocated!");
-        }else{
-            System.out.println("No available tables!");
+    }
+
+
+    /**
+     * Prints the invoice for the chosen table.<br>
+     * Sets the table as available.
+     */
+    public static void clearTable(){
+        Scanner sc = new Scanner(System.in);
+        int choice;
+        Table table;
+        boolean member;
+
+        while(true){
+            System.out.println("===================Clear Table====================");
+            TableListControl.printOccupied();
+            System.out.print("Select Table ID or " + TableListControl.BACK_OPTION + " to go back: ");
+            if(!sc.hasNextInt()){
+                System.out.println("Please enter a number!");
+                System.out.println();
+                sc.nextLine();
+                continue;
+            }else {
+                choice = sc.nextInt();
+                sc.nextLine();
+            }
+            if (choice == TableListControl.BACK_OPTION){
+                return;
+            }
+            table = TableListControl.getTable(choice);
+            if (table!=null && table.isOccupied()){
+                break;
+            }else{
+                System.out.println("Invalid Option!");
+                System.out.println();
+            }
         }
+
+        if (table.getCustomer().isMember()){
+            member = table.getCustomer().isMember();
+        }else{
+            while(true){
+                System.out.println("==Is customer a member?==");
+                System.out.println("|1. Yes                 |");
+                System.out.println("|2. No                  |");
+                System.out.println("=========================");
+                System.out.print("Please enter your choice: ");
+                if(!sc.hasNextInt()){
+                    System.out.println("Please enter a number!");
+                    System.out.println();
+                    sc.nextLine();
+                    continue;
+                }else {
+                    choice = sc.nextInt();
+                    sc.nextLine();
+                }
+                if(choice==1){
+                    int phone;
+                    while(true){
+                        try{
+                            System.out.print("Enter Customer contact number: ");
+                            if(!sc.hasNextInt()){
+                                System.out.println("Please enter a number!");
+                                System.out.println();
+                                sc.nextLine();
+                            }else {
+                                phone = sc.nextInt();
+                                sc.nextLine();
+                                if (phone < 100000000 && phone > 79999999) {
+                                    break;
+                                } else {
+                                    System.out.println("Invalid phone number!");
+                                    System.out.println();
+                                }
+                            }
+                        }
+                        catch(InputMismatchException e){
+                            System.out.println("Invalid phone number!");
+                            System.out.println();
+                            sc = new Scanner(System.in);
+                        }
+                    }
+                    member = MemberListControl.checkMember(phone);
+                    if(member){
+                        System.out.println("Customer is a member!");
+                        break;
+                    }else{
+                        System.out.println("Customer is not a member!");
+                    }
+                    System.out.println();
+                }else if(choice==2){
+                    member = false;
+                    break;
+                } else{
+                    System.out.println("Invalid Option!");
+                    System.out.println();
+                }
+
+            }
+        }
+
+        System.out.println("Settling bill for Table " + table.getTableId() + "...");
+
+        TableListControl.generateInvoice(table, member);
+        System.out.println("Bill has been settled!");
+        TableListControl.available(table);
+        System.out.print("Press any key to continue ");
+        sc.nextLine();
         System.out.println();
     }
 
@@ -337,7 +542,7 @@ public class TableListControl {
     /**
      * Sets this table as available.
      */
-    public static void clearTable(Table table) {
+    public static void available(Table table) {
         table.setOccupied(false);
         table.setReserved(false);
         table.setCustomer(null);

@@ -278,90 +278,175 @@ public class MenuControl {
 
 
 
-    public static void editMenu(FoodType type){
+    public static void editMenu(){
         Scanner sc = new Scanner(System.in);
         int choice;
         while (true) {
-            System.out.println("=====================Edit Food======================");
-            printCurrentMenu(type);
-            System.out.print("Select Food ID to edit or "+ BACK_OPTION + " to back: ");
+            System.out.println("========Edit Menu=========");
+            System.out.println("|1. Add Main Course      |");
+            System.out.println("|2. Add Drinks           |");
+            System.out.println("|3. Add Desserts         |");
+            System.out.println("|4. Add Promotion Set    |");
+            System.out.println("|5. Edit Menu Items      |");
+            System.out.println("|6. Delete Menu Items    |");
+            System.out.println("|0. Back                 |");
+            System.out.println("==========================");
+            System.out.print("Please enter your choice: ");
             if(!sc.hasNextInt()){
                 System.out.println("Please enter a number!");
                 System.out.println();
                 sc.nextLine();
-                continue;
             }else {
                 choice = sc.nextInt();
                 sc.nextLine();
-            }
-            if(choice == BACK_OPTION){
-                break;
-            }
-            Food food = getFood(choice, type);
-            if(food==null){
-                System.out.println("Invalid Option!");
-                System.out.println();
-                continue;
-            }
-            if (type != FoodType.PROMOTIONSET) {
-                /* In specific food type menu page */
-                while(choice!=0){
-                    System.out.println("===============Edit Food===============");
-                    System.out.printf("| %-29s%7s|\n", food.getName(), "$"+String.format("%.2f", food.getPrice()));
-                    System.out.println("|1. Change Name                       |");
-                    System.out.println("|2. Change Price                      |");
-                    System.out.println("|0. Back                              |");
-                    System.out.println("=======================================");
-                    System.out.print("Please enter your choice: ");
-                    if(!sc.hasNextInt()){
-                        System.out.println("Please enter a number!");
-                        System.out.println();
-                        sc.nextLine();
-                        continue;
-                    }else {
-                        choice = sc.nextInt();
-                        sc.nextLine();
+                switch (choice) {
+                    case 1 -> MenuControl.addFood(FoodType.MAINCOURSE);
+                    case 2 -> MenuControl.addFood(FoodType.DRINK);
+                    case 3 -> MenuControl.addFood(FoodType.DESSERT);
+                    case 4 -> MenuControl.addFood(FoodType.PROMOTIONSET);
+                    case 5 -> {
+                        while (true) {
+                            System.out.println("==========Edit Food===========");
+                            MenuControl.printMenu(true);
+                            System.out.print("Please enter your choice: ");
+                            if(!sc.hasNextInt()){
+                                System.out.println("Please enter a number!");
+                                System.out.println();
+                                sc.nextLine();
+                            }else {
+                                choice = sc.nextInt();
+                                sc.nextLine();
+                                if (choice == MenuControl.BACK_OPTION) {
+                                    break;
+                                }
+                                FoodType type = MenuControl.getMenuAction(choice, true);
+                                if (type == null) {
+                                    System.out.println("Invalid Option!");
+                                    System.out.println();
+                                } else {
+                                    while (true) {
+                                        System.out.println("=====================Edit Food======================");
+                                        printCurrentMenu(type);
+                                        System.out.print("Select Food ID to edit or "+ BACK_OPTION + " to back: ");
+                                        if(!sc.hasNextInt()){
+                                            System.out.println("Please enter a number!");
+                                            System.out.println();
+                                            sc.nextLine();
+                                            continue;
+                                        }else {
+                                            choice = sc.nextInt();
+                                            sc.nextLine();
+                                        }
+                                        if(choice == BACK_OPTION){
+                                            break;
+                                        }
+                                        Food food = getFood(choice, type);
+                                        if(food==null){
+                                            System.out.println("Invalid Option!");
+                                            System.out.println();
+                                            continue;
+                                        }
+                                        if (type != FoodType.PROMOTIONSET) {
+                                            /* In specific food type menu page */
+                                            while(choice!=0){
+                                                System.out.println("===============Edit Food===============");
+                                                System.out.printf("| %-29s%7s|\n", food.getName(), "$"+String.format("%.2f", food.getPrice()));
+                                                System.out.println("|1. Change Name                       |");
+                                                System.out.println("|2. Change Price                      |");
+                                                System.out.println("|0. Back                              |");
+                                                System.out.println("=======================================");
+                                                System.out.print("Please enter your choice: ");
+                                                if(!sc.hasNextInt()){
+                                                    System.out.println("Please enter a number!");
+                                                    System.out.println();
+                                                    sc.nextLine();
+                                                    continue;
+                                                }else {
+                                                    choice = sc.nextInt();
+                                                    sc.nextLine();
+                                                }
+                                                switch(choice){
+                                                    case 1->{
+                                                        String old = food.getName();
+                                                        System.out.print("Enter new name: ");
+                                                        String name = sc.nextLine();
+                                                        if (getFood(name)!=null){
+                                                            System.out.println("Duplicate name!");
+                                                            System.out.println();
+                                                            break;
+                                                        }
+                                                        food.setName(name);
+                                                        System.out.println(old + " has been changed to "+ name + "!");
+                                                        System.out.println();
+                                                    }
+                                                    case 2->{
+                                                        double old = food.getPrice();
+                                                        System.out.print("Enter new price: ");
+                                                        double price = sc.nextDouble();
+                                                        sc.nextLine();
+                                                        if(price<=0.0){
+                                                            System.out.println("Invalid Price!");
+                                                            System.out.println();
+                                                            break;
+                                                        }
+                                                        food.setPrice(Math.round(price*100.0)/100.0);
+                                                        System.out.println("Price change from $" + old + " to $" + price + "!");
+                                                        System.out.println();
+                                                    }
+                                                    case 0->{
+                                                    }
+                                                    default ->{
+                                                        System.out.println("Invalid Option!");
+                                                        System.out.println();
+                                                    }
+                                                }
+                                            }
+                                        }else{
+                                            editPromoSet((PromoSet) food);
+                                        }
+                                    }
+                                }
+                            }
+                        }
                     }
-                    switch(choice){
-                        case 1->{
-                            String old = food.getName();
-                            System.out.print("Enter new name: ");
-                            String name = sc.nextLine();
-                            if (getFood(name)!=null){
-                                System.out.println("Duplicate name!");
+                    case 6 -> {
+                        while (true) {
+                            System.out.println("========Deleting Food=========");
+                            MenuControl.printMenu(true);
+                            System.out.print("Please enter your choice: ");
+                            if(!sc.hasNextInt()){
+                                System.out.println("Please enter a number!");
                                 System.out.println();
-                                break;
+                                sc.nextLine();
+                            }else {
+                                choice = sc.nextInt();
+                                sc.nextLine();
+                                if (choice == MenuControl.BACK_OPTION) {
+                                    break;
+                                }
+                                FoodType action = MenuControl.getMenuAction(choice, true);
+                                if (action == null) {
+                                    System.out.println("Invalid Option");
+                                    System.out.println();
+
+                                } else {
+                                    MenuControl.deleteFood(action);
+                                }
                             }
-                            food.setName(name);
-                            System.out.println(old + " has been changed to "+ name + "!");
-                            System.out.println();
                         }
-                        case 2->{
-                            double old = food.getPrice();
-                            System.out.print("Enter new price: ");
-                            double price = sc.nextDouble();
-                            sc.nextLine();
-                            if(price<=0.0){
-                                System.out.println("Invalid Price!");
-                                System.out.println();
-                                break;
-                            }
-                            food.setPrice(Math.round(price*100.0)/100.0);
-                            System.out.println("Price change from $" + old + " to $" + price + "!");
-                            System.out.println();
-                        }
-                        case 0->{
-                        }
-                        default ->{
-                            System.out.println("Invalid Option!");
-                            System.out.println();
-                        }
+                    }
+                    case 0 -> {
+                        return;
+                    }
+                    default -> {
+                        System.out.println("Invalid Option!");
+                        System.out.println();
                     }
                 }
-            }else{
-                editPromoSet((PromoSet) food);
             }
         }
+
+
     }
 
     /**

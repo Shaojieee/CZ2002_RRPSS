@@ -8,6 +8,42 @@ import java.util.Scanner;
 public class MemberListControl {
 
 
+    /**
+     * Add or remove members. <br>
+     */
+    public static void editMembers(){
+        Scanner sc = new Scanner(System.in);
+        int choice;
+        while(true) {
+            System.out.println("=====Edit Member List=====");
+            System.out.println("|1. Add Member           |");
+            System.out.println("|2. Remove Member        |");
+            System.out.println("|0. Back                 |");
+            System.out.println("==========================");
+            System.out.print("Please enter your choice: ");
+            if(!sc.hasNextInt()){
+                System.out.println("Please enter a number!");
+                System.out.println();
+                sc.nextLine();
+                continue;
+            }else {
+                choice = sc.nextInt();
+                sc.nextLine();
+            }
+            switch(choice){
+                case 1-> addMembers();
+                case 2-> removeMembers();
+                case 0->{
+                    return;
+                }
+                default ->{
+                    System.out.println("Invalid Option!");
+                    System.out.println();
+                }
+            }
+        }
+    }
+
     public static void addMembers(){
         Scanner sc = new Scanner(System.in);
         int phone;
