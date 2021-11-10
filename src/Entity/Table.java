@@ -93,11 +93,69 @@ public class Table implements java.io.Serializable{
     }
 
     /**
+     * @return the number of people occupying this table.
+     */
+    public int getPax() {
+        return pax;
+    }
+
+    /**
      * Sets the order for this table.
      * @param order the order to be set to this table.
      */
     public void setOrder(Order order) {
         this.order = order;
+    }
+
+    /**
+     * Sets the status of availability for this table.
+     * @param occupied the status of availability to be set to this table.
+     */
+    public void setOccupied(boolean occupied) {
+        this.occupied = occupied;
+    }
+
+    /**
+     * Sets the reservation status for this table.
+     * @param reserved the status of reservation to be set to this table.
+     */
+    public void setReserved(boolean reserved) {
+        this.reserved = reserved;
+    }
+
+    /**
+     * Sets the customer for this table.
+     * @param customer the customer to be assigned to this table.
+     */
+    public void setCustomer(Customer customer) {
+        this.customer = customer;
+    }
+
+    /**
+     * Sets the Pax for this table.
+     * @param pax the pax to be set to this table.
+     */
+    public void setPax(int pax) {
+        this.pax = pax;
+    }
+
+    /**
+     * Sets the reservation timing for this table.
+     * @param reservedTime the timing of reservation to be set to this table.
+     */
+    public void setReservedTime(LocalDateTime reservedTime) {
+        this.reservedTime = reservedTime;
+    }
+
+    /**
+     * @return the reservation timing for the table.
+     */
+    public LocalDateTime getReservedTime(){ return reservedTime;}
+    /**
+     * @return <code>true</code> if table has an order, <code>false</code> otherwise.
+     */
+    public boolean hasOrder(){
+        return (order!=null);
     }
 
     /**
@@ -113,8 +171,6 @@ public class Table implements java.io.Serializable{
     public boolean isOccupied() {
         return occupied;
     }
-
-
 
 }
 
