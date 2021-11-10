@@ -1,5 +1,7 @@
 package Entity;
 
+import Control.FileEditor;
+
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
@@ -10,11 +12,6 @@ import java.util.HashMap;
  * Only 1 instance can exist at all times.
  */
 public class Menu {
-
-    /**
-     * The number assigned to go back when printing this menu.
-     */
-    static final int BACK_OPTION = 0;
 
     /**
      * HashMap of main course. <br>
@@ -67,111 +64,21 @@ public class Menu {
         return menu;
     }
 
-    /**
-     * Creates a new promotion set with the provided name
-     * @param name the name of the promotion set.
-     * @return the <code>PromoSet</code> object.
-     */
-    public PromoSet newPromoSet(String name){
-        return new PromoSet(name, this.newFoodID());
+
+    public HashMap<Integer, Food> getMainCourse() {
+        return this.mainCourse;
     }
 
-    /**
-     * Gets the <code>Food</code> object with the requested ID.
-     * @param ID the ID of the food item.
-     * @return the <code>Food</code> object.
-     */
-    public Food getFood(int ID){
-        if (this.mainCourse.containsKey(ID)){
-            return this.mainCourse.get(ID);
-        }else if(this.drinks.containsKey(ID)){
-            return this.drinks.get(ID);
-        }else {
-            return this.desserts.getOrDefault(ID, null);
-        }
+    public HashMap<Integer, Food> getDrinks() {
+        return drinks;
     }
 
-    /**
-     * Gets the <code>Food</code> object with the requested ID and food type.
-     * @param ID the ID of the food item.
-     * @param type the food type of the food item.
-     * @return the <code>Food</code> object.
-     */
-    public Food getFood(int ID, FoodType type){
-        if (type==FoodType.DRINK){
-            return this.drinks.getOrDefault(ID, null);
-        }else if(type==FoodType.DESSERT){
-            return this.desserts.getOrDefault(ID, null);
-        }else if(type==FoodType.MAINCOURSE){
-            return this.mainCourse.getOrDefault(ID, null);
-        }else{
-            return this.promoSet.getOrDefault(ID, null);
-        }
+    public HashMap<Integer, Food> getDesserts() {
+        return desserts;
     }
 
-    /**
-     * Gets the <code>Food</code> object with the requested name and food type.
-     * @param name the name of the food item.
-     * @param type the food type of the food item.
-     * @return the <code>Food</code> object.
-     */
-    public Food getFood(String name, FoodType type){
-        if (type==FoodType.DRINK){
-            for (Food food : this.drinks.values()){
-                if (food.getName().equals(name)){
-                    return food;
-                }
-            }
-        }else if(type==FoodType.DESSERT){
-            for (Food food : this.desserts.values()){
-                if (food.getName().equals(name)){
-                    return food;
-                }
-            }
-        }else if(type==FoodType.MAINCOURSE){
-            for (Food food : this.mainCourse.values()){
-                if (food.getName().equals(name)){
-                    return food;
-                }
-            }
-        }else{
-            for (Food food : this.promoSet.values()){
-                if (food.getName().equals(name)){
-                    return food;
-                }
-            }
-        }
-        return null;
+    public HashMap<Integer, PromoSet> getPromoSet() {
+        return promoSet;
     }
-
-    /**
-     * Gets the <code>Food</code> object with the requested name.
-     * @param name the name of the food item.
-     * @return the <code>Food</code> object.
-     */
-    public Food getFood(String name){
-        for (Food food : this.drinks.values()) {
-            if (food.getName().equals(name)) {
-                return food;
-            }
-        }
-        for (Food food : this.desserts.values()){
-            if (food.getName().equals(name)){
-                return food;
-            }
-        }
-        for (Food food : this.mainCourse.values()){
-            if (food.getName().equals(name)){
-                return food;
-            }
-        }
-        for (Food food : this.promoSet.values()){
-            if (food.getName().equals(name)){
-                return food;
-            }
-        }
-        return null;
-    }
-
 }
 
