@@ -1,5 +1,7 @@
 package Entity;
 
+import Control.FileEditor;
+
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
@@ -20,7 +22,7 @@ public class ReservationList {
      * The HashMap containing the reservations.
      * Key is the Table ID. Value is an ArrayList of <code>Reservation</code> objects.
      */
-    private HashMap<Integer, ArrayList<Reservation>> list;
+    private static HashMap<Integer, ArrayList<Reservation>> list;
 
     /**
      * This constructor defines the list of reservations.
@@ -39,6 +41,8 @@ public class ReservationList {
         }
         return reservationList;
     }
+
+    public static HashMap<Integer,ArrayList<Reservation>> getList(){ return list;}
 
 }
 
