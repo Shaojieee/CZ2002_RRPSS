@@ -11,10 +11,7 @@ import java.util.Set;
  */
 public class TableList {
 
-    /**
-     * The number assigned to go back when printing this list of tables
-     */
-    public static final int BACK_OPTION = 0;
+
 
     /**
      * The HashMap containing the tables.
