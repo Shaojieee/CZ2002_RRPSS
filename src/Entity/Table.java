@@ -114,18 +114,7 @@ public class Table implements java.io.Serializable{
         return occupied;
     }
 
-    /**
-     * Prints the basic details this table.
-     */
-    public void printBasicDetails() {
-        if (this.occupied){
-            System.out.printf("|| %-8s|| %-20s|| %-4s|| %-4s||\n", this.tableId, "Occupied", this.pax, this.maxPax);
-        }else if(this.reserved){
-            System.out.printf("|| %-8s|| %-20s|| %-4s|| %-4s||\n", this.tableId, "Reserved at " + this.reservedTime.toLocalTime(), this.pax, this.maxPax);
-        }else{
-            System.out.printf("|| %-8s|| %-20s|| %-4s|| %-4s||\n", this.tableId, "Available", "-", this.maxPax);
-        }
-    }
+
 
 }
 
