@@ -1,5 +1,7 @@
 package Entity;
 
+import Control.MemberListControl;
+
 /**
  * This class contains all the information of a particular customer.<br>
  * It includes name, phone number, the number of people in the group and the membership status.
@@ -31,7 +33,7 @@ public class Customer implements java.io.Serializable{
     public Customer(String name, int phone, int pax) {
         this.name = name;
         this.phone = phone;
-        this.member = MemberList.getMemberList().checkMember(phone);
+        this.member = MemberListControl.checkMember(phone);
         this.pax = pax;
     }
 

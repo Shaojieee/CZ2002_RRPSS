@@ -40,4 +40,16 @@ public class MemberList {
         return memberList;
     }
 
+    public ArrayList<Integer> getList(){
+        return this.list;
+    }
+
+    public void add(int phone){
+        memberList.add(phone);
+    }
+
+    public void remove(int phone){
+        memberList.remove(phone);
+    }
+
 }
