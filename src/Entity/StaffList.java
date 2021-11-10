@@ -44,14 +44,6 @@ public class StaffList {
         return this.list;
     }
 
-    public Role getStaffRole(int staffID){
-        if(this.list.containsKey(staffID)){
-            return this.list.get(staffID).getRole();
-        }else{
-            return null;
-        }
-    }
-
     public void printStaffList(){
         HashMap<Integer, Staff> staffList = StaffList.getStaffList().getList();
         System.out.println("====================Staff List=====================");
