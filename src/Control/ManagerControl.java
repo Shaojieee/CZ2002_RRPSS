@@ -55,27 +55,33 @@ public class ManagerControl extends StaffControl{
             System.out.println("|0. Back                        |");
             System.out.println("=================================");
             System.out.print("Please enter your choice: ");
-            choice = sc.nextInt();
-            sc.nextLine();
-            switch(choice) {
-                case 1:
-                    TableListControl.addTable();
-                case 2:
-                    TableListControl.deleteTable();
+            if(!sc.hasNextInt()){
+                System.out.println("Please enter a number!");
+                System.out.println();
+                sc.nextLine();
+            }else {
+                choice = sc.nextInt();
+                sc.nextLine();
+                switch (choice) {
+                    case 1:
+                        TableListControl.addTable();
+                    case 2:
+                        TableListControl.deleteTable();
 
-                case 3:
-                    TableListControl.printAllTables();
-                    System.out.print("Press any key to go back ");
-                    sc.nextLine();
-                    System.out.println();
-                    break;
+                    case 3:
+                        TableListControl.printAllTables();
+                        System.out.print("Press any key to go back ");
+                        sc.nextLine();
+                        System.out.println();
+                        break;
 
-                case 0:
-                    break;
-                default:
-                    System.out.println("Invalid Option!");
-                    System.out.println();
-                    break;
+                    case 0:
+                        break;
+                    default:
+                        System.out.println("Invalid Option!");
+                        System.out.println();
+                        break;
+                }
             }
         }
     }
@@ -97,23 +103,29 @@ public class ManagerControl extends StaffControl{
             System.out.println("|0. Back                         |");
             System.out.println("==================================");
             System.out.print("Please enter your choice: ");
-            choice = sc.nextInt();
-            sc.nextLine();
-            switch(choice) {
-                case 1-> StaffListControl.addStaff();
-                case 2-> StaffListControl.removeStaff(staffID);
-                case 3-> {
-                    StaffListControl.printStaffList();
-                    System.out.print("Press any key to go back ");
-                    sc.nextLine();
-                    System.out.println();
-                }
-                case 0->{
-                    return;
-                }
-                default->{
-                    System.out.println("Invalid Option!");
-                    System.out.println();
+            if(!sc.hasNextInt()){
+                System.out.println("Please enter a number!");
+                System.out.println();
+                sc.nextLine();
+            }else {
+                choice = sc.nextInt();
+                sc.nextLine();
+                switch (choice) {
+                    case 1 -> StaffListControl.addStaff();
+                    case 2 -> StaffListControl.removeStaff(staffID);
+                    case 3 -> {
+                        StaffListControl.printStaffList();
+                        System.out.print("Press any key to go back ");
+                        sc.nextLine();
+                        System.out.println();
+                    }
+                    case 0 -> {
+                        return;
+                    }
+                    default -> {
+                        System.out.println("Invalid Option!");
+                        System.out.println();
+                    }
                 }
             }
         }
@@ -136,59 +148,76 @@ public class ManagerControl extends StaffControl{
             System.out.println("|0. Back                 |");
             System.out.println("==========================");
             System.out.print("Please enter your choice: ");
-            choice = sc.nextInt();
-            sc.nextLine();
-            switch(choice){
-                case 1 -> MenuControl.addFood(FoodType.MAINCOURSE);
-                case 2 -> MenuControl.addFood(FoodType.DRINK);
-                case 3 -> MenuControl.addFood(FoodType.DESSERT);
-                case 4 -> MenuControl.addFood(FoodType.PROMOTIONSET);
-                case 5 -> {
-                    while(true) {
-                        System.out.println("==========Edit Food===========");
-                        MenuControl.printMenu(true);
-                        System.out.print("Please enter your choice: ");
-                        choice = sc.nextInt();
-                        sc.nextLine();
-                        if (choice == MenuControl.BACK_OPTION) {
-                            break;
-                        }
-                        FoodType action = MenuControl.getMenuAction(choice, true);
-
-                        if (action == null) {
-                            System.out.println("Invalid Option!");
-                            System.out.println();
-                        } else {
-                            MenuControl.editMenu(action);
-                        }
-                    }
-                }
-                case 6 -> {
-                    while(true) {
-                        System.out.println("========Deleting Food=========");
-                        MenuControl.printMenu(true);
-                        System.out.print("Please enter your choice: ");
-                        choice = sc.nextInt();
-                        sc.nextLine();
-                        if (choice == MenuControl.BACK_OPTION) {
-                            break;
-                        }
-                        FoodType action = MenuControl.getMenuAction(choice, true);
-                        if (action == null) {
-                            System.out.println("Invalid Option");
-                            System.out.println();
-
-                        } else {
-                            MenuControl.deleteFood(action);
+            if(!sc.hasNextInt()){
+                System.out.println("Please enter a number!");
+                System.out.println();
+                sc.nextLine();
+            }else {
+                choice = sc.nextInt();
+                sc.nextLine();
+                switch (choice) {
+                    case 1 -> MenuControl.addFood(FoodType.MAINCOURSE);
+                    case 2 -> MenuControl.addFood(FoodType.DRINK);
+                    case 3 -> MenuControl.addFood(FoodType.DESSERT);
+                    case 4 -> MenuControl.addFood(FoodType.PROMOTIONSET);
+                    case 5 -> {
+                        while (true) {
+                            System.out.println("==========Edit Food===========");
+                            MenuControl.printMenu(true);
+                            System.out.print("Please enter your choice: ");
+                            if(!sc.hasNextInt()){
+                                System.out.println("Please enter a number!");
+                                System.out.println();
+                                sc.nextLine();
+                            }else {
+                                choice = sc.nextInt();
+                                sc.nextLine();
+                                if (choice == MenuControl.BACK_OPTION) {
+                                    break;
+                                }
+                                FoodType action = MenuControl.getMenuAction(choice, true);
+                                if (action == null) {
+                                    System.out.println("Invalid Option!");
+                                    System.out.println();
+                                } else {
+                                    MenuControl.editMenu(action);
+                                }
+                            }
                         }
                     }
-                }
-                case 0 -> {
-                    return;
-                }
-                default -> {
-                    System.out.println("Invalid Option!");
-                    System.out.println();
+                    case 6 -> {
+                        while (true) {
+                            System.out.println("========Deleting Food=========");
+                            MenuControl.printMenu(true);
+                            System.out.print("Please enter your choice: ");
+                            if(!sc.hasNextInt()){
+                                System.out.println("Please enter a number!");
+                                System.out.println();
+                                sc.nextLine();
+                            }else {
+                                choice = sc.nextInt();
+                                sc.nextLine();
+                                if (choice == MenuControl.BACK_OPTION) {
+                                    break;
+                                }
+                                FoodType action = MenuControl.getMenuAction(choice, true);
+                                if (action == null) {
+                                    System.out.println("Invalid Option");
+                                    System.out.println();
+
+                                } else {
+                                    MenuControl.deleteFood(action);
+                                }
+                            }
+                        }
+                    }
+                    case 0 -> {
+                        return;
+                    }
+                    default -> {
+                        System.out.println("Invalid Option!");
+                        System.out.println();
+                    }
                 }
             }
         }

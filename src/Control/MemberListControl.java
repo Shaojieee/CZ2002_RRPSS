@@ -14,13 +14,19 @@ public class MemberListControl {
         while(true){
             try{
                 System.out.print("Enter Customer contact number: ");
-                phone = sc.nextInt();
-                sc.nextLine();
-                if(phone<100000000 && phone>79999999){
-                    break;
-                } else{
+                if(!sc.hasNextInt()){
                     System.out.println("Invalid phone number!");
                     System.out.println();
+                    sc.nextLine();
+                }else {
+                    phone = sc.nextInt();
+                    sc.nextLine();
+                    if (phone < 100000000 && phone > 79999999) {
+                        break;
+                    } else {
+                        System.out.println("Invalid phone number!");
+                        System.out.println();
+                    }
                 }
             }
             catch(InputMismatchException e){
@@ -45,13 +51,19 @@ public class MemberListControl {
         while(true){
             try{
                 System.out.print("Enter Customer contact number: ");
-                phone = sc.nextInt();
-                sc.nextLine();
-                if(phone<100000000 && phone>79999999){
-                    break;
-                }else{
+                if(!sc.hasNextInt()){
                     System.out.println("Invalid phone number!");
                     System.out.println();
+                    sc.nextLine();
+                }else{
+                    phone = sc.nextInt();
+                    sc.nextLine();
+                    if(phone<100000000 && phone>79999999){
+                        break;
+                    }else{
+                        System.out.println("Invalid phone number!");
+                        System.out.println();
+                    }
                 }
             }
             catch(InputMismatchException e){

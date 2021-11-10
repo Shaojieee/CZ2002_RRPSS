@@ -56,9 +56,15 @@ public class SalesReportControl {
             System.out.println("|0. Back                |");
             System.out.println("=========================");
             System.out.print("Please enter your choice: ");
-            choice = sc.nextInt();
-            sc.nextLine();
-
+            if(!sc.hasNextInt()){
+                System.out.println("Please enter a number!");
+                System.out.println();
+                sc.nextLine();
+                continue;
+            }else {
+                choice = sc.nextInt();
+                sc.nextLine();
+            }
             switch(choice){
                 case 1 ->{
                     try{

@@ -17,46 +17,42 @@ public class StaffListControl {
         StaffList.getStaffList().printStaffList();
     }
 
-    public static boolean performActions(int staffID){
+    public static void performActions(int staffID){
         Scanner sc = new Scanner(System.in);
         Role role = StaffList.getStaffList().getRole(staffID);
         int choice;
         boolean exit = false;
         if(role==Role.Manager){
-
             do{
                 StaffListBoundary.printManagerActions();
-                while(!sc.hasNextInt()){
+                if(!sc.hasNextInt()){
                     System.out.println("Please enter a number!");
                     System.out.println();
                     sc.nextLine();
-                    StaffListBoundary.printManagerActions();
+                }else{
+                    choice = sc.nextInt();
+                    sc.nextLine();
+                    exit = ManagerControl.getAction(choice,staffID);
                 }
-                choice = sc.nextInt();
-                sc.nextLine();
-                exit = ManagerControl.getAction(choice,staffID);
             }while(!exit);
 
-            return exit;
         }else if(role == Role.Staff){
 
             do{
                 StaffListBoundary.printStaffActions();
-                while(!sc.hasNextInt()){
+                if(!sc.hasNextInt()){
                     System.out.println("Please enter a number!");
                     System.out.println();
                     sc.nextLine();
-                    StaffListBoundary.printManagerActions();
+                }else{
+                    choice = sc.nextInt();
+                    sc.nextLine();
+                    exit = StaffControl.getAction(choice, staffID);
                 }
-                choice = sc.nextInt();
-                sc.nextLine();
-                exit = StaffControl.getAction(choice, staffID);
             }while(!exit);
-            return exit;
         }else{
             System.out.println("Invalid Option!");
             System.out.println();
-            return false;
         }
     }
 
@@ -76,8 +72,15 @@ public class StaffListControl {
             System.out.println("|2. Female       |");
             System.out.println("==================");
             System.out.print("Select Gender: ");
-            choice = sc.nextInt();
-            sc.nextLine();
+            if(!sc.hasNextInt()){
+                System.out.println("Please enter a number!");
+                System.out.println();
+                sc.nextLine();
+                continue;
+            }else {
+                choice = sc.nextInt();
+                sc.nextLine();
+            }
             if (choice == 1) {
                 gender = "M";
                 break;
@@ -100,8 +103,15 @@ public class StaffListControl {
             System.out.println("|2. Staff        |");
             System.out.println("==================");
             System.out.print("Select Job Title: ");
-            choice = sc.nextInt();
-            sc.nextLine();
+            if(!sc.hasNextInt()){
+                System.out.println("Please enter a number!");
+                System.out.println();
+                sc.nextLine();
+                continue;
+            }else {
+                choice = sc.nextInt();
+                sc.nextLine();
+            }
             if (choice == 1) {
                 role = Role.Manager;
                 break;
@@ -125,8 +135,15 @@ public class StaffListControl {
             System.out.println("=============Deleting Staff==============");
             printStaffList();
             System.out.print("Select Staff ID to delete or " + "0 to back: ");
-            choice = sc.nextInt();
-            sc.nextLine();
+            if(!sc.hasNextInt()){
+                System.out.println("Please enter a number!");
+                System.out.println();
+                sc.nextLine();
+                continue;
+            }else {
+                choice = sc.nextInt();
+                sc.nextLine();
+            }
             if(choice==0){
                 return;
             }

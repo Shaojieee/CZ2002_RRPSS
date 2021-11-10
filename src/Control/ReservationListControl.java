@@ -155,14 +155,21 @@ public class ReservationListControl {
         int phone;
         while(true){
             try{
+
                 System.out.print("Enter Customer Contact Number: ");
-                phone = sc.nextInt();
-                sc.nextLine();
-                if(phone<100000000 && phone>79999999){
-                    break;
-                }else{
+                if(!sc.hasNextInt()){
                     System.out.println("Invalid phone number!");
                     System.out.println();
+                    sc.nextLine();
+                }else{
+                    phone = sc.nextInt();
+                    sc.nextLine();
+                    if (phone < 100000000 && phone > 79999999) {
+                        break;
+                    } else {
+                        System.out.println("Invalid phone number!");
+                        System.out.println();
+                    }
                 }
             }
             catch(InputMismatchException e){
@@ -295,13 +302,19 @@ public class ReservationListControl {
         while(true){
             try{
                 System.out.print("Enter Customer contact number: ");
-                phone = sc.nextInt();
-                sc.nextLine();
-                if(phone<100000000 && phone>79999999){
-                    break;
-                } else{
+                if(!sc.hasNextInt()){
                     System.out.println("Invalid phone number!");
                     System.out.println();
+                    sc.nextLine();
+                }else {
+                    phone = sc.nextInt();
+                    sc.nextLine();
+                    if (phone < 100000000 && phone > 79999999) {
+                        break;
+                    } else {
+                        System.out.println("Invalid phone number!");
+                        System.out.println();
+                    }
                 }
             }
             catch(InputMismatchException e){
@@ -493,12 +506,20 @@ public class ReservationListControl {
      */
     public static void createReservation(){
         Scanner sc = new Scanner(System.in);
-
+        int pax;
         System.out.println("=====Creating Reservation=====");
-        System.out.print("Enter number of pax: ");
-        int pax = sc.nextInt();
-        sc.nextLine();
-
+        while(true) {
+            System.out.print("Enter number of pax: ");
+            if (!sc.hasNextInt()) {
+                System.out.println("Invalid phone number!");
+                System.out.println();
+                sc.nextLine();
+            } else {
+                pax = sc.nextInt();
+                sc.nextLine();
+                break;
+            }
+        }
         System.out.print("Enter Reservation Date (dd/mm/yyyy): ");
         LocalDate date;
         String date_str, time_str;
@@ -565,13 +586,19 @@ public class ReservationListControl {
         while(true){
             try{
                 System.out.print("Enter Customer Contact Number: ");
-                phone = sc.nextInt();
-                sc.nextLine();
-                if(phone<100000000 && phone>79999999){
-                    break;
-                }else{
-                    System.out.println("Invalid phone number!");
+                if(!sc.hasNextInt()){
+                    System.out.println("Please enter a number!");
                     System.out.println();
+                    sc.nextLine();
+                }else {
+                    phone = sc.nextInt();
+                    sc.nextLine();
+                    if (phone < 100000000 && phone > 79999999) {
+                        break;
+                    } else {
+                        System.out.println("Invalid phone number!");
+                        System.out.println();
+                    }
                 }
             }
             catch(InputMismatchException e){

@@ -19,15 +19,23 @@ public class TableListControl {
     public static void addTable(){
         Scanner sc = new Scanner(System.in);
         int maxPax;
-        System.out.print("Enter number of pax: ");
-        maxPax = sc.nextInt();
-        sc.nextLine();
-        while(maxPax%2!=0 || maxPax<2 || maxPax>10){
-            System.out.println("Invalid Pax");
+        while (true) {
             System.out.print("Enter number of pax: ");
-            maxPax = sc.nextInt();
-            sc.nextLine();
+            if(!sc.hasNextInt()){
+                System.out.println("Please enter a number!");
+                System.out.println();
+                sc.nextLine();
+            }else {
+                maxPax = sc.nextInt();
+                sc.nextLine();
+                if(maxPax%2!=0 || maxPax<2 || maxPax>10){
+                    System.out.println("Invalid Pax");
+                }else{
+                    break;
+                }
+            }
         }
+
         int id = 1;
         Set<Integer> tableID = TableList.getTableList().getList().keySet();
         while(tableID.contains(id)){
@@ -50,9 +58,18 @@ public class TableListControl {
         Scanner sc = new Scanner(System.in);
         int choice;
         printAllTables();
-        System.out.print("Enter Table ID to delete: ");
-        choice = sc.nextInt();
-        sc.nextLine();
+        while(true){
+            System.out.print("Enter Table ID to delete: ");
+            if(!sc.hasNextInt()){
+                System.out.println("Please enter a number!");
+                System.out.println();
+                sc.nextLine();
+            }else {
+                choice = sc.nextInt();
+                sc.nextLine();
+                break;
+            }
+        }
         Table table = getTable(choice);
         if(table==null){
             System.out.println("Invalid Option!");
@@ -85,14 +102,22 @@ public class TableListControl {
         Scanner sc = new Scanner(System.in);
         int pax;
         System.out.print("Enter number of Pax: ");
-        do {
-            pax = sc.nextInt();
-            sc.nextLine();
-            if(pax<=0){
-                System.out.println("Invalid Pax!");
-                System.out.print("Enter number of Pax: ");
+        while(true) {
+            if(!sc.hasNextInt()){
+                System.out.println("Please enter a number!");
+                System.out.println();
+                sc.nextLine();
+            }else {
+                pax = sc.nextInt();
+                sc.nextLine();
+                if(pax<=0){
+                    System.out.println("Invalid Pax!");
+                    System.out.print("Enter number of Pax: ");
+                }else{
+                    break;
+                }
             }
-        }while(pax<=0);
+        }
         updateTables();
         Table table = TableListControl.chooseTable(pax);
         if(table!=null){
@@ -155,8 +180,15 @@ public class TableListControl {
         while(true) {
             printAllTables();
             System.out.print("Select Table ID to view reservation or table order or " + BACK_OPTION + " to go back: ");
-            choice = sc.nextInt();
-            sc.nextLine();
+            if(!sc.hasNextInt()){
+                System.out.println("Please enter a number!");
+                System.out.println();
+                sc.nextLine();
+                continue;
+            }else {
+                choice = sc.nextInt();
+                sc.nextLine();
+            }
             if(choice==BACK_OPTION){
                 return;
             }

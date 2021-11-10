@@ -55,8 +55,15 @@ public class StaffControl {
             System.out.println("==================Creating Order==================");
             TableListControl.printOccupied();
             System.out.print("Select Table ID or " + TableListControl.BACK_OPTION + " to go back: ");
-            choice = sc.nextInt();
-            sc.nextLine();
+            if(!sc.hasNextInt()){
+                System.out.println("Please enter a number!");
+                System.out.println();
+                sc.nextLine();
+                continue;
+            }else {
+                choice = sc.nextInt();
+                sc.nextLine();
+            }
             if (choice == TableListControl.BACK_OPTION){
                 return;
             }
@@ -84,8 +91,15 @@ public class StaffControl {
             System.out.println("|0. Back                   |");
             System.out.println("============================");
             System.out.print("Please enter your choice: ");
-            choice = sc.nextInt();
-            sc.nextLine();
+            if(!sc.hasNextInt()){
+                System.out.println("Please enter a number!");
+                System.out.println();
+                sc.nextLine();
+                continue;
+            }else {
+                choice = sc.nextInt();
+                sc.nextLine();
+            }
             switch(choice){
                 case 1-> OrderControl.addFood(newOrder);
                 case 2-> OrderControl.removeFood(newOrder);
@@ -140,8 +154,15 @@ public class StaffControl {
             System.out.println("===================Clear Table====================");
             TableListControl.printOccupied();
             System.out.print("Select Table ID or " + TableListControl.BACK_OPTION + " to go back: ");
-            choice = sc.nextInt();
-            sc.nextLine();
+            if(!sc.hasNextInt()){
+                System.out.println("Please enter a number!");
+                System.out.println();
+                sc.nextLine();
+                continue;
+            }else {
+                choice = sc.nextInt();
+                sc.nextLine();
+            }
             if (choice == TableListControl.BACK_OPTION){
                 return;
             }
@@ -163,20 +184,33 @@ public class StaffControl {
                 System.out.println("|2. No                  |");
                 System.out.println("=========================");
                 System.out.print("Please enter your choice: ");
-                choice = sc.nextInt();
-                sc.nextLine();
+                if(!sc.hasNextInt()){
+                    System.out.println("Please enter a number!");
+                    System.out.println();
+                    sc.nextLine();
+                    continue;
+                }else {
+                    choice = sc.nextInt();
+                    sc.nextLine();
+                }
                 if(choice==1){
                     int phone;
                     while(true){
                         try{
                             System.out.print("Enter Customer contact number: ");
-                            phone = sc.nextInt();
-                            sc.nextLine();
-                            if(phone<100000000 && phone>79999999){
-                                break;
-                            } else{
-                                System.out.println("Invalid phone number!");
+                            if(!sc.hasNextInt()){
+                                System.out.println("Please enter a number!");
                                 System.out.println();
+                                sc.nextLine();
+                            }else {
+                                phone = sc.nextInt();
+                                sc.nextLine();
+                                if (phone < 100000000 && phone > 79999999) {
+                                    break;
+                                } else {
+                                    System.out.println("Invalid phone number!");
+                                    System.out.println();
+                                }
                             }
                         }
                         catch(InputMismatchException e){
@@ -235,8 +269,15 @@ public class StaffControl {
             System.out.println("|0. Back                              |");
             System.out.println("=======================================");
             System.out.print("Please enter your choice: ");
-            choice = sc.nextInt();
-            sc.nextLine();
+            if(!sc.hasNextInt()){
+                System.out.println("Please enter a number!");
+                System.out.println();
+                sc.nextLine();
+                continue;
+            }else {
+                choice = sc.nextInt();
+                sc.nextLine();
+            }
             switch(choice){
                 case 1->{
                     if(!ReservationListControl.checkReservation()){
@@ -273,9 +314,15 @@ public class StaffControl {
             System.out.println("|0. Back                 |");
             System.out.println("==========================");
             System.out.print("Please enter your choice: ");
-            choice = sc.nextInt();
-            sc.nextLine();
-
+            if(!sc.hasNextInt()){
+                System.out.println("Please enter a number!");
+                System.out.println();
+                sc.nextLine();
+                continue;
+            }else {
+                choice = sc.nextInt();
+                sc.nextLine();
+            }
             switch(choice){
                 case 1-> MemberListControl.addMembers();
                 case 2-> MemberListControl.removeMembers();

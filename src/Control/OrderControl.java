@@ -26,8 +26,15 @@ public class OrderControl {
             System.out.println("=========Adding Food==========");
             MenuControl.printMenu(true);
             System.out.print("Please enter your choice: ");
-            choice = sc.nextInt();
-            sc.nextLine();
+            if(!sc.hasNextInt()){
+                System.out.println("Please enter a number!");
+                System.out.println();
+                sc.nextLine();
+                continue;
+            }else {
+                choice = sc.nextInt();
+                sc.nextLine();
+            }
             if(choice == MenuControl.BACK_OPTION){
                 break;
             }
@@ -38,13 +45,20 @@ public class OrderControl {
                 continue;
             }
 
-            System.out.println("===================Creating Order===================");
-            MenuControl.printCurrentMenu(action);
-            System.out.print("Select Food ID to add or " + MenuControl.BACK_OPTION + " to go back: ");
-            /* In specific food type menu page */
             while (true) {
-                choice = sc.nextInt();
-                sc.nextLine();
+                System.out.println("===================Creating Order===================");
+                MenuControl.printCurrentMenu(action);
+                System.out.print("Select Food ID to add or " + MenuControl.BACK_OPTION + " to go back: ");
+                /* In specific food type menu page */
+                if(!sc.hasNextInt()){
+                    System.out.println("Please enter a number!");
+                    System.out.println();
+                    sc.nextLine();
+                    continue;
+                }else {
+                    choice = sc.nextInt();
+                    sc.nextLine();
+                }
                 if (choice == MenuControl.BACK_OPTION){
                     break;
                 }
@@ -53,15 +67,22 @@ public class OrderControl {
                     System.out.println("Invalid Option!");
                     System.out.println();
                 } else {
-                    System.out.print("Enter Quantity: ");
-                    choice = sc.nextInt();
-                    sc.nextLine();
-                    while (choice <= 0) {
-                        System.out.println("Invalid Quantity!");
-                        System.out.println();
+                    while(true) {
                         System.out.print("Enter Quantity: ");
-                        choice = sc.nextInt();
-                        sc.nextLine();
+                        if (!sc.hasNextInt()) {
+                            System.out.println("Please enter a number!");
+                            System.out.println();
+                            sc.nextLine();
+                        } else {
+                            choice = sc.nextInt();
+                            sc.nextLine();
+                            if (choice <= 0) {
+                                System.out.println("Invalid Quantity!");
+                                System.out.println();
+                            }else{
+                                break;
+                            }
+                        }
                     }
 
                     HashMap<Food, Double[]> items = order.getItems();
@@ -102,23 +123,38 @@ public class OrderControl {
                 System.out.println();
                 break;
             } else {
+                int foodId;
                 System.out.print("Select Food ID or " + BACK_OPTION + " to go back: ");
-                int foodId = sc.nextInt();
-                sc.nextLine();
+                if(!sc.hasNextInt()){
+                    System.out.println("Please enter a number!");
+                    System.out.println();
+                    sc.nextLine();
+                    continue;
+                }else {
+                    foodId = sc.nextInt();
+                    sc.nextLine();
+                }
                 if(foodId == BACK_OPTION){
                     break;
                 }
                 Food food = MenuControl.getFood(foodId);
                 if (checkInOrder(order, food)){
-                    System.out.print("Enter Quantity to remove: ");
-                    choice = sc.nextInt();
-                    sc.nextLine();
-                    while(!checkFoodQty(order, food, choice)){
-                        System.out.println("Invalid Quantity!");
-                        System.out.println();
-                        System.out.print("Enter Quantity to remove:");
-                        choice = sc.nextInt();
-                        sc.nextLine();
+                    while(true) {
+                        System.out.print("Enter Quantity to remove: ");
+                        if (!sc.hasNextInt()) {
+                            System.out.println("Please enter a number!");
+                            System.out.println();
+                            sc.nextLine();
+                        } else {
+                            choice = sc.nextInt();
+                            sc.nextLine();
+                            if (!checkFoodQty(order, food, choice)) {
+                                System.out.println("Invalid Quantity!");
+                                System.out.println();
+                            }else{
+                                break;
+                            }
+                        }
                     }
 
                     HashMap<Food, Double[]> items = order.getItems();
