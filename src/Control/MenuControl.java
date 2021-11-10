@@ -39,6 +39,7 @@ public class MenuControl {
                     while (true) {
                         System.out.println("=====Add to Promotion Set=====");
                         printMenu(false);
+                        System.out.print("Please enter your choice: ");
                         choice = sc.nextInt();
                         sc.nextLine();
                         if (choice == BACK_OPTION) {
@@ -82,7 +83,6 @@ public class MenuControl {
 
                         }
                     }
-
                 }
                 case 2->{
                     while (true) {
@@ -108,11 +108,11 @@ public class MenuControl {
                                 sc.nextLine();
                                 if (newSet.getQty(food) >= quantity && quantity>=0) {
                                     newSet.removeFood(food, quantity);
+                                    System.out.println(quantity + " " + food.getName() + " has been removed from Promotion Set!");
                                 } else {
                                     System.out.println("Invalid Quantity!");
-                                    System.out.println();
                                 }
-                                System.out.println(quantity + " " + food.getName() + " has been removed from Promotion Set!");
+                                    System.out.println();
                             } else {
                                 System.out.println(food.getName() + " is not in Promotion Set!");
                             }
@@ -162,8 +162,6 @@ public class MenuControl {
                     System.out.println();
                 }
             }
-
-
         }
     }
 

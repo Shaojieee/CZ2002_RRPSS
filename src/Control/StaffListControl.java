@@ -19,39 +19,44 @@ public class StaffListControl {
 
     public static boolean performActions(int staffID){
         Scanner sc = new Scanner(System.in);
-        Role role = getStaffRole(staffID);
+        Role role = StaffList.getStaffList().getRole(staffID);
         int choice;
+        boolean exit = false;
         if(role==Role.Manager){
-            StaffListBoundary.printManagerActions();
-            while(!sc.hasNextInt()){
-                System.out.println("Please enter a number!");
-                System.out.println();
+
+            do{
+                StaffListBoundary.printManagerActions();
+                while(!sc.hasNextInt()){
+                    System.out.println("Please enter a number!");
+                    System.out.println();
+                    sc.nextLine();
+                    StaffListBoundary.printManagerActions();
+                }
+                choice = sc.nextInt();
                 sc.nextLine();
-            }
-            choice = sc.nextInt();
-            return ManagerControl.getAction(choice, staffID);
+                exit = ManagerControl.getAction(choice,staffID);
+            }while(!exit);
+
+            return exit;
         }else if(role == Role.Staff){
-            StaffListBoundary.printStaffActions();
-            while(!sc.hasNextInt()){
-                System.out.println("Please enter a number!");
-                System.out.println();
+
+            do{
+                StaffListBoundary.printStaffActions();
+                while(!sc.hasNextInt()){
+                    System.out.println("Please enter a number!");
+                    System.out.println();
+                    sc.nextLine();
+                    StaffListBoundary.printManagerActions();
+                }
+                choice = sc.nextInt();
                 sc.nextLine();
-            }
-            choice = sc.nextInt();
-            return StaffControl.getAction(choice, staffID);
+                exit = StaffControl.getAction(choice, staffID);
+            }while(!exit);
+            return exit;
         }else{
-            StaffListBoundary.printInvalid();
+            System.out.println("Invalid Option!");
             System.out.println();
             return false;
-        }
-    }
-
-    private static Role getStaffRole(int staffID){
-        HashMap<Integer, Staff> staffList = StaffList.getStaffList().getList();
-        if(staffList.containsKey(staffID)){
-            return staffList.get(staffID).getRole();
-        }else{
-            return null;
         }
     }
 

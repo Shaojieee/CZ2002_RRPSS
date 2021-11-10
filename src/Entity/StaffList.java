@@ -66,5 +66,12 @@ public class StaffList {
         list.remove(staffID);
     }
 
+    public Role getRole(int staffID) {
+        if(list.containsKey(staffID)){
+            return list.get(staffID).getRole();
+        }else{
+            return null;
+        }
+    }
 }
 

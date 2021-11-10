@@ -12,7 +12,6 @@ public class StaffListBoundary {
      * @return
      */
     public static void printManagerActions(){
-        Scanner sc = new Scanner(System.in);
         System.out.println("=============Welcome=============");
         System.out.println("|1. Take Order                  |");
         System.out.println("|2. Clear Table                 |");
@@ -30,11 +29,6 @@ public class StaffListBoundary {
         System.out.println("|14. Log Out                    |");
         System.out.println("=================================");
         System.out.print("Please enter your choice: ");
-        while(!sc.hasNextInt()){
-            System.out.println("Please enter a number!");
-            System.out.println();
-            sc.nextLine();
-        }
 
     }
 
@@ -68,10 +62,5 @@ public class StaffListBoundary {
 
     }
 
-
-    public static void printInvalid(){
-        System.out.println("Invalid Option!");
-        System.out.println();
-    }
 
 }
