@@ -106,7 +106,7 @@ public class OrderControl {
         int choice;
         while(true) {
             System.out.println("======================Removing Food=======================");
-            order.printOrder();
+            printOrder(order);
 
             if (order.getSize() == 0) {
                 System.out.print("Press any key to go back ");
