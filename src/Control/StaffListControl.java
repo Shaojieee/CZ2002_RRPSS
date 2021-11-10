@@ -1,0 +1,59 @@
+package Control;
+
+import Boundary.StaffListBoundary;
+import Entity.Role;
+import Entity.StaffList;
+
+import java.util.Scanner;
+
+public class StaffListControl {
+
+    /**
+     * Prints the details of all staffs.
+     */
+    public static void printStaffList(){
+        StaffList.getStaffList().printStaffList();
+    }
+
+
+    public static boolean printActions(int staffID){
+        Scanner sc = new Scanner(System.in);
+        Role role = StaffList.getStaffList().getStaffRole(staffID);
+
+        if(role==Role.Manager){
+            StaffListBoundary.printManagerActions();
+            while(!sc.hasNextInt()){
+                System.out.println("Please enter a number!");
+                System.out.println();
+                sc.nextLine();
+            }
+        }else if(role == Role.Staff){
+            StaffListBoundary.printStaffActions();
+            while(!sc.hasNextInt()){
+                System.out.println("Please enter a number!");
+                System.out.println();
+                sc.nextLine();
+            }
+        }else{
+            StaffListBoundary.printInvalid();
+            System.out.println();
+            return false;
+        }
+    }
+
+
+    public static void addStaff(){
+
+    }
+
+    public static void addManager(){
+
+    }
+
+    public static void removeStaff(){
+
+    }
+
+
+
+}
