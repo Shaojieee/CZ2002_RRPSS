@@ -13,13 +13,14 @@ public class StaffListControl {
      */
     public static void printStaffList(){
         StaffList.getStaffList().printStaffList();
+
     }
 
 
-    public static boolean printActions(int staffID){
+    public static boolean performActions(int staffID){
         Scanner sc = new Scanner(System.in);
         Role role = StaffList.getStaffList().getStaffRole(staffID);
-
+        int choice;
         if(role==Role.Manager){
             StaffListBoundary.printManagerActions();
             while(!sc.hasNextInt()){
@@ -27,6 +28,8 @@ public class StaffListControl {
                 System.out.println();
                 sc.nextLine();
             }
+            choice = sc.nextInt();
+            return ManagerControl.getAction(choice);
         }else if(role == Role.Staff){
             StaffListBoundary.printStaffActions();
             while(!sc.hasNextInt()){
@@ -34,6 +37,8 @@ public class StaffListControl {
                 System.out.println();
                 sc.nextLine();
             }
+            choice = sc.nextInt();
+            return StaffControl.getAction(choice);
         }else{
             StaffListBoundary.printInvalid();
             System.out.println();

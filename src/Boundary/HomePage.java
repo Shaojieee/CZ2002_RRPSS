@@ -10,12 +10,12 @@ public class HomePage {
 
         int choice;
         boolean exit=false;
-        while (exit) {
+        while (!exit) {
             StaffListControl.printStaffList();
             System.out.print("Select Staff ID: ");
             choice = sc.nextInt();
             sc.nextLine();
-            exit = StaffListControl.printActions(choice);
+            exit = StaffListControl.performActions(choice);
         }
     }
 }
