@@ -44,5 +44,8 @@ public class ReservationList {
 
     public static HashMap<Integer,ArrayList<Reservation>> getList(){ return list;}
 
+    public static void remove(int tableID, Reservation reservation) {
+        list.remove(tableID, reservation);
+    }
 }
 

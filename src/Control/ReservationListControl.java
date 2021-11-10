@@ -296,44 +296,52 @@ public class ReservationListControl {
     }
 
     /**
-     * Assigns the reserved table to the customer.
-     * @param name the name of the customer.
-     * @param phone the phone number of the customer.
-     * @return the <code>Table</code> object allocated to the customer, <code>null</code> if there are no available tables.
-     */
-    public Table assignReservation(String name, int phone) {
-        TableList tableList = TableList.getTableList();
-        for(ArrayList<Reservation> reservations : ReservationList.getList().values()){
-            for(Reservation reservation : reservations){
-                Table table = TableListControl.getTable(reservation.getTableID());
-                if(reservation.getCustomer().equals(name,phone)){
-                    if(table.isOccupied()){
-                        return null;
-                    }else{
-                        TableListControl.assign(table, reservation.getCustomer());
-                        reservations.remove(reservation);
-                        saveReservationList();
-                        return table;
-                    }
-                }
-            }
-        }
-        return null;
-    }
-
-    /**
      * Checks if there is a reservation under the provided name and phone number.
      * @param name the name of the customer.
      * @param phone the phone number of the customer.
      * @return <code>true</code> if there is valid reservation, <code>false</code> otherwise.
      */
-    public boolean checkReservation(String name, int phone){
+    public static boolean checkReservation(){
         updateTableStatus();
+        Scanner sc = new Scanner(System.in);
+        System.out.print("Enter Customer Name: ");
+        String name = sc.nextLine();
+        int phone;
+        while(true){
+            try{
+                System.out.print("Enter Customer contact number: ");
+                phone = sc.nextInt();
+                sc.nextLine();
+                if(phone<100000000 && phone>79999999){
+                    break;
+                } else{
+                    System.out.println("Invalid phone number!");
+                    System.out.println();
+                }
+            }
+            catch(InputMismatchException e){
+                System.out.println("Invalid phone number!");
+                System.out.println();
+                sc = new Scanner(System.in);
+            }
+        }
+
+
         for(HashMap.Entry<Integer, ArrayList<Reservation>> item : ReservationList.getList().entrySet()){
             for (Reservation reservation : item.getValue()) {
                 if (reservation.getCustomer().equals(name, phone)){
+                    Table table = TableListControl.getTable(reservation.getTableID());
                     long minutes = reservation.getTime().until(LocalDateTime.now(), ChronoUnit.MINUTES);
                     if(minutes>-30 && minutes<15){
+                        if(!table.isOccupied()){
+                            TableListControl.assign(table, reservation.getCustomer());
+                            ReservationList.remove(table.getTableId(),reservation);
+                            System.out.println("Table " + table.getTableId() + " has been assigned to " + name + "!");
+                            saveReservationList();
+                        }else{
+                            System.out.println("No available tables!");
+                        }
+                        System.out.println();
                         return true;
                     }
                 }

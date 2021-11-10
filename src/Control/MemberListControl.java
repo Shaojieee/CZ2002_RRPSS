@@ -72,4 +72,8 @@ public class MemberListControl {
         return MemberList.getMemberList().getList().contains(phone);
     }
 
+    public static void saveMembers(){
+        FileEditor.writeMembers(MemberList.getMemberList().getList());
+    }
+
 }

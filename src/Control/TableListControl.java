@@ -5,7 +5,6 @@ import Entity.*;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
-import java.util.HashMap;
 import java.util.Scanner;
 import java.util.Set;
 
@@ -16,7 +15,6 @@ public class TableListControl {
 
     /**
      * Create a new <code>Table</code> and adds it to the list.
-     * @param maxPax the maximum number of people the new table can accommodate.
      */
     public static void addTable(){
         Scanner sc = new Scanner(System.in);
@@ -56,7 +54,6 @@ public class TableListControl {
 
     /**
      * Remove table from the list according to the ID.
-     * @param id the ID of the table to remove.
      */
     public static void deleteTable(){
         Scanner sc = new Scanner(System.in);
@@ -72,7 +69,6 @@ public class TableListControl {
         }else if(table.isOccupied()){
             System.out.println("Table is currently occupied!");
         }else{
-            ReservationList reservationList = ReservationList.getReservationList();
             if(ReservationListControl.checkDelete(table.getTableId())){
                 TableList.getTableList().remove(table.getTableId());
                 saveTableList();
@@ -92,6 +88,29 @@ public class TableListControl {
      */
     public static Table getTable(int ID) {
         return TableList.getList().getOrDefault(ID, null);
+    }
+
+    public static void allocateTable(){
+        Scanner sc = new Scanner(System.in);
+        int pax;
+        System.out.print("Enter number of Pax: ");
+        do {
+            pax = sc.nextInt();
+            sc.nextLine();
+            if(pax<=0){
+                System.out.println("Invalid Pax!");
+                System.out.print("Enter number of Pax: ");
+            }
+        }while(pax<=0);
+        updateTables();
+        Table table = TableListControl.chooseTable(pax);
+        if(table!=null){
+            assign(table, new Customer(pax));
+            System.out.println("Table " + table.getTableId()+ " has been allocated!");
+        }else{
+            System.out.println("No available tables!");
+        }
+        System.out.println();
     }
 
     /**

@@ -8,6 +8,7 @@ import Entity.PromoSet;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.Scanner;
 
 public class MenuControl {
 
@@ -18,40 +19,200 @@ public class MenuControl {
 
     /**
      * Adds a new promotion set into this menu.
-     * @param set the promotion set to add.
      */
-    public static void addPromoSet(PromoSet set){
-        Menu.getMenu().getPromoSet().put(set.getId(), set);
-        saveMenu();
+    public static PromoSet editPromoSet(PromoSet newSet){
+        int choice;
+        Scanner sc = new Scanner(System.in);
+        while(true){
+            System.out.println("====Edit Promotion Set====");
+            System.out.println("|1. Add Food             |" );
+            System.out.println("|2. Remove Food          |" );
+            System.out.println("|3. Set Price            |" );
+            System.out.println("|4. View Set             |" );
+            System.out.println("|5. Save Set             |" );
+            System.out.println("|0. Back                 |");
+            System.out.println("==========================");
+            System.out.print("Please enter your choice: ");
+            choice = sc.nextInt();
+            sc.nextLine();
+            switch(choice){
+                case 1->{
+                    while (true) {
+                        System.out.println("=====Add to Promotion Set=====");
+                        printMenu(false);
+                        choice = sc.nextInt();
+                        sc.nextLine();
+                        if (choice == BACK_OPTION) {
+                            break;
+                        }
+                        FoodType action = getMenuAction(choice, false);
+                        if (action == null) {
+                            System.out.println("Invalid Option!");
+                            System.out.println();
+                            continue;
+                        }
+                        while(true){
+                            System.out.println("================Add to Promotion Set================");
+                            printCurrentMenu(action);
+                            System.out.print("Select Food ID to add or " + BACK_OPTION + " to back: ");
+                            choice = sc.nextInt();
+                            sc.nextLine();
+                            if(choice==BACK_OPTION){
+                                break;
+                            }
+                            Food food = getFood(choice, action);
+                            if (food == null) {
+                                System.out.println("Invalid Food ID!");
+                            } else {
+                                System.out.print("Enter Quantity: ");
+                                int quantity = sc.nextInt();
+                                sc.nextLine();
+                                while (quantity <= 0) {
+                                    System.out.println("Invalid Quantity!");
+                                    System.out.print("Enter Quantity: ");
+                                    quantity = sc.nextInt();
+                                    sc.nextLine();
+                                }
+                                newSet.addFood(food, quantity);
+                                System.out.println(quantity + " " + food.getName() + " has been added!");
+                                System.out.println();
+                                System.out.println("====================================================");
+                                newSet.printFood();
+                            }
+                            System.out.println();
+
+                        }
+                    }
+
+                }
+                case 2->{
+                    while (true) {
+                        if (newSet.getSize() == 0) {
+                            System.out.println("There are currently no items in this Promotion Set!");
+                            System.out.println();
+                            break;
+                        }
+                        System.out.println("===================Deleting Food====================");
+                        printPromoSet(newSet);
+                        System.out.print("Select Food ID to delete or " + BACK_OPTION + " to back: ");
+
+
+                        choice = sc.nextInt();
+                        sc.nextLine();
+                        if (choice == BACK_OPTION) {
+                            break;
+                        } else {
+                            Food food = getFood(choice);
+                            if (newSet.inSet(food)) {
+                                System.out.print("Enter Quantity: ");
+                                int quantity = sc.nextInt();
+                                sc.nextLine();
+                                if (newSet.getQty(food) >= quantity && quantity>=0) {
+                                    newSet.removeFood(food, quantity);
+                                } else {
+                                    System.out.println("Invalid Quantity!");
+                                    System.out.println();
+                                }
+                                System.out.println(quantity + " " + food.getName() + " has been removed from Promotion Set!");
+                            } else {
+                                System.out.println(food.getName() + " is not in Promotion Set!");
+                            }
+                            System.out.println();
+                        }
+                    }
+                }
+                case 3->{
+                    System.out.print("Enter new Price: ");
+                    double price = sc.nextDouble();
+                    sc.nextLine();
+                    while(price<=0.0){
+                        System.out.println("Invalid Price!");
+                        System.out.print("Enter new Price: ");
+                        price = sc.nextDouble();
+                        sc.nextLine();
+                    }
+                    newSet.setPrice(Math.round(price*100.0)/100.0);
+                    System.out.println("Price has been set at $" +  String.format("%.2f",newSet.getPrice()) + "!");
+                    System.out.println();
+                }
+                case 4->{
+                    System.out.println("====================================================");
+                    printPromoSet(newSet);
+                    System.out.print("Press any key to back ");
+                    sc.nextLine();
+                    System.out.println();
+                }
+                case 5->{
+                    boolean test = true;
+                    if(newSet.getSize()==0){
+                        test=false;
+                        System.out.println("Promotion Set is empty! Please add food!");
+                    }
+                    if(newSet.getPrice()==0.00){
+                        test=false;
+                        System.out.println("Promotion Set price is set at $0.00! Please set price!");
+                    }
+                    if(test){
+                        return newSet;
+                    }else{
+                        System.out.println();
+                    }
+                }
+                case 0 ->{
+                    return null;
+                }
+                default->{
+                    System.out.println("Invalid Option!");
+                    System.out.println();
+                }
+            }
+
+
+        }
     }
+
 
     /**
      * Adds new food item into this menu.<br>
      * Does not include PromoSet.
-     * @param name the name of the food item.
-     * @param price the price of the food item.
      * @param type the type of food to add.
      */
-    public static void addFood(String name, double price, FoodType type){
-        Menu menu = Menu.getMenu();
-        Food food = new Food(name, price, newFoodID(), type);
-        if (type==FoodType.DESSERT){
-            menu.getDesserts().put(food.getId(), food);
-        }else if(type==FoodType.DRINK){
-            menu.getDrinks().put(food.getId(), food);
-        }else if(type==FoodType.MAINCOURSE){
-            menu.getMainCourse().put(food.getId(), food);
+    public static void addFood(FoodType type){
+        Scanner sc = new Scanner(System.in);
+        System.out.print("Enter name of " + type+ ": ");
+        String name = sc.nextLine();
+        if (MenuControl.getFood(name, type)!=null){
+            System.out.println(type + " already exist");
+            System.out.println();
+            return;
         }
-        saveMenu();
-    }
+        Food food;
+        if(type==FoodType.PROMOTIONSET){
+            food = editPromoSet(new PromoSet(name, newFoodID()));
+            if(food==null){
+                System.out.println(name+ " not added into menu!");
+                System.out.println();
+                return;
+            }
+        }else{
+            System.out.print("Enter Price: ");
+            double price = sc.nextDouble();
+            sc.nextLine();
+            while(price<=0.0){
+                System.out.println("Invalid Price!");
+                System.out.print("Enter Price: ");
+                price = sc.nextDouble();
+                sc.nextLine();
+            }
+            food = new Food(name, Math.round(price*100.0)/100.0, newFoodID(), type);
 
-    /**
-     * Creates a new promotion set with the provided name
-     * @param name the name of the promotion set.
-     * @return the <code>PromoSet</code> object.
-     */
-    public static PromoSet newPromoSet(String name){
-        return new PromoSet(name, newFoodID());
+        }
+        Menu.getMenu().addToMenu(type, food);
+        saveMenu();
+
+        System.out.println(name + " has been add to " + type + "!");
+        System.out.println();
+
     }
 
     /**
@@ -72,6 +233,81 @@ public class MenuControl {
             menu.getPromoSet().remove(ID);
         }
         saveMenu();
+    }
+
+    public static void editMenu(FoodType type){
+        Scanner sc = new Scanner(System.in);
+        int choice;
+        while (true) {
+            System.out.println("=====================Edit Food======================");
+            printCurrentMenu(type);
+            System.out.print("Select Food ID to edit or "+ BACK_OPTION + " to back: ");
+            choice = sc.nextInt();
+            sc.nextLine();
+            if(choice == BACK_OPTION){
+                break;
+            }
+            Food food = getFood(choice, type);
+            if(food==null){
+                System.out.println("Invalid Option!");
+                System.out.println();
+                continue;
+            }
+            if (type != FoodType.PROMOTIONSET) {
+                /* In specific food type menu page */
+                while(choice!=0){
+                    System.out.println("===============Edit Food===============");
+                    System.out.printf("| %-29s%7s|\n", food.getName(), "$"+String.format("%.2f", food.getPrice()));
+                    System.out.println("|1. Change Name                       |");
+                    System.out.println("|2. Change Price                      |");
+                    System.out.println("|0. Back                              |");
+                    System.out.println("=======================================");
+                    System.out.print("Please enter your choice: ");
+                    choice = sc.nextInt();
+                    sc.nextLine();
+
+                    switch(choice){
+                        case 1->{
+                            String old = food.getName();
+                            System.out.print("Enter new name: ");
+                            String name = sc.nextLine();
+                            if (getFood(name)!=null){
+                                System.out.println("Duplicate name!");
+                                System.out.println();
+                                break;
+                            }
+                            food.setName(name);
+                            System.out.println(old + " has been changed to "+ name + "!");
+                            System.out.println();
+                        }
+                        case 2->{
+                            double old = food.getPrice();
+                            System.out.print("Enter new price: ");
+                            double price = sc.nextDouble();
+                            sc.nextLine();
+                            if(price<=0.0){
+                                System.out.println("Invalid Price!");
+                                System.out.println();
+                                break;
+                            }
+                            food.setPrice(Math.round(price*100.0)/100.0);
+                            System.out.println("Price change from $" + old + " to $" + price + "!");
+                            System.out.println();
+                        }
+                        case 0->{
+                        }
+                        default ->{
+                            System.out.println("Invalid Option!");
+                            System.out.println();
+                        }
+                    }
+                }
+            }else{
+                PromoSet set = editPromoSet((PromoSet) food);
+            }
+        }
+    }
+
     }
 
     /**
@@ -113,7 +349,7 @@ public class MenuControl {
     /**
      * Prints out the list of main course.
      */
-    private static void printMainCourse(){
+    private static void printMainCourseMenu(){
         HashMap<Integer, Food> mainCourse = Menu.getMenu().getMainCourse();
         System.out.println("====================Main Course=====================");
         System.out.printf("|| %-3s|| %-30s|| %-8s||\n", "ID", "Name", "Price");
@@ -126,7 +362,7 @@ public class MenuControl {
     /**
      * Prints out the list of drinks.
      */
-    private static void printDrinks(){
+    private static void printDrinksMenu(){
         HashMap<Integer, Food> drinks = Menu.getMenu().getDrinks();
         System.out.println("=======================Drinks=======================");
         System.out.printf("|| %-3s|| %-30s|| %-8s||\n", "ID", "Name", "Price");
@@ -139,7 +375,7 @@ public class MenuControl {
     /**
      * Prints out the list of desserts.
      */
-    private static void printDesserts(){
+    private static void printDessertsMenu(){
         HashMap<Integer, Food> desserts = Menu.getMenu().getDesserts();
         System.out.println("======================Desserts======================");
         System.out.printf("|| %-3s|| %-30s|| %-8s||\n", "ID", "Name", "Price");
@@ -152,7 +388,7 @@ public class MenuControl {
     /**
      * Prints out the list of promotion sets.
      */
-    private static void printPromoSet(){
+    private static void printPromoSetMenu(){
         HashMap<Integer, PromoSet> promoSet = Menu.getMenu().getPromoSet();
         System.out.println("===================Promotion Set====================");
         System.out.printf("|| %-3s|| %-30s|| %-8s||\n", "ID", "Name", "Price");
@@ -169,14 +405,24 @@ public class MenuControl {
      */
     public static void printCurrentMenu(FoodType type){
         if (type==FoodType.DRINK){
-            printDrinks();
+            printDrinksMenu();
         }else if(type==FoodType.MAINCOURSE){
-            printMainCourse();
+            printMainCourseMenu();
         }else if(type == FoodType.DESSERT){
-            printDesserts();
+            printDessertsMenu();
         }else{
-            printPromoSet();
+            printPromoSetMenu();
         }
+    }
+
+
+    public static void printPromoSet(PromoSet set){
+        System.out.printf("|| %-3s|| %-30s|| %-8s||\n", set.getId(), set.getName(), "$"+String.format("%.2f",set.getPrice()));
+        System.out.printf("|| %-6s%-3s   %-35s||\n", "","Qty", "Name");
+        for (HashMap.Entry<Food, Integer> item : set.getItems().entrySet()){
+            System.out.printf("|| %-6s%3s   %-35s||\n", "", item.getValue(), item.getKey().getName());
+        }
+        System.out.println("====================================================");
     }
 
     /**

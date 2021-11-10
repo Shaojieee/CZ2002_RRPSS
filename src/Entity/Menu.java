@@ -80,5 +80,17 @@ public class Menu {
     public HashMap<Integer, PromoSet> getPromoSet() {
         return promoSet;
     }
+
+    public void addToMenu(FoodType type, Food food){
+        if (type==FoodType.DESSERT){
+            desserts.put(food.getId(), food);
+        }else if(type==FoodType.DRINK){
+            drinks.put(food.getId(), food);
+        }else if(type==FoodType.MAINCOURSE){
+            mainCourse.put(food.getId(), food);
+        }else{
+            promoSet.put(food.getId(), (PromoSet) food);
+        }
+    }
 }
 

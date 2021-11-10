@@ -1,10 +1,6 @@
 package Control;
 
 import Entity.*;
-
-import java.time.DateTimeException;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.InputMismatchException;
 import java.util.Scanner;
@@ -21,8 +17,8 @@ public class StaffControl {
         switch(choice){
             case 1 -> createOrder(staffID);
             case 2 -> clearTable();
-            case 3 -> createReservation();
-            case 4 -> deleteReservation();
+            case 3 -> ReservationListControl.createReservation();
+            case 4 -> ReservationListControl.deleteReservation();
             case 5 -> ReservationListControl.printReservations();
             case 6 -> TableListControl.checkTableDetails();
             case 7 -> allocateTable();
@@ -42,7 +38,6 @@ public class StaffControl {
     /**
      * Creates an order for the chosen table.<br>
      * Add or remove food from the order.
-     * @param staffID
      */
     public static void createOrder(int staffID){
         Scanner sc = new Scanner(System.in);
@@ -92,12 +87,8 @@ public class StaffControl {
             choice = sc.nextInt();
             sc.nextLine();
             switch(choice){
-                case 1->{
-                    OrderControl.addFood(newOrder);
-                }
-                case 2->{
-                    OrderControl.removeFood(newOrder);
-                }
+                case 1-> OrderControl.addFood(newOrder);
+                case 2-> OrderControl.removeFood(newOrder);
                 case 3->{
                     OrderControl.printOrder(newOrder);
                     System.out.print("Press any key to go back ");
@@ -138,13 +129,11 @@ public class StaffControl {
     /**
      * Prints the invoice for the chosen table.<br>
      * Sets the table as available.
-     * @param staffID
      */
     public static void clearTable(){
         Scanner sc = new Scanner(System.in);
         int choice;
         Table table;
-        TableList tableList = TableList.getTableList();
         boolean member;
 
         while(true){
@@ -233,8 +222,6 @@ public class StaffControl {
     public static void allocateTable(){
         Scanner sc = new Scanner(System.in);
         int choice;
-        Table table;
-        TableList tableList = TableList.getTableList();
 
         if(LocalTime.now().isAfter(LocalTime.of(20,40))){
             System.out.println("Sorry kitchen has closed!");
@@ -252,61 +239,14 @@ public class StaffControl {
             sc.nextLine();
             switch(choice){
                 case 1->{
-                    System.out.print("Enter Customer Name: ");
-                    String name = sc.nextLine();
-                    int phone;
-                    while(true){
-                        try{
-                            System.out.print("Enter Customer contact number: ");
-                            phone = sc.nextInt();
-                            sc.nextLine();
-                            if(phone<100000000 && phone>79999999){
-                                break;
-                            } else{
-                                System.out.println("Invalid phone number!");
-                                System.out.println();
-                            }
-                        }
-                        catch(InputMismatchException e){
-                            System.out.println("Invalid phone number!");
-                            System.out.println();
-                            sc = new Scanner(System.in);
-                        }
+                    if(!ReservationListControl.checkReservation()){
+                        System.out.println("No such reservation!");
+                        System.out.println();
                     }
-                    ReservationList reservationList = ReservationList.getReservationList();
-                    if(reservationList.checkReservation(name, phone)){
-                        if((table = reservationList.assignReservation(name,phone))!=null){
-                            System.out.println("Table " + table.getTableId() + " has been assigned to " + name + "!");
-                        }else{
-                            System.out.println("No available tables!");
-                        }
-                    }else{
-                        System.out.println(name + " does not have a reservation!");
-                    }
-                    System.out.println();
                     return;
                 }
                 case 2->{
-                    int pax;
-                    System.out.print("Enter number of Pax: ");
-                    do {
-                        pax = sc.nextInt();
-                        sc.nextLine();
-                        if(pax<=0){
-                            System.out.println("Invalid Pax!");
-                            System.out.print("Enter number of Pax: ");
-                        }
-                    }while(pax<=0);
-                    ReservationList.getReservationList().updateTableStatus();
-                    table = tableList.chooseTable(pax);
-                    if(table!=null){
-                        table.assign(new Customer(pax));
-                        System.out.println("Table " + table.getTableId()+ " has been allocated!");
-
-                    }else{
-                        System.out.println("No available tables!");
-                    }
-                    System.out.println();
+                    TableListControl.allocateTable();
                     return;
                 }
                 case 0->{
@@ -325,7 +265,6 @@ public class StaffControl {
      */
     public static void editMembers(){
         Scanner sc = new Scanner(System.in);
-        MemberList memberList = MemberList.getMemberList();
         int choice;
         while(true) {
             System.out.println("=====Edit Member List=====");
@@ -338,13 +277,8 @@ public class StaffControl {
             sc.nextLine();
 
             switch(choice){
-                case 1->{
-                    MemberListControl.addMembers();
-
-                }
-                case 2->{
-                    MemberListControl.removeMembers();
-                }
+                case 1-> MemberListControl.addMembers();
+                case 2-> MemberListControl.removeMembers();
                 case 0->{
                     return;
                 }
@@ -360,7 +294,6 @@ public class StaffControl {
      * Saves all the data in the program and terminate it
      */
     public static void exitProgram() {
-        TableList tableList = TableList.getTableList();
         if(!TableListControl.allEmpty()){
             System.out.println("There are still occupied tables!");
             System.out.println();
