@@ -10,21 +10,21 @@ import java.util.InputMismatchException;
 import java.util.Scanner;
 
 public class StaffControl {
-    
+
 
     /**
      * Runs the function associated with the choice as displayed by <code>printActions()</code>.
      * @param choice  the choice selected by the staff.
      * @return        <code>true</code> if staff chooses to log out, <code>false</code> otherwise
      */
-    public static boolean getAction(int choice){
+    public static boolean getAction(int choice, int staffID){
         switch(choice){
-            case 1 -> createOrder();
+            case 1 -> createOrder(staffID);
             case 2 -> clearTable();
             case 3 -> createReservation();
             case 4 -> deleteReservation();
-            case 5 -> printReservations();
-            case 6 -> checkTableDetails();
+            case 5 -> ReservationListControl.printReservations();
+            case 6 -> TableListControl.checkTableDetails();
             case 7 -> allocateTable();
             case 8 -> editMembers();
             case 9 -> exitProgram();
@@ -42,13 +42,12 @@ public class StaffControl {
     /**
      * Creates an order for the chosen table.<br>
      * Add or remove food from the order.
+     * @param staffID
      */
-    public static void createOrder(){
+    public static void createOrder(int staffID){
         Scanner sc = new Scanner(System.in);
         int choice;
         Table table;
-        TableList tableList = TableList.getTableList();
-        Menu menu = Menu.getMenu();
 
         if(LocalTime.now().isAfter(LocalTime.of(20,40))){
             System.out.println("Sorry kitchen has closed!");
@@ -59,14 +58,14 @@ public class StaffControl {
         /* Choosing table to take order */
         while(true){
             System.out.println("==================Creating Order==================");
-            tableList.printOccupied();
-            System.out.print("Select Table ID or " + TableList.BACK_OPTION + " to go back: ");
+            TableListControl.printOccupied();
+            System.out.print("Select Table ID or " + TableListControl.BACK_OPTION + " to go back: ");
             choice = sc.nextInt();
             sc.nextLine();
-            if (choice == TableList.BACK_OPTION){
+            if (choice == TableListControl.BACK_OPTION){
                 return;
             }
-            table = tableList.getTable(choice);
+            table = TableListControl.getTable(choice);
             if (table==null){
                 System.out.println("Invalid Option!");
                 System.out.println();
@@ -77,8 +76,9 @@ public class StaffControl {
                 System.out.println();
             }
         }
+        Staff staff = StaffListControl.getStaff(staffID);
+        Order newOrder = new Order(staff);
 
-        Order newOrder = new Order(this);
         /* Taking order */
         while(true) {
             System.out.println("=======Creating Order=======");
@@ -93,98 +93,13 @@ public class StaffControl {
             sc.nextLine();
             switch(choice){
                 case 1->{
-                    while(true){
-                        System.out.println("=========Adding Food==========");
-                        menu.printMenu(true);
-                        System.out.print("Please enter your choice: ");
-                        choice = sc.nextInt();
-                        sc.nextLine();
-                        if(choice == Menu.BACK_OPTION){
-                            break;
-                        }
-                        FoodType action = menu.getMenuAction(choice, true);
-                        if(action==null){
-                            System.out.println("Invalid Option!");
-                            System.out.println();
-                            continue;
-                        }
-
-                        System.out.println("===================Creating Order===================");
-                        menu.printCurrentMenu(action);
-                        System.out.print("Select Food ID to add or " + Menu.BACK_OPTION + " to go back: ");
-                        /* In specific food type menu page */
-                        while (true) {
-                            choice = sc.nextInt();
-                            sc.nextLine();
-                            if (choice == Menu.BACK_OPTION){
-                                break;
-                            }
-                            Food food = menu.getFood(choice, action);
-                            if (food == null) {
-                                System.out.println("Invalid Option!");
-                                System.out.println();
-                            } else {
-                                System.out.print("Enter Quantity: ");
-                                choice = sc.nextInt();
-                                sc.nextLine();
-                                while (choice <= 0) {
-                                    System.out.println("Invalid Quantity!");
-                                    System.out.println();
-                                    System.out.print("Enter Quantity: ");
-                                    choice = sc.nextInt();
-                                    sc.nextLine();
-                                }
-                                newOrder.addFood(food, choice);
-                                System.out.println(choice + " " + food.getName() + " has been added!");
-                                System.out.println();
-                                System.out.println("===================Creating Order===================");
-                                menu.printCurrentMenu(action);
-                                System.out.print("Select Food ID to add or " + Menu.BACK_OPTION + " to go back: ");
-                            }
-                        }
-
-                    }
+                    OrderControl.addFood(newOrder);
                 }
                 case 2->{
-                    while(true) {
-                        System.out.println("======================Removing Food=======================");
-                        newOrder.printOrder();
-
-                        if (newOrder.getSize() == 0) {
-                            System.out.print("Press any key to go back ");
-                            sc.nextLine();
-                            System.out.println();
-                            break;
-                        } else {
-                            System.out.print("Select Food ID or " + Order.BACK_OPTION + " to go back: ");
-                            int foodId = sc.nextInt();
-                            sc.nextLine();
-                            if(foodId == Order.BACK_OPTION){
-                                break;
-                            }
-                            Food food = menu.getFood(foodId);
-                            if (newOrder.checkInOrder(food)){
-                                System.out.print("Enter Quantity to remove: ");
-                                choice = sc.nextInt();
-                                sc.nextLine();
-                                while(!newOrder.checkFoodQty(food, choice)){
-                                    System.out.println("Invalid Quantity!");
-                                    System.out.println();
-                                    System.out.print("Enter Quantity to remove:");
-                                    choice = sc.nextInt();
-                                    sc.nextLine();
-                                }
-                                newOrder.removeFood(food, choice);
-                                System.out.println(choice + " " + food.getName() + " has been removed!");
-                            }else{
-                                System.out.println("Invalid Option");
-                            }
-                            System.out.println();
-                        }
-                    }
+                    OrderControl.removeFood(newOrder);
                 }
                 case 3->{
-                    newOrder.printOrder();
+                    OrderControl.printOrder(newOrder);
                     System.out.print("Press any key to go back ");
                     sc.nextLine();
                     System.out.println();
@@ -195,11 +110,13 @@ public class StaffControl {
                         System.out.println();
                         break;
                     }
+
                     if (table.hasOrder()){
-                        table.getOrder().appendOrder(newOrder);
+                        OrderControl.appendOrder(table.getOrder(), newOrder);
                     }else{
                         table.setOrder(newOrder);
                     }
+
                     System.out.println("Order has been successfully submitted!");
                     System.out.println();
                     return;
@@ -215,11 +132,13 @@ public class StaffControl {
                 }
             }
         }
+
     }
 
     /**
      * Prints the invoice for the chosen table.<br>
      * Sets the table as available.
+     * @param staffID
      */
     public static void clearTable(){
         Scanner sc = new Scanner(System.in);
@@ -230,14 +149,14 @@ public class StaffControl {
 
         while(true){
             System.out.println("===================Clear Table====================");
-            tableList.printOccupied();
-            System.out.print("Select Table ID or " + TableList.BACK_OPTION + " to go back: ");
+            TableListControl.printOccupied();
+            System.out.print("Select Table ID or " + TableListControl.BACK_OPTION + " to go back: ");
             choice = sc.nextInt();
             sc.nextLine();
-            if (choice == TableList.BACK_OPTION){
+            if (choice == TableListControl.BACK_OPTION){
                 return;
             }
-            table = tableList.getTable(choice);
+            table = TableListControl.getTable(choice);
             if (table!=null && table.isOccupied()){
                 break;
             }else{
@@ -277,7 +196,7 @@ public class StaffControl {
                             sc = new Scanner(System.in);
                         }
                     }
-                    member = MemberList.getMemberList().checkMember(phone);
+                    member = MemberListControl.checkMember(phone);
                     if(member){
                         System.out.println("Customer is a member!");
                         break;
@@ -298,9 +217,9 @@ public class StaffControl {
 
         System.out.println("Settling bill for Table " + table.getTableId() + "...");
 
-        table.generateInvoice(member);
+        TableListControl.generateInvoice(table, member);
         System.out.println("Bill has been settled!");
-        table.clearTable();
+        TableListControl.clearTable(table);
         System.out.print("Press any key to continue ");
         sc.nextLine();
         System.out.println();
@@ -370,9 +289,7 @@ public class StaffControl {
 
         LocalDateTime date_time = LocalDateTime.of(date, time);
 
-        ReservationList reservationList = ReservationList.getReservationList();
-
-        if (!reservationList.checkAvailability(pax, date_time)){
+        if (!ReservationListControl.checkAvailability(pax, date_time)){
             System.out.println("Sorry no available tables at " + time_str + " on " + date_str + "!");
             System.out.println();
             return;
@@ -401,7 +318,7 @@ public class StaffControl {
             }
         }
 
-        reservationList.addReservation(name, phone, pax, date_time);
+        ReservationListControl.addReservation(name, phone, pax, date_time);
         System.out.println("Reservation for " + name + " at " + time_str + " on " + date_str + " has been recorded!");
         System.out.println();
     }
@@ -511,33 +428,7 @@ public class StaffControl {
         sc.nextLine();
     }
 
-    /**
-     * Prints the list of tables.
-     */
-    public static void checkTableDetails(){
-        TableList tableList = TableList.getTableList();
-        Scanner sc = new Scanner(System.in);
-        int choice;
-        while(true) {
-            tableList.printAllTables();
-            System.out.print("Select Table ID to view reservation or table order or " + TableList.BACK_OPTION + " to go back: ");
-            choice = sc.nextInt();
-            sc.nextLine();
-            if(choice==TableList.BACK_OPTION){
-                return;
-            }
-            if(tableList.getTable(choice)!=null){
-                tableList.printTableDetails(choice);
-                System.out.print("Press any key to go back ");
-                sc.nextLine();
-            }else{
-                System.out.println("Invalid Option!");
-                System.out.println();
-            }
 
-        }
-
-    }
 
     /**
      * Allocates a table to a customer. <br>
@@ -653,62 +544,11 @@ public class StaffControl {
 
             switch(choice){
                 case 1->{
-                    int phone;
-                    while(true){
-                        try{
-                            System.out.print("Enter Customer contact number: ");
-                            phone = sc.nextInt();
-                            sc.nextLine();
-                            if(phone<100000000 && phone>79999999){
-                                break;
-                            } else{
-                                System.out.println("Invalid phone number!");
-                                System.out.println();
-                            }
-                        }
-                        catch(InputMismatchException e){
-                            System.out.println("Invalid phone number!");
-                            System.out.println();
-                            sc = new Scanner(System.in);
-                        }
-                    }
+                    MemberListControl.addMembers();
 
-
-                    if (memberList.checkMember(phone)){
-                        System.out.println("Customer already a member!");
-                    }else{
-                        memberList.addMembers(phone);
-                        System.out.println("Customer (" + phone + ") has been added to the Members List!");
-                    }
-                    System.out.println();
                 }
                 case 2->{
-
-                    int phone;
-                    while(true){
-                        try{
-                            System.out.print("Enter Customer contact number: ");
-                            phone = sc.nextInt();
-                            sc.nextLine();
-                            if(phone<100000000 && phone>79999999){
-                                break;
-                            }else{
-                                System.out.println("Invalid phone number!");
-                                System.out.println();
-                            }
-                        }
-                        catch(InputMismatchException e){
-                            System.out.println("Invalid phone number!");
-                            System.out.println();
-                        }
-                    }
-                    if(!memberList.checkMember(phone)){
-                        System.out.println("Customer is not a member!");
-                    }else{
-                        memberList.removeMembers(phone);
-                        System.out.println("Customer has been removed from the Members List!");
-                    }
-                    System.out.println();
+                    MemberListControl.removeMembers();
                 }
                 case 0->{
                     return;
@@ -726,18 +566,18 @@ public class StaffControl {
      */
     public static void exitProgram() {
         TableList tableList = TableList.getTableList();
-        if(!tableList.allEmpty()){
+        if(!TableListControl.allEmpty()){
             System.out.println("There are still occupied tables!");
             System.out.println();
             return;
         }
         System.out.println("Saving all data...");
-        MemberList.getMemberList().saveMembers();
-        TableList.getTableList().saveTableList();
-        Menu.getMenu().saveMenu();
-        StaffList.getStaffList().saveStaffList();
-        SalesReport.getSalesReport().saveSalesReport();
-        ReservationList.getReservationList().saveReservationList();
+        MemberListControl.saveMembers();
+        TableListControl.saveTableList();
+        MenuControl.saveMenu();
+        StaffListControl.saveStaffList();
+        SalesReportControl.saveSalesReport();
+        ReservationListControl.saveReservationList();
         System.out.println("All data saved! Have a good day!");
         System.out.println();
         System.exit(0);
