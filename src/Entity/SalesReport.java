@@ -1,5 +1,7 @@
 package Entity;
 
+import Control.FileEditor;
+
 import java.time.format.DateTimeFormatter;
 import java.util.*;
 import java.time.*;
@@ -38,6 +40,10 @@ public class SalesReport {
             report = new SalesReport();
         }
         return report;
+    }
+
+    public HashMap<String, HashMap<Food, Double[]>> getData(){
+        return this.data;
     }
 
 }

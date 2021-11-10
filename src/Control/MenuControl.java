@@ -2,6 +2,8 @@ package Control;
 
 import Entity.Food;
 import Entity.FoodType;
+import Entity.Menu;
+import Entity.PromoSet;
 
 import java.util.Arrays;
 import java.util.Collections;
@@ -10,12 +12,17 @@ import java.util.HashMap;
 public class MenuControl {
 
     /**
+     * The number assigned to go back when printing this menu.
+     */
+    public static final int BACK_OPTION = 0;
+
+    /**
      * Adds a new promotion set into this menu.
      * @param set the promotion set to add.
      */
-    public void addPromoSet(PromoSet set){
-        this.promoSet.put(set.getId(), set);
-        this.saveMenu();
+    public static void addPromoSet(PromoSet set){
+        Menu.getMenu().getPromoSet().put(set.getId(), set);
+        saveMenu();
     }
 
     /**
@@ -25,16 +32,17 @@ public class MenuControl {
      * @param price the price of the food item.
      * @param type the type of food to add.
      */
-    public void addFood(String name, double price, FoodType type){
-        Food food = new Food(name, price, this.newFoodID(), type);
+    public static void addFood(String name, double price, FoodType type){
+        Menu menu = Menu.getMenu();
+        Food food = new Food(name, price, newFoodID(), type);
         if (type==FoodType.DESSERT){
-            this.desserts.put(food.getId(), food);
+            menu.getDesserts().put(food.getId(), food);
         }else if(type==FoodType.DRINK){
-            this.drinks.put(food.getId(), food);
+            menu.getDrinks().put(food.getId(), food);
         }else if(type==FoodType.MAINCOURSE){
-            this.mainCourse.put(food.getId(), food);
+            menu.getMainCourse().put(food.getId(), food);
         }
-        this.saveMenu();
+        saveMenu();
     }
 
     /**
@@ -42,34 +50,35 @@ public class MenuControl {
      * @param name the name of the promotion set.
      * @return the <code>PromoSet</code> object.
      */
-    public PromoSet newPromoSet(String name){
-        return new PromoSet(name, this.newFoodID());
+    public static PromoSet newPromoSet(String name){
+        return new PromoSet(name, newFoodID());
     }
 
     /**
      * Removes the food item from this menu.
      * @param food the food item to remove.
      */
-    public void deleteFood(Food food){
+    public static void deleteFood(Food food){
+        Menu menu = Menu.getMenu();
         int ID = food.getId();
         FoodType type = food.getFoodType();
         if (type==FoodType.DESSERT){
-            this.desserts.remove(ID);
+            menu.getDesserts().remove(ID);
         }else if(type==FoodType.DRINK){
-            this.drinks.remove(ID);
+            menu.getDrinks().remove(ID);
         }else if(type==FoodType.MAINCOURSE){
-            this.mainCourse.remove(ID);
+            menu.getMainCourse().remove(ID);
         }else{
-            this.promoSet.remove(ID);
+            menu.getPromoSet().remove(ID);
         }
-        this.saveMenu();
+        saveMenu();
     }
 
     /**
      * Prints out the type of food in this Menu
      * @param fullMenu if <code>false</code> will not show promotion set, if <code>true</code> will show all 4 food types
      */
-    public void printMenu(boolean fullMenu){
+    public static void printMenu(boolean fullMenu){
         System.out.println("========Select a Menu=========");
         System.out.println("|1. Main Course              |");
         System.out.println("|2. Drinks                   |");
@@ -77,7 +86,7 @@ public class MenuControl {
         if (fullMenu){
             System.out.println("|4. Promotion Sets           |");
         }
-        System.out.println("|"+BACK_OPTION+". Back                     |");
+        System.out.println("|"+ BACK_OPTION+". Back                     |");
         System.out.println("==============================");
     }
 
@@ -87,7 +96,7 @@ public class MenuControl {
      * @param fullMenu if <code>false</code> cannot return promotion set, if <code>true</code> can return promotion set
      * @return the <code>FoodType</code> of the selected choice
      */
-    public FoodType getMenuAction(int choice, boolean fullMenu){
+    public static FoodType getMenuAction(int choice, boolean fullMenu){
         if (choice==1){
             return FoodType.MAINCOURSE;
         }else if(choice==2){
@@ -104,10 +113,11 @@ public class MenuControl {
     /**
      * Prints out the list of main course.
      */
-    private void printMainCourse(){
+    private static void printMainCourse(){
+        HashMap<Integer, Food> mainCourse = Menu.getMenu().getMainCourse();
         System.out.println("====================Main Course=====================");
         System.out.printf("|| %-3s|| %-30s|| %-8s||\n", "ID", "Name", "Price");
-        for(HashMap.Entry<Integer, Food> item : this.mainCourse.entrySet()){
+        for(HashMap.Entry<Integer, Food> item : mainCourse.entrySet()){
             item.getValue().printFood();
         }
         System.out.println("====================================================");
@@ -116,10 +126,11 @@ public class MenuControl {
     /**
      * Prints out the list of drinks.
      */
-    private void printDrinks(){
+    private static void printDrinks(){
+        HashMap<Integer, Food> drinks = Menu.getMenu().getDrinks();
         System.out.println("=======================Drinks=======================");
         System.out.printf("|| %-3s|| %-30s|| %-8s||\n", "ID", "Name", "Price");
-        for(HashMap.Entry<Integer, Food> item : this.drinks.entrySet()){
+        for(HashMap.Entry<Integer, Food> item : drinks.entrySet()){
             item.getValue().printFood();
         }
         System.out.println("====================================================");
@@ -128,10 +139,11 @@ public class MenuControl {
     /**
      * Prints out the list of desserts.
      */
-    private void printDesserts(){
+    private static void printDesserts(){
+        HashMap<Integer, Food> desserts = Menu.getMenu().getDesserts();
         System.out.println("======================Desserts======================");
         System.out.printf("|| %-3s|| %-30s|| %-8s||\n", "ID", "Name", "Price");
-        for(HashMap.Entry<Integer, Food> item : this.desserts.entrySet()){
+        for(HashMap.Entry<Integer, Food> item : desserts.entrySet()){
             item.getValue().printFood();
         }
         System.out.println("====================================================");
@@ -140,11 +152,12 @@ public class MenuControl {
     /**
      * Prints out the list of promotion sets.
      */
-    private void printPromoSet(){
+    private static void printPromoSet(){
+        HashMap<Integer, PromoSet> promoSet = Menu.getMenu().getPromoSet();
         System.out.println("===================Promotion Set====================");
         System.out.printf("|| %-3s|| %-30s|| %-8s||\n", "ID", "Name", "Price");
 
-        for(HashMap.Entry<Integer, PromoSet> set : this.promoSet.entrySet()){
+        for(HashMap.Entry<Integer, PromoSet> set : promoSet.entrySet()){
             set.getValue().printFood();
         }
         System.out.println("====================================================");
@@ -154,7 +167,7 @@ public class MenuControl {
      * Prints the list of food item according to the provided food type.
      * @param type the type of food to print.
      */
-    public void printCurrentMenu(FoodType type){
+    public static void printCurrentMenu(FoodType type){
         if (type==FoodType.DRINK){
             printDrinks();
         }else if(type==FoodType.MAINCOURSE){
@@ -171,13 +184,16 @@ public class MenuControl {
      * @param ID the ID of the food item.
      * @return the <code>Food</code> object.
      */
-    public Food getFood(int ID){
-        if (this.mainCourse.containsKey(ID)){
-            return this.mainCourse.get(ID);
-        }else if(this.drinks.containsKey(ID)){
-            return this.drinks.get(ID);
-        }else {
-            return this.desserts.getOrDefault(ID, null);
+    public static Food getFood(int ID){
+        Menu menu = Menu.getMenu();
+        if (menu.getMainCourse().containsKey(ID)){
+            return menu.getMainCourse().get(ID);
+        }else if(menu.getDrinks().containsKey(ID)){
+            return menu.getDrinks().get(ID);
+        }else if(menu.getDesserts().containsKey(ID)) {
+            return menu.getDesserts().get(ID);
+        }else{
+            return menu.getPromoSet().getOrDefault(ID, null);
         }
     }
 
@@ -187,15 +203,16 @@ public class MenuControl {
      * @param type the food type of the food item.
      * @return the <code>Food</code> object.
      */
-    public Food getFood(int ID, FoodType type){
+    public static Food getFood(int ID, FoodType type){
+        Menu menu = Menu.getMenu();
         if (type==FoodType.DRINK){
-            return this.drinks.getOrDefault(ID, null);
+            return menu.getDrinks().getOrDefault(ID, null);
         }else if(type==FoodType.DESSERT){
-            return this.desserts.getOrDefault(ID, null);
+            return menu.getDesserts().getOrDefault(ID, null);
         }else if(type==FoodType.MAINCOURSE){
-            return this.mainCourse.getOrDefault(ID, null);
+            return menu.getMainCourse().getOrDefault(ID, null);
         }else{
-            return this.promoSet.getOrDefault(ID, null);
+            return menu.getPromoSet().getOrDefault(ID, null);
         }
     }
 
@@ -205,27 +222,28 @@ public class MenuControl {
      * @param type the food type of the food item.
      * @return the <code>Food</code> object.
      */
-    public Food getFood(String name, FoodType type){
+    public static Food getFood(String name, FoodType type){
+        Menu menu = Menu.getMenu();
         if (type==FoodType.DRINK){
-            for (Food food : this.drinks.values()){
+            for (Food food : menu.getDrinks().values()){
                 if (food.getName().equals(name)){
                     return food;
                 }
             }
         }else if(type==FoodType.DESSERT){
-            for (Food food : this.desserts.values()){
+            for (Food food : menu.getDesserts().values()){
                 if (food.getName().equals(name)){
                     return food;
                 }
             }
         }else if(type==FoodType.MAINCOURSE){
-            for (Food food : this.mainCourse.values()){
+            for (Food food : menu.getMainCourse().values()){
                 if (food.getName().equals(name)){
                     return food;
                 }
             }
         }else{
-            for (Food food : this.promoSet.values()){
+            for (Food food : menu.getPromoSet().values()){
                 if (food.getName().equals(name)){
                     return food;
                 }
@@ -239,23 +257,24 @@ public class MenuControl {
      * @param name the name of the food item.
      * @return the <code>Food</code> object.
      */
-    public Food getFood(String name){
-        for (Food food : this.drinks.values()) {
+    public static Food getFood(String name){
+        Menu menu = Menu.getMenu();
+        for (Food food : menu.getDrinks().values()) {
             if (food.getName().equals(name)) {
                 return food;
             }
         }
-        for (Food food : this.desserts.values()){
+        for (Food food : menu.getDesserts().values()){
             if (food.getName().equals(name)){
                 return food;
             }
         }
-        for (Food food : this.mainCourse.values()){
+        for (Food food : menu.getMainCourse().values()){
             if (food.getName().equals(name)){
                 return food;
             }
         }
-        for (Food food : this.promoSet.values()){
+        for (Food food : menu.getPromoSet().values()){
             if (food.getName().equals(name)){
                 return food;
             }
@@ -266,21 +285,23 @@ public class MenuControl {
     /**
      * @return an unused food ID in this menu.
      */
-    private int newFoodID(){
-        int mainCourseID = this.mainCourse.keySet().stream().max((entry1, entry2) -> entry1 > entry2? 1 : -1).orElse(0);
-        int drinksID = this.drinks.keySet().stream().max((entry1, entry2) -> entry1 > entry2? 1 : -1).orElse(0);
-        int dessertsID = this.desserts.keySet().stream().max((entry1, entry2) -> entry1 > entry2? 1 : -1).orElse(0);
-        int promoSetID = this.promoSet.keySet().stream().max((entry1, entry2) -> entry1 > entry2? 1 : -1).orElse(0);
+    private static int newFoodID(){
+        Menu menu = Menu.getMenu();
+        int mainCourseID = menu.getMainCourse().keySet().stream().max((entry1, entry2) -> entry1 > entry2? 1 : -1).orElse(0);
+        int drinksID = menu.getDrinks().keySet().stream().max((entry1, entry2) -> entry1 > entry2? 1 : -1).orElse(0);
+        int dessertsID = menu.getDesserts().keySet().stream().max((entry1, entry2) -> entry1 > entry2? 1 : -1).orElse(0);
+        int promoSetID = menu.getPromoSet().keySet().stream().max((entry1, entry2) -> entry1 > entry2? 1 : -1).orElse(0);
         return Collections.max(Arrays.asList(mainCourseID, drinksID, dessertsID, promoSetID))+1;
     }
 
     /**
      * Save the current menu.
      */
-    public void saveMenu(){
-        FileEditor.writeDesserts(this.desserts);
-        FileEditor.writeMainCourse(this.mainCourse);
-        FileEditor.writeDrink(this.drinks);
-        FileEditor.writePromoSets(this.promoSet);
+    public static void saveMenu(){
+        Menu menu = Menu.getMenu();
+        FileEditor.writeDesserts(menu.getDesserts());
+        FileEditor.writeMainCourse(menu.getMainCourse());
+        FileEditor.writeDrink(menu.getDrinks());
+        FileEditor.writePromoSets(menu.getPromoSet());
     }
 }
