@@ -7,6 +7,10 @@ import Entity.StaffList;
 import java.util.HashMap;
 import java.util.Scanner;
 
+
+/**
+ * This class contains the functions used to control the list of staffs.
+ */
 public class StaffListControl {
 
     /**
@@ -24,8 +28,9 @@ public class StaffListControl {
     }
 
     /**
-     * Add or remove staffs from the restaurant.
-     * This manager will not be able to remove himself.
+     * Add or remove staffs from the restaurant.<br>
+     * The user will not be able to remove himself.
+     * @param staffID the staffID of the staff calling this function.
      */
     public static void editStaff(int staffID) {
         Scanner sc = new Scanner(System.in);
@@ -67,7 +72,10 @@ public class StaffListControl {
         }
     }
 
-    public static void addStaff(){
+    /**
+     * Adds a staff into the list of staffs.
+     */
+    private static void addStaff(){
         Scanner sc = new Scanner(System.in);
         int choice;
         System.out.print("Enter Staff Name: ");
@@ -139,7 +147,11 @@ public class StaffListControl {
         System.out.println();
     }
 
-    public static void removeStaff(int staffID){
+    /**
+     * Removes a staff from the list of staffs.
+     * @param staffID the staff ID of the staff to remove.
+     */
+    private static void removeStaff(int staffID){
         Scanner sc = new Scanner(System.in);
         int choice;
         while(true) {
@@ -171,13 +183,18 @@ public class StaffListControl {
         }
     }
 
+    /**
+     * Returns the <code>Staff</code> object of the specified staff ID.
+     * @param staffID the staff ID of the staff.
+     * @return the <code>Staff</code> object, <code>null</code> if staff ID is invalid.
+     */
     public static Staff getStaff(int staffID){
         HashMap<Integer, Staff> staffList = StaffList.getStaffList().getList();
         return staffList.getOrDefault(staffID, null);
     }
 
     /**
-     * Checks if name is in this list.
+     * Checks if name is in the list of staff.
      * @param name the name of the staff to be checked.
      * @return <code>true</code> if name is in the list, <code>false</code> otherwise.
      */
@@ -190,14 +207,26 @@ public class StaffListControl {
         return false;
     }
 
+    /**
+     * Checks if the staffI D is in the list of staffs.
+     * @param staffID the staff ID to check.
+     * @return <code>true</code> if staff ID is in the list, <code>false</code> otherwise.
+     */
     public static boolean checkStaff(int staffID){
         return StaffList.getStaffList().getList().containsKey(staffID);
     }
 
+    /**
+     * Saves the list of staff.
+     */
     public static void saveStaffList(){
         FileEditor.writeStaff(StaffList.getStaffList().getList());
     }
 
+    /**
+     * Prints the action menu of according to the role of the staff.
+     * @param staffID the staff ID of the staff.
+     */
     public static void printAction(int staffID) {
         Role role;
         if(StaffList.getStaffList().getList().containsKey(staffID)){

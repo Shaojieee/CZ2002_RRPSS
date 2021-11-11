@@ -40,14 +40,25 @@ public class MemberList {
         return memberList;
     }
 
+    /**
+     * @return the ArrayList of members.
+     */
     public ArrayList<Integer> getList(){
         return this.list;
     }
 
+    /**
+     * Adds a member into this list of members
+     * @param phone the phone number to add.
+     */
     public void add(int phone){
         memberList.add(phone);
     }
 
+    /**
+     * Removes a member from this list of members.
+     * @param phone the phone number to remove.
+     */
     public void remove(int phone){
         memberList.remove(phone);
     }

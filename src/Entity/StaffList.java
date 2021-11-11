@@ -40,10 +40,16 @@ public class StaffList {
         return staffList;
     }
 
+    /**
+     * @return the HashMap of staffs.
+     */
     public HashMap<Integer, Staff> getList(){
         return this.list;
     }
 
+    /**
+     * Prints all the staff in this list of staffs.
+     */
     public void printStaffList(){
         HashMap<Integer, Staff> staffList = StaffList.getStaffList().getList();
         System.out.println("====================Staff List=====================");
@@ -58,6 +64,9 @@ public class StaffList {
         System.out.println("===================================================");
     }
 
+    /**
+     * Prints only the managers in this list of staffs.
+     */
     public void printManager(){
         HashMap<Integer, Staff> staffList = StaffList.getStaffList().getList();
         System.out.println("===================Manager List====================");
@@ -73,6 +82,9 @@ public class StaffList {
         System.out.println("===================================================");
     }
 
+    /**
+     * Prints only the staff in this list of staff
+     */
     public void printStaff(){
         HashMap<Integer, Staff> staffList = StaffList.getStaffList().getList();
         System.out.println("====================Staff List=====================");
@@ -88,14 +100,27 @@ public class StaffList {
         System.out.println("===================================================");
     }
 
+    /**
+     * Adds a staff into this list of staff.
+     * @param staff the staff to add.
+     */
     public void addStaff(Staff staff){
         list.put(staff.getID(), staff);
     }
 
+    /**
+     * Removes a staff from this list of staffs.
+     * @param staffID the staffID of the staff to remove.
+     */
     public void removeStaff(int staffID){
         list.remove(staffID);
     }
 
+    /**
+     * Gets the role of the specified staff.
+     * @param staffID the staffID of the staff.
+     * @return the role of the staff.
+     */
     public Role getRole(int staffID) {
         if(list.containsKey(staffID)){
             return list.get(staffID).getRole();

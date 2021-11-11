@@ -8,18 +8,20 @@ import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
 import java.util.Scanner;
 
+/**
+ * This class contains the functions used to control an order.
+ */
 public class OrderControl {
 
     /**
-     * The number assigned to go back when printing this order
+     * Number to press to go back in order page.
      */
     public static final int BACK_OPTION = 0;
 
 
-
     /**
      * Creates an order for the chosen table.<br>
-     * Add or remove food from the order.
+     * @param staffID the staffID of the staff creating this order.
      */
     public static void createOrder(int staffID){
         Scanner sc = new Scanner(System.in);
@@ -123,7 +125,8 @@ public class OrderControl {
     }
 
     /**
-     * Adds food items into this order.
+     * Adds food items into an order.
+     * @param order the order to add to.
      */
     private static void addFood(Order order) {
         Scanner sc = new Scanner(System.in);
@@ -204,7 +207,8 @@ public class OrderControl {
     }
 
     /**
-     * Removes food item from this order.
+     * Removes food item from an order.
+     * @param order the order to remove from.
      */
     private static void removeFood(Order order) {
         Scanner sc = new Scanner(System.in);
@@ -265,8 +269,9 @@ public class OrderControl {
     }
 
     /**
-     * Adds an order to this order.
-     * @param newOrder the order to add.
+     * Adds an order to another order.
+     * @param existingOrder the order to add to.
+     * @param newOrder the order to add from.
      */
     private static void appendOrder(Order existingOrder, Order newOrder){
         for (HashMap.Entry<Food, Double[]> new_item : newOrder.getItems().entrySet()){
@@ -276,9 +281,9 @@ public class OrderControl {
     }
 
 
-
     /**
-     * Prints the Invoice for this order.
+     * Prints the Invoice for an order.
+     * @param order the order to print the invoice for.
      * @param tableID the table ID associated to this order.
      * @param member the membership status of the customer associated to this order.
      */

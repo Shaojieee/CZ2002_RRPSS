@@ -27,6 +27,9 @@ public class Staff implements java.io.Serializable{
      */
     private final String gender;
 
+    /**
+     * Role of this staff.
+     */
     private Role role;
 
     /**
@@ -63,6 +66,9 @@ public class Staff implements java.io.Serializable{
         return this.gender;
     }
 
+    /**
+     * @return the role of this staff.
+     */
     public Role getRole() {
         return this.role;
     }

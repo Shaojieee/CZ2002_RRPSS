@@ -64,22 +64,38 @@ public class Menu {
         return menu;
     }
 
+    /**
+     * @return the HashMap of main course.
+     */
     public HashMap<Integer, Food> getMainCourse() {
         return this.mainCourse;
     }
 
+    /**
+     * @return the HashMap of drinks.
+     */
     public HashMap<Integer, Food> getDrinks() {
         return drinks;
     }
 
+    /**
+     * @return the HashMap of desserts.
+     */
     public HashMap<Integer, Food> getDesserts() {
         return desserts;
     }
 
+    /**
+     * @return the HashMap of promotion sets.
+     */
     public HashMap<Integer, PromoSet> getPromoSet() {
         return promoSet;
     }
 
+    /**
+     * Adds a food item into this menu.
+     * @param food the food item to add.
+     */
     public void addToMenu(Food food){
         FoodType type = food.getFoodType();
         if (type==FoodType.DESSERT){
@@ -93,6 +109,10 @@ public class Menu {
         }
     }
 
+    /**
+     * Removes a food item from this menu.
+     * @param food the food item to remove.
+     */
     public void removeFromMenu(Food food){
         FoodType type = food.getFoodType();
         if (type==FoodType.DESSERT){

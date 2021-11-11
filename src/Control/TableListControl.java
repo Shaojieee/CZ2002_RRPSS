@@ -9,14 +9,18 @@ import java.util.InputMismatchException;
 import java.util.Scanner;
 import java.util.Set;
 
+/**
+ * This class contains the functions used to control the list of tables.
+ */
 public class TableListControl {
 
-
-    public static final int BACK_OPTION =0 ;
-
+    /**
+     * Number to press to go back in table list page.
+     */
+    public static final int BACK_OPTION =0;
 
     /**
-     * Add or remove tables from the restaurant.
+     * Edits the list of tables.
      */
     public static void editTable() {
         Scanner sc = new Scanner(System.in);
@@ -64,7 +68,7 @@ public class TableListControl {
     /**
      * Create a new <code>Table</code> and adds it to the list.
      */
-    public static void addTable(){
+    private static void addTable(){
         Scanner sc = new Scanner(System.in);
         int maxPax;
         while (true) {
@@ -102,7 +106,7 @@ public class TableListControl {
     /**
      * Remove table from the list according to the ID.
      */
-    public static void deleteTable(){
+    private static void deleteTable(){
         Scanner sc = new Scanner(System.in);
         int choice;
         printAllTables();
@@ -138,9 +142,9 @@ public class TableListControl {
     }
 
     /**
-     * Gets the <code>Table</code> object with teh requested ID.
+     * Gets the <code>Table</code> object with the requested ID.
      * @param ID the ID of the table.
-     * @return the <code>Table</code> object.
+     * @return the <code>Table</code> object, <code>null</code> if table ID is invalid.
      */
     public static Table getTable(int ID) {
         return TableList.getTableList().getList().getOrDefault(ID, null);
@@ -445,7 +449,8 @@ public class TableListControl {
     }
 
     /**
-     * Prints the invoice for this table.
+     * Prints the invoice for a table.
+     * @param table the table to print the invoice for.
      * @param member <code>true</code> if customer is a member, <code>false</code> otherwise.
      */
     public static void generateInvoice(Table table,boolean member) {
@@ -458,7 +463,8 @@ public class TableListControl {
     }
 
     /**
-     * Prints the basic details this table.
+     * Prints the basic details of a table.
+     * @param table  the table to print the details for.
      */
     public static void printBasicDetails(Table table) {
         if (table.isOccupied()){
@@ -473,7 +479,7 @@ public class TableListControl {
 
     /**
      * Prints more in-depth detail of the specified table.
-     * @param table Contains the detail of the table to be printed.
+     * @param table the table to print details for.
      */
     public static void printTableDetails(Table table){
         System.out.println("======================Table Details=======================");
@@ -507,7 +513,8 @@ public class TableListControl {
     }
 
     /**
-     * Unreserved this table.
+     * Unreserved a table.
+     * @param table the table to unreserve.
      */
     public static void unreserve(Table table){
         table.setReserved(false);
@@ -518,7 +525,8 @@ public class TableListControl {
     }
 
     /**
-     * Reserves this table for the customer.
+     * Reserves a table for the customer.
+     * @param table the table to reserve.
      * @param reservation the details of the reservation.
      */
     public static void reserve(Table table, Reservation reservation) {
@@ -529,7 +537,8 @@ public class TableListControl {
     }
 
     /**
-     * Allocates this table to the customer.
+     * Allocates a table to the customer.
+     * @param table the table to assign to the customer.
      * @param customer the customer that has been allocated to this table.
      */
     public static void assign(Table table, Customer customer) {
@@ -540,7 +549,8 @@ public class TableListControl {
     }
 
     /**
-     * Sets this table as available.
+     * Sets a table as available.
+     * @param table the table to set as available.
      */
     public static void available(Table table) {
         table.setOccupied(false);

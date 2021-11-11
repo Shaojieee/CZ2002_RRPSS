@@ -9,6 +9,9 @@ import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 import java.util.*;
 
+/**
+ * This class contains the functions used to control the sales report.
+ */
 public class SalesReportControl {
 
     /**
@@ -43,7 +46,7 @@ public class SalesReportControl {
     }
 
     /**
-     * Prints the sales report according to the specified period.
+     * Gets the period to print the sales report and prints accordingly.
      * Will not print days that have no recorded sales.
      */
     public static void printRevenue() {

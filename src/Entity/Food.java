@@ -16,11 +16,11 @@ public class Food implements java.io.Serializable{
     /**
      * ID of food.
      */
-    private int id;
+    private final int id;
     /**
      * Type of food.
      */
-    private FoodType type;
+    private final FoodType type;
 
     /**
      * This constructor defines a food item.
@@ -79,6 +79,9 @@ public class Food implements java.io.Serializable{
     }
 
 
+    /**
+     * Prints the details of this food item.
+     */
     public void printFood(){
         System.out.printf("|| %-3s|| %-30s|| %-8s||\n", this.getId(), this.getName(), "$"+String.format("%.2f",this.getPrice()));
     }

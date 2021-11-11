@@ -31,10 +31,18 @@ public class PromoSet extends Food implements java.io.Serializable{
         return this.items.size();
     }
 
+    /**
+     * @return the HashMap of food items in the promotion set.
+     */
     public HashMap<Food, Integer> getItems() {
         return items;
     }
 
+    /**
+     * Adds a food item into this promotion set.
+     * @param food the food item to add.
+     * @param quantity the quantity to add.
+     */
     public void addFood(Food food, int quantity){
         for(HashMap.Entry<Food, Integer> item : items.entrySet()){
             if(food.getId()==item.getKey().getId()){
@@ -45,6 +53,11 @@ public class PromoSet extends Food implements java.io.Serializable{
         items.put(food, quantity);
     }
 
+    /**
+     * Removes a food item from this promotion set.
+     * @param food the food item to remove.
+     * @param quantity the quantity to remove.
+     */
     public void removeFood(Food food, int quantity){
         for(HashMap.Entry<Food, Integer> item : items.entrySet()){
             if(food.getId()==item.getKey().getId()){
@@ -75,8 +88,9 @@ public class PromoSet extends Food implements java.io.Serializable{
     }
 
     /**
-     * @param food the food item to find in this promotion set.
-     * @return the number of the specified food item in this promotion set.
+     * Gets the quantity of the speicifed food item in this promotion set.
+     * @param food the food item to find.
+     * @return the quantity in this promotion set.
      */
     public int getQty(Food food){
         int search_id = food.getId();
@@ -87,6 +101,7 @@ public class PromoSet extends Food implements java.io.Serializable{
         }
         return 0;
     }
+
 
     public void printFood(){
         super.printFood();

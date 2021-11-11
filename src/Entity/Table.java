@@ -14,11 +14,11 @@ public class Table implements java.io.Serializable{
     /**
      * Maximum number of people this table can accommodate.
      */
-    private int maxPax;
+    private final int maxPax;
     /**
      * The table ID of this table.
      */
-    private int tableId;
+    private final int tableId;
     /**
      * The current number of people at the table.
      */

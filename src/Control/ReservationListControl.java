@@ -9,16 +9,17 @@ import java.time.DateTimeException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
-import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.InputMismatchException;
 import java.util.Scanner;
 
+
+/**
+ * This class contains the functions used to control the list of reservations.
+ */
 public class ReservationListControl {
-
-
 
     /**
      * Gets the customer name, phone number and reservation time to create reservation.

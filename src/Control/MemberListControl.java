@@ -5,11 +5,15 @@ import Entity.MemberList;
 import java.util.InputMismatchException;
 import java.util.Scanner;
 
+
+/**
+ * This class contains the functions used to control the list of members.
+ */
 public class MemberListControl {
 
 
     /**
-     * Add or remove members. <br>
+     * Edit list of members.
      */
     public static void editMembers(){
         Scanner sc = new Scanner(System.in);
@@ -44,7 +48,10 @@ public class MemberListControl {
         }
     }
 
-    public static void addMembers(){
+    /**
+     * Adds members.
+     */
+    private static void addMembers(){
         Scanner sc = new Scanner(System.in);
         int phone;
         while(true){
@@ -81,7 +88,10 @@ public class MemberListControl {
         System.out.println();
     }
 
-    public static void removeMembers(){
+    /**
+     * Removes members.
+     */
+    private static void removeMembers(){
         Scanner sc = new Scanner(System.in);
         int phone;
         while(true){
@@ -116,10 +126,19 @@ public class MemberListControl {
         System.out.println();
     }
 
+
+    /**
+     * Checks whether the phone number is in the list of members.
+     * @param phone the phone number to check.
+     * @return <code>true</code> if phone number is in the list, <code>false</code> otherwise.
+     */
     public static boolean checkMember(int phone){
         return MemberList.getMemberList().getList().contains(phone);
     }
 
+    /**
+     * Saves the list of members
+     */
     public static void saveMembers(){
         FileEditor.writeMembers(MemberList.getMemberList().getList());
     }

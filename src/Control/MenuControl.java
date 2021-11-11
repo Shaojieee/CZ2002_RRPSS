@@ -10,14 +10,20 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Scanner;
 
+
+/**
+ * This class contains the functions used to control the menu.
+ */
 public class MenuControl {
 
     /**
-     * The number assigned to go back when printing this menu.
+     * Number to press to go back in menu page.
      */
     public static final int BACK_OPTION = 0;
 
-
+    /**
+     * Edits the current menu.
+     */
     public static void editMenu(){
         Scanner sc = new Scanner(System.in);
         int choice;
@@ -190,7 +196,9 @@ public class MenuControl {
     }
 
     /**
-     * Adds a new promotion set into this menu.
+     * Edits promotion set.
+     * @param newSet the promotion set to edit.
+     * @return the edited <code>PromSet</code> object.
      */
     private static PromoSet editPromoSet(PromoSet newSet){
         int choice;
@@ -375,8 +383,7 @@ public class MenuControl {
     }
 
     /**
-     * Adds new food item into this menu.<br>
-     * Does not include PromoSet.
+     * Adds new food item into the menu.<br>
      * @param type the type of food to add.
      */
     private static void addFood(FoodType type){
@@ -413,7 +420,8 @@ public class MenuControl {
     }
 
     /**
-     * Removes the food item from this menu.
+     * Removes the food item from the menu.
+     * @param type the food type to remove.
      */
     private static void deleteFood(FoodType type){
         Scanner sc = new Scanner(System.in);
@@ -447,9 +455,8 @@ public class MenuControl {
         }
     }
 
-
     /**
-     * Prints out the type of food in this Menu
+     * Prints out the type of food in the menu
      * @param fullMenu if <code>false</code> will not show promotion set, if <code>true</code> will show all 4 food types
      */
     public static void printMenu(boolean fullMenu){
@@ -658,7 +665,7 @@ public class MenuControl {
     }
 
     /**
-     * @return an unused food ID in this menu.
+     * @return an unused food ID in the menu.
      */
     private static int newFoodID(){
         Menu menu = Menu.getMenu();

@@ -3,7 +3,6 @@ package Entity;
 import Control.FileEditor;
 
 import java.util.HashMap;
-import java.util.Set;
 
 /**
  * This class contains list of tables in the restaurant.<br>
@@ -42,18 +41,32 @@ public class TableList {
         return tableList;
     }
 
+    /**
+     * @return the HashMap of tables.
+     */
     public HashMap<Integer,Table> getList(){
         return list;
     }
 
+    /**
+     * Removes a table from this list of tables.
+     * @param tableID the table ID of the table to remove.
+     */
     public void removeTable(int tableID){
         list.remove(tableID);
     }
 
+    /**
+     * Adds a table into this list of tables.
+     * @param table the table to add.
+     */
     public void addTable(Table table) {
         list.put(table.getTableId(), table);
     }
 
+    /**
+     * @return number of tables.
+     */
     public int size(){
         return list.size();
     }

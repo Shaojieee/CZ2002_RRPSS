@@ -65,10 +65,18 @@ public class Order{
         return this.items.values().stream().mapToInt(x->x[0].intValue()).sum();
     }
 
+    /**
+     * @return the total price of this order before GST.
+     */
     public double getTotalPrice() {
         return this.totalPrice;
     }
 
+    /**
+     * Adds a food item to this order.
+     * @param food the food item to add.
+     * @param quantity the quantity to add.
+     */
     public void addToOrder(Food food, int quantity){
         Double[] arr = {(double) quantity, food.getPrice()*(double)quantity};
         this.setPrice(this.getTotalPrice()+arr[1]);
@@ -81,6 +89,11 @@ public class Order{
         }
     }
 
+    /**
+     * Removes a food item from this order.
+     * @param food the food item to remove.
+     * @param quantity the quantity to remove.
+     */
     public void removeFromOrder(Food food, int quantity){
         Double[] arr = {(double) quantity, food.getPrice()*(double)quantity};
         Double[] cur = items.get(food);
@@ -94,6 +107,11 @@ public class Order{
         this.setPrice(this.getTotalPrice()-arr[1]);
     }
 
+    /**
+     * Gets the quantity of the specified food item in this order.
+     * @param food the food item.
+     * @return the quantity of the food item.
+     */
     public int getFoodQty(Food food){
         if (this.items.containsKey(food)){
             return this.items.get(food)[0].intValue();
@@ -101,6 +119,7 @@ public class Order{
             return 0;
         }
     }
+
     /**
      * Checks if the food item is in this order.
      * @param food the food item to check.

@@ -42,6 +42,9 @@ public class SalesReport {
         return report;
     }
 
+    /**
+     * @return the HashMap of all the past sales data.
+     */
     public HashMap<String, HashMap<Food, Double[]>> getData(){
         return this.data;
     }
