@@ -58,11 +58,41 @@ public class StaffList {
         System.out.println("===================================================");
     }
 
-    public void add(Staff staff){
+    public void printManager(){
+        HashMap<Integer, Staff> staffList = StaffList.getStaffList().getList();
+        System.out.println("===================Manager List====================");
+        System.out.printf("|| %-7s|| %-3s|| %-20s|| Gender ||\n", "Role", "ID", "Name");
+        for(Staff staff: staffList.values()){
+            if(staff.getRole()==Role.Manager){
+                staff.printDetails();
+            }
+        }
+        if(staffList.size()==0){
+            System.out.println("||    There are no managers in the restaurant    ||");
+        }
+        System.out.println("===================================================");
+    }
+
+    public void printStaff(){
+        HashMap<Integer, Staff> staffList = StaffList.getStaffList().getList();
+        System.out.println("====================Staff List=====================");
+        System.out.printf("|| %-7s|| %-3s|| %-20s|| Gender ||\n", "Role", "ID", "Name");
+        for(Staff staff: staffList.values()){
+            if(staff.getRole()==Role.Staff){
+                staff.printDetails();
+            }
+        }
+        if(staffList.size()==0){
+            System.out.println("||     There are no staff in the restaurant     ||");
+        }
+        System.out.println("===================================================");
+    }
+
+    public void addStaff(Staff staff){
         list.put(staff.getID(), staff);
     }
 
-    public void remove(int staffID){
+    public void removeStaff(int staffID){
         list.remove(staffID);
     }
 

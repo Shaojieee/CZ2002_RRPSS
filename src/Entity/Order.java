@@ -69,11 +69,74 @@ public class Order{
         return this.totalPrice;
     }
 
-    public void addToOrder(){
+    public void addToOrder(Food food, int quantity){
+        Double[] arr = {(double) quantity, food.getPrice()*(double)quantity};
+        this.setPrice(this.getTotalPrice()+arr[1]);
+        if(items.containsKey(food)){
+            Double[] cur = items.get(food);
+            arr[0] += cur[0];
+            arr[1] += cur[1];
+        }else{
+            items.put(food, arr);
+        }
+    }
+
+    public void removeFromOrder(Food food, int quantity){
+        Double[] arr = {(double) quantity, food.getPrice()*(double)quantity};
+        Double[] cur = items.get(food);
+        cur[0] -= arr[0];
+        cur[1] -= arr[1];
+        if(cur[0]==0){
+            items.remove(food);
+        }else{
+            items.put(food, cur);
+        }
+        this.setPrice(this.getTotalPrice()-arr[1]);
+    }
+
+    public int getFoodQty(Food food){
+        if (this.items.containsKey(food)){
+            return this.items.get(food)[0].intValue();
+        }else{
+            return 0;
+        }
+    }
+    /**
+     * Checks if the food item is in this order.
+     * @param food the food item to check.
+     * @return <code>true</code> if the food item is in this order, <code>false</code> otherwise.
+     */
+    public boolean checkInOrder(Food food){
+        return this.items.containsKey(food);
+    }
+
+
+    /**
+     * Prints the food items in this order.
+     */
+    public void printOrder(){
+
+        System.out.println("==========================Order===========================");
+        if (this.items.size()==0){
+            System.out.println("|          This order does not have any items!           |");
+            System.out.println("==========================================================");
+            System.out.println();
+            return;
+        }
+        System.out.printf("|| %-3s|| %-30s|| %-3s|| %-8s||\n", "ID", "Name" , "Qty", "Price");
+        Food food;
+        int qty;
+        double price;
+        for (HashMap.Entry<Food, Double[]> item : this.items.entrySet()){
+            food = item.getKey();
+            qty = item.getValue()[0].intValue();
+            price = item.getValue()[1];
+            System.out.printf("|| %-3s|| %-30s|| %-3s|| %-8s||\n", food.getId(), food.getName(), qty, "$"+String.format("%.2f",price));
+        }
+        System.out.println("==========================================================");
 
     }
 
-    public void removeFromOrder(){
 
-    }
+
 }

@@ -17,6 +17,121 @@ import java.util.InputMismatchException;
 import java.util.Scanner;
 
 public class ReservationListControl {
+
+
+
+    /**
+     * Gets the customer name, phone number and reservation time to create reservation.
+     */
+    public static void createReservation(){
+        Scanner sc = new Scanner(System.in);
+        int pax;
+        System.out.println("=====Creating Reservation=====");
+        while(true) {
+            System.out.print("Enter number of pax: ");
+            if (!sc.hasNextInt()) {
+                System.out.println("Invalid phone number!");
+                System.out.println();
+                sc.nextLine();
+            } else {
+                pax = sc.nextInt();
+                sc.nextLine();
+                break;
+            }
+        }
+        System.out.print("Enter Reservation Date (dd/mm/yyyy): ");
+        LocalDate date;
+        String date_str, time_str;
+        boolean today;
+        while(true){
+            try{
+                date_str = sc.nextLine();
+                String[] date_arr = date_str.split("/", 3);
+                date = LocalDate.of(Integer.parseInt(date_arr[2]), Integer.parseInt(date_arr[1]), Integer.parseInt(date_arr[0]));
+
+                if(date.isAfter(LocalDate.now())) {
+                    today = false;
+                    break;
+                }else if(date.isEqual(LocalDate.now())){
+                    today = true;
+                    break;
+                }
+                else{
+                    System.out.println("Invalid reservation date!");
+                    System.out.print("Enter Reservation Date (dd/mm/yyyy): ");
+                }
+            }catch(DateTimeException e){
+                System.out.println("Invalid reservation date!");
+                System.out.print("Enter Reservation Date (hh-mm): ");
+            }
+        }
+
+        System.out.print("Enter Reservation Time (hh-mm): ");
+        LocalTime time;
+        while(true){
+            try{
+                time_str = sc.nextLine();
+                String[] time_arr = time_str.split("-", 2);
+                time = LocalTime.of(Integer.parseInt(time_arr[0]), Integer.parseInt(time_arr[1]));
+                if(time.isAfter(LocalTime.of(20,30))){
+                    System.out.println("Restaurant closes at 21-00!");
+                }else if(time.isBefore(LocalTime.of(9,0))){
+                    System.out.println("Restaurant opens at 09-00!");
+                } else if(today && time.isAfter(LocalTime.now())) {
+                    break;
+                }else if(!today){
+                    break;
+                }
+                System.out.println("Invalid reservation time!");
+                System.out.print("Enter Reservation Time (hh-mm): ");
+            }catch(DateTimeException e){
+                System.out.println("Invalid reservation time!");
+                System.out.print("Enter Reservation Time (hh-mm): ");
+            }
+        }
+
+        LocalDateTime date_time = LocalDateTime.of(date, time);
+
+        if (!ReservationListControl.checkAvailability(pax, date_time)){
+            System.out.println("Sorry no available tables at " + time_str + " on " + date_str + "!");
+            System.out.println();
+            return;
+        }
+
+        System.out.print("Enter Customer Name: ");
+        String name = sc.nextLine();
+
+        int phone;
+        while(true){
+            try{
+                System.out.print("Enter Customer Contact Number: ");
+                if(!sc.hasNextInt()){
+                    System.out.println("Please enter a number!");
+                    System.out.println();
+                    sc.nextLine();
+                }else {
+                    phone = sc.nextInt();
+                    sc.nextLine();
+                    if (phone < 100000000 && phone > 79999999) {
+                        break;
+                    } else {
+                        System.out.println("Invalid phone number!");
+                        System.out.println();
+                    }
+                }
+            }
+            catch(InputMismatchException e){
+                System.out.println("Invalid phone number!");
+                System.out.println();
+                sc = new Scanner(System.in);
+            }
+        }
+
+        addReservation(name, phone, pax, date_time);
+        System.out.println("Reservation for " + name + " at " + time_str + " on " + date_str + " has been recorded!");
+        System.out.println();
+    }
+
     /**
      * Creates a new <code>Reservation</code> and adds it to the list.
      * @param name the name of the customer.
@@ -24,7 +139,7 @@ public class ReservationListControl {
      * @param pax the number of pax with the customer.
      * @param time the reservation time.
      */
-    public static void addReservation(String name, int phone, int pax, LocalDateTime time){
+    private static void addReservation(String name, int phone, int pax, LocalDateTime time){
         Table table;
         int tableID=-1;
         int maxpax=100;
@@ -96,7 +211,7 @@ public class ReservationListControl {
      * @param time the reservation time.
      * @return <code>true</code> if there is an available table, <code>false</code> otherwise.
      */
-    public static boolean checkAvailability(int pax, LocalDateTime time){
+    private static boolean checkAvailability(int pax, LocalDateTime time){
         updateTableStatus();
         boolean result= false;
         boolean available_now = true;
@@ -236,7 +351,7 @@ public class ReservationListControl {
         for(ArrayList<Reservation> reservations : ReservationList.getReservationList().getList().values()){
             for(Reservation reservation : reservations){
                 if(reservation.getCustomer().equals(name,phone) && reservation.getTime().isEqual(date_time)){
-                    reservations.remove(reservation);
+                    ReservationList.getReservationList().removeFromReservations(reservation);
                     long minutes = LocalDateTime.now().until(reservation.getTime(), ChronoUnit.MINUTES);
                     if(minutes<30){
                         TableListControl.unreserve(TableListControl.getTable(reservation.getTableID()));
@@ -465,26 +580,11 @@ public class ReservationListControl {
         System.out.println("==========================Reservation List===========================");
         System.out.printf("|| %-12s|| %-5s|| %-15s|| %-8s || %-3s|| %-5s||\n", "Date", "Time" ,"Name", "Contact", "Pax", "Table");
         for(Reservation reservation : reservations){
-            printDetails(reservation);
+            reservation.printDetails();
         }
         System.out.println("=====================================================================");
         System.out.println("Press any key to go back ");
         sc.nextLine();
-    }
-
-    /**
-     * Prints the details of this reservation.
-     */
-    public static void printDetails(Reservation reservation) {
-        LocalDate date = reservation.getTime().toLocalDate();
-        LocalTime time = reservation.getTime().toLocalTime();
-        DateTimeFormatter date_format = DateTimeFormatter.ofPattern("dd MMM yyyy");
-        String date_str = date_format.format(date);
-
-        DateTimeFormatter time_format = DateTimeFormatter.ofPattern("H:mm");
-        String time_str = time_format.format(time);
-
-        System.out.printf("|| %-12s|| %-5s|| %-15s|| %-8s || %-3s|| %-5s||\n", date_str, time_str , reservation.getCustomer().getName(), reservation.getCustomer().getPhone(), reservation.getCustomer().getPax(), reservation.getTableID());
     }
 
     /**
@@ -501,116 +601,6 @@ public class ReservationListControl {
         return reservations;
     }
 
-    /**
-     * Gets the customer name, phone number and reservation time to create reservation.
-     */
-    public static void createReservation(){
-        Scanner sc = new Scanner(System.in);
-        int pax;
-        System.out.println("=====Creating Reservation=====");
-        while(true) {
-            System.out.print("Enter number of pax: ");
-            if (!sc.hasNextInt()) {
-                System.out.println("Invalid phone number!");
-                System.out.println();
-                sc.nextLine();
-            } else {
-                pax = sc.nextInt();
-                sc.nextLine();
-                break;
-            }
-        }
-        System.out.print("Enter Reservation Date (dd/mm/yyyy): ");
-        LocalDate date;
-        String date_str, time_str;
-        boolean today;
-        while(true){
-            try{
-                date_str = sc.nextLine();
-                String[] date_arr = date_str.split("/", 3);
-                date = LocalDate.of(Integer.parseInt(date_arr[2]), Integer.parseInt(date_arr[1]), Integer.parseInt(date_arr[0]));
 
-                if(date.isAfter(LocalDate.now())) {
-                    today = false;
-                    break;
-                }else if(date.isEqual(LocalDate.now())){
-                    today = true;
-                    break;
-                }
-                else{
-                    System.out.println("Invalid reservation date!");
-                    System.out.print("Enter Reservation Date (dd/mm/yyyy): ");
-                }
-            }catch(DateTimeException e){
-                System.out.println("Invalid reservation date!");
-                System.out.print("Enter Reservation Date (hh-mm): ");
-            }
-        }
-
-        System.out.print("Enter Reservation Time (hh-mm): ");
-        LocalTime time;
-        while(true){
-            try{
-                time_str = sc.nextLine();
-                String[] time_arr = time_str.split("-", 2);
-                time = LocalTime.of(Integer.parseInt(time_arr[0]), Integer.parseInt(time_arr[1]));
-                if(time.isAfter(LocalTime.of(20,30))){
-                    System.out.println("Restaurant closes at 21-00!");
-                }else if(time.isBefore(LocalTime.of(9,0))){
-                    System.out.println("Restaurant opens at 09-00!");
-                } else if(today && time.isAfter(LocalTime.now())) {
-                    break;
-                }else if(!today){
-                    break;
-                }
-                System.out.println("Invalid reservation time!");
-                System.out.print("Enter Reservation Time (hh-mm): ");
-            }catch(DateTimeException e){
-                System.out.println("Invalid reservation time!");
-                System.out.print("Enter Reservation Time (hh-mm): ");
-            }
-        }
-
-        LocalDateTime date_time = LocalDateTime.of(date, time);
-
-        if (!ReservationListControl.checkAvailability(pax, date_time)){
-            System.out.println("Sorry no available tables at " + time_str + " on " + date_str + "!");
-            System.out.println();
-            return;
-        }
-
-        System.out.print("Enter Customer Name: ");
-        String name = sc.nextLine();
-
-        int phone;
-        while(true){
-            try{
-                System.out.print("Enter Customer Contact Number: ");
-                if(!sc.hasNextInt()){
-                    System.out.println("Please enter a number!");
-                    System.out.println();
-                    sc.nextLine();
-                }else {
-                    phone = sc.nextInt();
-                    sc.nextLine();
-                    if (phone < 100000000 && phone > 79999999) {
-                        break;
-                    } else {
-                        System.out.println("Invalid phone number!");
-                        System.out.println();
-                    }
-                }
-            }
-            catch(InputMismatchException e){
-                System.out.println("Invalid phone number!");
-                System.out.println();
-                sc = new Scanner(System.in);
-            }
-        }
-
-        addReservation(name, phone, pax, date_time);
-        System.out.println("Reservation for " + name + " at " + time_str + " on " + date_str + " has been recorded!");
-        System.out.println();
-    }
 
 }

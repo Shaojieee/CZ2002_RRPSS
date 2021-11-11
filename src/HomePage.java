@@ -1,5 +1,3 @@
-package Boundary;
-
 import Control.*;
 import Entity.Role;
 
@@ -9,38 +7,66 @@ public class HomePage {
     public static void main(String[] args){
         Scanner sc = new Scanner(System.in);
 
-        int staffID;
+        int staffID, role;
         boolean exit=false;
-        while (true) {
-            StaffListControl.printStaffList();
-            System.out.print("Select Staff ID: ");
+        while (!exit) {
+            System.out.println("===Select your role==");
+            System.out.println("|1. Manager         |");
+            System.out.println("|2. Staff           |");
+            System.out.println("=====================");
+            System.out.print("Please enter your choice: ");
             if(!sc.hasNextInt()){
                 System.out.println("Please enter a number!");
                 System.out.println();
                 sc.nextLine();
             }else {
-                staffID = sc.nextInt();
+                role = sc.nextInt();
                 sc.nextLine();
-
                 while(!exit){
-                    Role role = StaffListControl.getAction(staffID);
+                    if(role==1){
+                        StaffListControl.printManagers();
+
+                    }else if(role==2){
+                        StaffListControl.printStaffs();
+                    }else{
+                        System.out.println("Invalid Option!");
+                        System.out.println();
+                        continue;
+                    }
                     if(!sc.hasNextInt()){
                         System.out.println("Please enter a number!");
                         System.out.println();
                         sc.nextLine();
-                    }else {
-                        int action = sc.nextInt();
+
+                    }else{
+                        staffID = sc.nextInt();
                         sc.nextLine();
-                        exit = getAction(action, role, staffID);
+                        if(StaffListControl.checkStaff(staffID)){
+                            StaffListControl.printAction(staffID);
+                            if(!sc.hasNextInt()){
+                                System.out.println("Please enter a number!");
+                                System.out.println();
+                                sc.nextLine();
+                            }else{
+                                int action = sc.nextInt();
+                                sc.nextLine();
+                                exit = getAction(action, role, staffID);
+                            }
+                        }else{
+                            System.out.println("Invalid Option!");
+                            System.out.println();
+                        }
                     }
                 }
-            }
 
+
+
+            }
         }
     }
 
-    public static boolean getAction(int choice, Role role, int staffID) {
-        if (role == Role.Manager) {
+    public static boolean getAction(int choice, int role, int staffID) {
+        if (role == 1) {
             switch (choice) {
                 case 1 -> OrderControl.createOrder(staffID);
                 case 2 -> TableListControl.clearTable();
@@ -63,7 +89,7 @@ public class HomePage {
                     System.out.println();
                 }
             }
-        } else {
+        } else if(role==2){
             switch (choice) {
                 case 1 -> OrderControl.createOrder(staffID);
                 case 2 -> TableListControl.clearTable();

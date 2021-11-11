@@ -86,7 +86,7 @@ public class OrderControl {
                 case 1-> OrderControl.addFood(newOrder);
                 case 2-> OrderControl.removeFood(newOrder);
                 case 3->{
-                    OrderControl.printOrder(newOrder);
+                    newOrder.printOrder();
                     System.out.print("Press any key to go back ");
                     sc.nextLine();
                     System.out.println();
@@ -125,7 +125,7 @@ public class OrderControl {
     /**
      * Adds food items into this order.
      */
-    public static void addFood(Order order) {
+    private static void addFood(Order order) {
         Scanner sc = new Scanner(System.in);
         int choice;
         while(true){
@@ -190,17 +190,7 @@ public class OrderControl {
                             }
                         }
                     }
-
-                    HashMap<Food, Double[]> items = order.getItems();
-                    Double[] arr = {(double) choice, food.getPrice()*(double)choice};
-                    order.setPrice(order.getTotalPrice()+arr[1]);
-                    if(checkInOrder(order, food)){
-                        Double[] cur = items.get(food);
-                        arr[0] += cur[0];
-                        arr[1] += cur[1];
-                    }
-
-                    items.put(food, arr);
+                    order.addToOrder(food, choice);
                     System.out.println(choice + " " + food.getName() + " has been added!");
                     System.out.println();
                     System.out.println("===================Creating Order===================");
@@ -216,12 +206,12 @@ public class OrderControl {
     /**
      * Removes food item from this order.
      */
-    public static void removeFood(Order order) {
+    private static void removeFood(Order order) {
         Scanner sc = new Scanner(System.in);
         int choice;
         while(true) {
             System.out.println("======================Removing Food=======================");
-            printOrder(order);
+            order.printOrder();
 
             if (order.getSize() == 0) {
                 System.out.print("Press any key to go back ");
@@ -244,7 +234,7 @@ public class OrderControl {
                     break;
                 }
                 Food food = MenuControl.getFood(foodId);
-                if (checkInOrder(order, food)){
+                if (order.checkInOrder(food)){
                     while(true) {
                         System.out.print("Enter Quantity to remove: ");
                         if (!sc.hasNextInt()) {
@@ -254,7 +244,7 @@ public class OrderControl {
                         } else {
                             choice = sc.nextInt();
                             sc.nextLine();
-                            if (!checkFoodQty(order, food, choice)) {
+                            if (!(order.getFoodQty(food)<choice)) {
                                 System.out.println("Invalid Quantity!");
                                 System.out.println();
                             }else{
@@ -263,18 +253,7 @@ public class OrderControl {
                         }
                     }
 
-                    HashMap<Food, Double[]> items = order.getItems();
-                    Double[] arr = {(double) choice, food.getPrice()*(double)choice};
-                    Double[] cur = items.get(food);
-                    cur[0] -= arr[0];
-                    cur[1] -= arr[1];
-                    if(cur[0]==0){
-                        items.remove(food);
-                    }else{
-                        items.put(food, cur);
-                    }
-                    order.setPrice(order.getTotalPrice()-arr[1]);
-
+                    order.removeFromOrder(food, choice);
                     System.out.println(choice + " " + food.getName() + " has been removed!");
                 }else{
                     System.out.println("Invalid Option");
@@ -286,73 +265,17 @@ public class OrderControl {
     }
 
     /**
-     * Checks if the food item is in this order.
-     * @param order
-     * @param food the food item to check.
-     * @return <code>true</code> if the food item is in this order, <code>false</code> otherwise.
-     */
-    private static boolean checkInOrder(Order order, Food food){
-        return order.getItems().containsKey(food);
-    }
-
-    /**
-     * Checks if the quantity in this order is higher than or equal to the specified quantity for the specified food item.
-     * @param food the food item to check.
-     * @param quantity the quantity to be compared with.
-     * @return <code>true</code> if the quantity in this order is higher than or equal to the specified quantity, <code>false</code> otherwise.
-     */
-    private static boolean checkFoodQty(Order order, Food food, int quantity){
-        return order.getItems().get(food)[0].intValue()>=quantity;
-    }
-
-    /**
      * Adds an order to this order.
      * @param newOrder the order to add.
      */
-    public static void appendOrder(Order existingOrder, Order newOrder){
-        Food food;
-        Double[] arr;
-        double existingPrice = existingOrder.getTotalPrice();
-        HashMap<Food, Double[]> existingItems = existingOrder.getItems();
+    private static void appendOrder(Order existingOrder, Order newOrder){
         for (HashMap.Entry<Food, Double[]> new_item : newOrder.getItems().entrySet()){
-            food = new_item.getKey();
-            arr = new_item.getValue();
-            existingPrice += arr[1];
-            if(existingItems.containsKey(food)){
-                Double[] cur = existingItems.get(food);
-                arr[0] += cur[0];
-                arr[1] += cur[1];
-            }
-            existingItems.put(food, arr);
+            existingOrder.addToOrder(new_item.getKey(), (int) Math.round(new_item.getValue()[0]));
         }
-        existingOrder.setPrice(existingPrice);
-    }
-
-    /**
-     * Prints the food items in this order.
-     */
-    public static void printOrder(Order order){
-        HashMap<Food, Double[]> items = order.getItems();
-        System.out.println("==========================Order===========================");
-        if (items.size()==0){
-            System.out.println("|          This order does not have any items!           |");
-            System.out.println("==========================================================");
-            System.out.println();
-            return;
-        }
-        System.out.printf("|| %-3s|| %-30s|| %-3s|| %-8s||\n", "ID", "Name" , "Qty", "Price");
-        Food food;
-        int qty;
-        double price;
-        for (HashMap.Entry<Food, Double[]> item : items.entrySet()){
-            food = item.getKey();
-            qty = item.getValue()[0].intValue();
-            price = item.getValue()[1];
-            System.out.printf("|| %-3s|| %-30s|| %-3s|| %-8s||\n", food.getId(), food.getName(), qty, "$"+String.format("%.2f",price));
-        }
-        System.out.println("==========================================================");
 
     }
+
+
 
     /**
      * Prints the Invoice for this order.
@@ -364,7 +287,7 @@ public class OrderControl {
         System.out.printf("|| %-25s|| %-25s||\n", "Date: " + LocalDate.now().format(DateTimeFormatter.ofPattern("dd MMM yyyy")), "Time: " + LocalTime.now().format(DateTimeFormatter.ofPattern("HH:mm")));
         System.out.printf("|| %-25s|| %-25s||\n", "Served by: " + order.getStaff().getName(), "Table ID: " + tableID);
 
-        printOrder(order);
+        order.printOrder();
         double subTotal = Math.round(order.getTotalPrice()*100.0)/100.0;
         double discount, gst, total;
         System.out.printf("%47s $%7s||\n", "Sub-Total:", String.format("%.2f",subTotal));
@@ -390,8 +313,8 @@ public class OrderControl {
 
     /**
      * Update this order with a members discount of 5%.
+     * @param order the order to apply the discount to.
      * @return the discounted amount.
-     * @param order
      */
     private static double memberDiscount(Order order){
         HashMap<Food, Double[]> items = order.getItems();

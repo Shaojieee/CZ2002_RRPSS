@@ -79,5 +79,9 @@ public class Food implements java.io.Serializable{
     }
 
 
+    public void printFood(){
+        System.out.printf("|| %-3s|| %-30s|| %-8s||\n", this.getId(), this.getName(), "$"+String.format("%.2f",this.getPrice()));
+    }
+
 }
 

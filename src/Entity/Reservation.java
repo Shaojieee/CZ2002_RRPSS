@@ -71,5 +71,20 @@ public class Reservation implements Serializable {
         this.tableID = tableID;
     }
 
+    /**
+     * Prints the details of this reservation.
+     */
+    public void printDetails() {
+        LocalDate date = this.getTime().toLocalDate();
+        LocalTime time = this.getTime().toLocalTime();
+        DateTimeFormatter date_format = DateTimeFormatter.ofPattern("dd MMM yyyy");
+        String date_str = date_format.format(date);
+
+        DateTimeFormatter time_format = DateTimeFormatter.ofPattern("H:mm");
+        String time_str = time_format.format(time);
+
+        System.out.printf("|| %-12s|| %-5s|| %-15s|| %-8s || %-3s|| %-5s||\n", date_str, time_str , this.getCustomer().getName(), this.getCustomer().getPhone(), this.getCustomer().getPax(), this.getTableID());
+    }
+
 }
 

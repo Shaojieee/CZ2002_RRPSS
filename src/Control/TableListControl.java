@@ -481,7 +481,7 @@ public class TableListControl {
         if (table.isOccupied()){
             System.out.println("|| Status: Occupied                                     ||\n");
             if(table.hasOrder()){
-                OrderControl.printOrder(table.getOrder());
+                table.getOrder().printOrder();
             }else{
                 System.out.println("==========================Order===========================");
                 System.out.println("|          This order does not have any items!           |");

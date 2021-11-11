@@ -10,10 +10,17 @@ import java.util.Scanner;
 public class StaffListControl {
 
     /**
+     * Prints the details of all managers.
+     */
+    public static void printManagers(){
+        StaffList.getStaffList().printManager();
+    }
+
+    /**
      * Prints the details of all staffs.
      */
-    public static void printStaffList(){
-        StaffList.getStaffList().printStaffList();
+    public static void printStaffs(){
+        StaffList.getStaffList().printStaff();
     }
 
     /**
@@ -43,7 +50,7 @@ public class StaffListControl {
                     case 1 -> addStaff();
                     case 2 -> removeStaff(staffID);
                     case 3 -> {
-                        printStaffList();
+                        StaffList.getStaffList().printStaffList();
                         System.out.print("Press any key to go back ");
                         sc.nextLine();
                         System.out.println();
@@ -127,7 +134,7 @@ public class StaffListControl {
                 System.out.println();
             }
         }
-        StaffList.getStaffList().add(new Staff(name, id, gender, role));
+        StaffList.getStaffList().addStaff(new Staff(name, id, gender, role));
         System.out.println(name + "(" + role + ", "+ gender + ")" + " has been added!");
         System.out.println();
     }
@@ -137,7 +144,7 @@ public class StaffListControl {
         int choice;
         while(true) {
             System.out.println("=============Deleting Staff==============");
-            printStaffList();
+            StaffList.getStaffList().printStaffList();
             System.out.print("Select Staff ID to delete or " + "0 to back: ");
             if(!sc.hasNextInt()){
                 System.out.println("Please enter a number!");
@@ -155,7 +162,7 @@ public class StaffListControl {
                 System.out.println("Cannot delete own account!");
 
             } else if (checkStaff(choice)) {
-                StaffList.getStaffList().remove(choice);
+                StaffList.getStaffList().removeStaff(choice);
                 System.out.println("Staff has been deleted!");
             } else {
                 System.out.println("Invalid Staff ID");
@@ -183,7 +190,7 @@ public class StaffListControl {
         return false;
     }
 
-    private static boolean checkStaff(int staffID){
+    public static boolean checkStaff(int staffID){
         return StaffList.getStaffList().getList().containsKey(staffID);
     }
 
@@ -191,7 +198,7 @@ public class StaffListControl {
         FileEditor.writeStaff(StaffList.getStaffList().getList());
     }
 
-    public static Role getAction(int staffID) {
+    public static void printAction(int staffID) {
         Role role;
         if(StaffList.getStaffList().getList().containsKey(staffID)){
             role = StaffList.getStaffList().getRole(staffID);
@@ -235,6 +242,5 @@ public class StaffListControl {
             System.out.println("Invalid Option!");
             System.out.println();
         }
-        return role;
     }
 }

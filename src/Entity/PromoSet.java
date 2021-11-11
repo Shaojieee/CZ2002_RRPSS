@@ -88,5 +88,14 @@ public class PromoSet extends Food implements java.io.Serializable{
         return 0;
     }
 
+    public void printFood(){
+        super.printFood();
+        System.out.printf("|| %-6s%-3s   %-35s||\n", "ID","Qty", "Name");
+        for (HashMap.Entry<Food, Integer> item : this.getItems().entrySet()){
+            System.out.printf("|| %-6s%3s   %-35s||\n", item.getKey().getId(), item.getValue(), item.getKey().getName());
+        }
+        System.out.println("====================================================");
+    }
+
 }
 
