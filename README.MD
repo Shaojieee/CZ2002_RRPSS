@@ -35,7 +35,7 @@ DSAI2
 
 JavaDoc is in the doc directory
 
-##Diagrams
+## Diagrams
 
 Class Diagram can be found in the diagrams directory.
 The sequence diagram for checking reservation when allocating a table and delete reservation can be found in the same directory as well.
