@@ -212,8 +212,24 @@ public class StaffListControl {
      * @param staffID the staff ID to check.
      * @return <code>true</code> if staff ID is in the list, <code>false</code> otherwise.
      */
-    public static boolean checkStaff(int staffID){
+    private static boolean checkStaff(int staffID){
         return StaffList.getStaffList().getList().containsKey(staffID);
+    }
+
+
+    /**
+     * Checks if the staff corresponds to the role.
+     * @param staffID the staff ID to check.
+     * @param role the role to check.
+     * @return <code>true</code> if the staff has input role, <code>false</code> otherwise.
+     */
+    public static boolean checkRole(int staffID, int role){
+        if(role==1){
+            return StaffList.getStaffList().getRole(staffID)==Role.Manager;
+        }else if (role==2){
+            return StaffList.getStaffList().getRole(staffID)==Role.Staff;
+        }
+        return false;
     }
 
     /**

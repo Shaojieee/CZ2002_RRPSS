@@ -8,8 +8,9 @@ public class HomePage {
         Scanner sc = new Scanner(System.in);
 
         int staffID, role;
-        boolean exit=false;
-        while (!exit) {
+        boolean exit;
+        while (true) {
+            exit=false;
             System.out.println("===Select your role==");
             System.out.println("|1. Manager         |");
             System.out.println("|2. Staff           |");
@@ -33,25 +34,29 @@ public class HomePage {
                         System.out.println();
                         continue;
                     }
+                    System.out.print("Select your Staff ID: ");
                     if(!sc.hasNextInt()){
                         System.out.println("Please enter a number!");
                         System.out.println();
                         sc.nextLine();
-
                     }else{
                         staffID = sc.nextInt();
                         sc.nextLine();
-                        if(StaffListControl.checkStaff(staffID)){
-                            StaffListControl.printAction(staffID);
-                            if(!sc.hasNextInt()){
-                                System.out.println("Please enter a number!");
-                                System.out.println();
-                                sc.nextLine();
-                            }else{
-                                int action = sc.nextInt();
-                                sc.nextLine();
-                                exit = getAction(action, role, staffID);
+                        if(StaffListControl.checkRole(staffID, role)){
+
+                            while(!exit){
+                                StaffListControl.printAction(staffID);
+                                if(!sc.hasNextInt()){
+                                    System.out.println("Please enter a number!");
+                                    System.out.println();
+                                    sc.nextLine();
+                                }else{
+                                    int action = sc.nextInt();
+                                    sc.nextLine();
+                                    exit = getAction(action, role, staffID);
+                                }
                             }
+
                         }else{
                             System.out.println("Invalid Option!");
                             System.out.println();
