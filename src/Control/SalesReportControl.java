@@ -90,6 +90,7 @@ public class SalesReportControl {
                         printRevenueByDay(keys, start_str, end_str);
                         System.out.print("Press any key to back ");
                         sc.nextLine();
+                        return;
 
                     }catch(DateTimeParseException e){
                         System.out.println("Invalid Format!");
@@ -115,6 +116,7 @@ public class SalesReportControl {
                         printRevenueByMonth(keys, start_str, end_str);
                         System.out.print("Press any key to back ");
                         sc.nextLine();
+                        return;
 
                     }catch(DateTimeParseException e){
                         System.out.println("Invalid Format!");

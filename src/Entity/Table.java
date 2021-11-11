@@ -1,10 +1,6 @@
 package Entity;
 
-import java.time.Duration;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.LocalTime;
-import java.time.format.DateTimeFormatter;
 
 /**
  * This class contains the information of a particular table.<br>
@@ -108,43 +104,39 @@ public class Table implements java.io.Serializable{
     }
 
     /**
-     * Sets the status of availability for this table.
-     * @param occupied the status of availability to be set to this table.
+     * Sets this table as occupied.
+     * @param customer the customer assigned to this table.
+     * @param pax the number of pax assigned to this table.
      */
-    public void setOccupied(boolean occupied) {
-        this.occupied = occupied;
-    }
-
-    /**
-     * Sets the reservation status for this table.
-     * @param reserved the status of reservation to be set to this table.
-     */
-    public void setReserved(boolean reserved) {
-        this.reserved = reserved;
-    }
-
-    /**
-     * Sets the customer for this table.
-     * @param customer the customer to be assigned to this table.
-     */
-    public void setCustomer(Customer customer) {
+    public void setOccupied(Customer customer, int pax) {
+        this.occupied = true;
+        this.reserved = false;
         this.customer = customer;
-    }
-
-    /**
-     * Sets the Pax for this table.
-     * @param pax the pax to be set to this table.
-     */
-    public void setPax(int pax) {
         this.pax = pax;
     }
 
     /**
-     * Sets the reservation timing for this table.
-     * @param reservedTime the timing of reservation to be set to this table.
+     * Sets this table as available.
      */
-    public void setReservedTime(LocalDateTime reservedTime) {
-        this.reservedTime = reservedTime;
+    public void setAvailable(){
+        this.occupied = false;
+        this.reserved = false;
+        this.customer = null;
+        this.pax = 0;
+        this.order = null;
+    }
+
+    /**
+     * Sets this table as reserved.
+     * @param customer the customer reserving this table.
+     * @param pax the number of pax in the reservation.
+     * @param time the time of the reservation.
+     */
+    public void setReserved(Customer customer, int pax, LocalDateTime time) {
+        this.reserved = true;
+        this.customer = customer;
+        this.pax = pax;
+        this.reservedTime = time;
     }
 
     /**

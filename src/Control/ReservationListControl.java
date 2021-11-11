@@ -355,7 +355,7 @@ public class ReservationListControl {
                     ReservationList.getReservationList().removeFromReservations(reservation);
                     long minutes = LocalDateTime.now().until(reservation.getTime(), ChronoUnit.MINUTES);
                     if(minutes<30){
-                        TableListControl.unreserve(TableListControl.getTable(reservation.getTableID()));
+                        TableListControl.available(TableListControl.getTable(reservation.getTableID()));
                     }
                     saveReservationList();
                     System.out.println("Reservation for " + name + " has been deleted!");
@@ -384,7 +384,7 @@ public class ReservationListControl {
                 long time_diff = reservationTime.until(LocalDateTime.now(), ChronoUnit.MINUTES);
                 /* Customer late by 15 mins */
                 if (time_diff>15){
-                    TableListControl.unreserve(table);
+                    TableListControl.available(table);
                     ReservationList.getReservationList().removeFromReservations(reservation);
 
                     /*Upcoming Reservation*/

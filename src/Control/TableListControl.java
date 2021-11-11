@@ -513,27 +513,12 @@ public class TableListControl {
     }
 
     /**
-     * Unreserved a table.
-     * @param table the table to unreserve.
-     */
-    public static void unreserve(Table table){
-        table.setReserved(false);
-        table.setOccupied(false);
-        table.setCustomer(null);
-        table.setPax(0);
-        table.setReservedTime(null);
-    }
-
-    /**
      * Reserves a table for the customer.
      * @param table the table to reserve.
      * @param reservation the details of the reservation.
      */
     public static void reserve(Table table, Reservation reservation) {
-        table.setReserved(true);
-        table.setCustomer(reservation.getCustomer());
-        table.setPax(reservation.getCustomer().getPax());
-        table.setReservedTime(reservation.getTime());
+        table.setReserved(reservation.getCustomer(), reservation.getCustomer().getPax(), reservation.getTime());
     }
 
     /**
@@ -542,10 +527,7 @@ public class TableListControl {
      * @param customer the customer that has been allocated to this table.
      */
     public static void assign(Table table, Customer customer) {
-        table.setOccupied(true);
-        table.setReserved(false);
-        table.setCustomer(customer);
-        table.setPax(customer.getPax());
+        table.setOccupied(customer, customer.getPax());
     }
 
     /**
@@ -553,11 +535,7 @@ public class TableListControl {
      * @param table the table to set as available.
      */
     public static void available(Table table) {
-        table.setOccupied(false);
-        table.setReserved(false);
-        table.setCustomer(null);
-        table.setOrder(null);
-        table.setPax(0);
+        table.setAvailable();
     }
 
     /**

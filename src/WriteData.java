@@ -150,25 +150,25 @@ public class WriteData {
         HashMap<Food, Double[]> day = new HashMap<Food , Double[]>();
 
 
-        day.put(chickenAlfredo, new Double[] {25.0, Math.round(25.0* chickenAlfredo.getPrice()/100.0)*100.0});
-        day.put(lavaCake, new Double[] {15.0, Math.round(15.0* lavaCake.getPrice()/100.0)*100.0});
+        day.put(chickenAlfredo, new Double[] {25.0, Math.round(25.0* chickenAlfredo.getPrice()*100.0)/100.0});
+        day.put(lavaCake, new Double[] {15.0, Math.round(15.0* lavaCake.getPrice()*100.0)/100.0});
         salesReport.put("10 Oct 2021", day);
 
         day = new HashMap<>();
-        day.put(gelatoMisto, new Double[] {20.0, Math.round(20.0* gelatoMisto.getPrice()/100.0)*100.0});
-        day.put(tigerPint, new Double[] {15.0, Math.round(15.0* tigerPint.getPrice()/100.0)*100.0});
+        day.put(gelatoMisto, new Double[] {20.0, Math.round(20.0* gelatoMisto.getPrice()*100.0)/100.0});
+        day.put(tigerPint, new Double[] {15.0, Math.round(15.0* tigerPint.getPrice()*100.0)/100.0});
         day.put(set, new Double[] {5.0, Math.round(5.0*set.getPrice()*100.0)/100.0});
         salesReport.put("20 Oct 2021", day);
 
         day = new HashMap<>();
-        day.put(lobsterPie, new Double[] {10.0, Math.round(10.0* lobsterPie.getPrice()/100.0)*100.0});
-        day.put(primeRib, new Double[] {15.0, Math.round(15.0* primeRib.getPrice()/100.0)*100.0});
+        day.put(lobsterPie, new Double[] {10.0, Math.round(10.0* lobsterPie.getPrice()*100.0)/100.0});
+        day.put(primeRib, new Double[] {15.0, Math.round(15.0* primeRib.getPrice()*100.0)/100.0});
         day.put(tiramisuCake, new Double[] {20.0, Math.round(20.0*tiramisuCake.getPrice()*100.0)/100.0});
         salesReport.put("30 Sep 2021", day);
 
         day = new HashMap<>();
-        day.put(cokeFloat, new Double[] {10.0, Math.round(10.0* cokeFloat.getPrice()/100.0)*100.0});
-        day.put(turkeyClub, new Double[] {12.0, Math.round(12.0* turkeyClub.getPrice()/100.0)*100.0});
+        day.put(cokeFloat, new Double[] {10.0, Math.round(10.0* cokeFloat.getPrice()*100.0)/100.0});
+        day.put(turkeyClub, new Double[] {12.0, Math.round(12.0* turkeyClub.getPrice()*100.0)/100.0});
         day.put(shrimpScampi, new Double[] {18.0, Math.round(18.0*shrimpScampi.getPrice()*100.0)/100.0});
         salesReport.put("01 Nov 2021", day);
 
