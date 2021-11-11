@@ -42,24 +42,20 @@ public class TableListControl {
                 choice = sc.nextInt();
                 sc.nextLine();
                 switch (choice) {
-                    case 1:
-                        TableListControl.addTable();
-                    case 2:
-                        TableListControl.deleteTable();
-
-                    case 3:
+                    case 1-> TableListControl.addTable();
+                    case 2-> TableListControl.deleteTable();
+                    case 3->{
                         TableListControl.printAllTables();
                         System.out.print("Press any key to go back ");
                         sc.nextLine();
                         System.out.println();
-                        break;
-
-                    case 0:
-                        break;
-                    default:
+                    }
+                    case 0->{}
+                    default->{
                         System.out.println("Invalid Option!");
                         System.out.println();
-                        break;
+                    }
+
                 }
             }
         }
