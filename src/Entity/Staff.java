@@ -31,6 +31,7 @@ public class Staff implements java.io.Serializable{
      * @param name the name of this staff.
      * @param ID the ID of this staff.
      * @param gender the gender of this staff.
+     * @param role the role of this staff.
      */
     public Staff(String name, int ID, String gender, Role role){
         this.name = name;
