@@ -60,7 +60,7 @@ public class MemberList {
      * @param phone the phone number to remove.
      */
     public void remove(int phone){
-        list.remove(phone);
+        list.remove((Object) phone);
     }
 
 }
