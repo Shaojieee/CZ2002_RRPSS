@@ -72,7 +72,13 @@ public class Staff implements java.io.Serializable{
      * Prints the details of this staff.
      */
     public void printDetails(){
-        System.out.printf("|| %-7s|| %-3s|| %-20s|| %2s%s%3s ||\n", "Staff", this.ID, this.name, "",this.gender, "");
+        String role;
+        if(this.role==Role.Manager){
+            role = "Manager";
+        }else{
+            role = "Staff";
+        }
+        System.out.printf("|| %-7s|| %-3s|| %-20s|| %2s%s%3s ||\n", role, this.ID, this.name, "",this.gender, "");
     }
 }
 
