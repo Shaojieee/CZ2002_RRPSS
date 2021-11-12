@@ -116,6 +116,7 @@ public class MenuControl {
                                                         String old = food.getName();
                                                         System.out.print("Enter new name: ");
                                                         String name = sc.nextLine();
+                                                        name = name.trim();
                                                         if (getFood(name)!=null){
                                                             System.out.println("Duplicate name!");
                                                             System.out.println();
@@ -191,8 +192,6 @@ public class MenuControl {
                 }
             }
         }
-
-
     }
 
     /**
@@ -355,6 +354,7 @@ public class MenuControl {
                         String old = newSet.getName();
                         System.out.print("Enter new name: ");
                         String name = sc.nextLine();
+                        name = name.trim();
                         if (getFood(name)!=null){
                             System.out.println("Duplicate name!");
                             System.out.println();
@@ -404,6 +404,7 @@ public class MenuControl {
         Scanner sc = new Scanner(System.in);
         System.out.print("Enter name of " + type+ ": ");
         String name = sc.nextLine();
+        name = name.trim();
         if (MenuControl.getFood(name, type)!=null){
             System.out.println(type + " already exist");
             System.out.println();

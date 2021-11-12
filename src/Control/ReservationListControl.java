@@ -106,7 +106,7 @@ public class ReservationListControl {
 
         System.out.print("Enter Customer Name: ");
         String name = sc.nextLine();
-
+        name = name.trim();
         int phone;
         while(true){
             try{
@@ -272,11 +272,10 @@ public class ReservationListControl {
 
         System.out.print("Enter Customer Name: ");
         String name = sc.nextLine();
-
+        name = name.trim();
         int phone;
         while(true){
             try{
-
                 System.out.print("Enter Customer Contact Number: ");
                 if(!sc.hasNextInt()){
                     System.out.println("Invalid phone number!");
@@ -323,7 +322,7 @@ public class ReservationListControl {
                 }
             }catch(DateTimeException e){
                 System.out.println("Invalid reservation date!");
-                System.out.print("Enter Reservation Date (hh-mm): ");
+                System.out.print("Enter Reservation Date (dd/mm/yyyy): ");
             }
         }
 
@@ -359,7 +358,7 @@ public class ReservationListControl {
                 if(reservation.getCustomer().equals(name,phone) && reservation.getTime().isEqual(date_time)){
                     ReservationList.getReservationList().removeFromReservations(reservation);
                     long minutes = LocalDateTime.now().until(reservation.getTime(), ChronoUnit.MINUTES);
-                    if(minutes<30){
+                    if(minutes<30 && reservation.getTableID()!=0){
                         TableListControl.available(TableListControl.getTable(reservation.getTableID()));
                     }
                     saveReservationList();
@@ -401,6 +400,8 @@ public class ReservationListControl {
                         if(table!=null){
                             TableListControl.reserve(table,reservation);
                             reservation.setTableID(table.getTableId());
+                        }else{
+                            reservation.setTableID(0);
                         }
                     }else{
                         TableListControl.reserve(table,reservation);

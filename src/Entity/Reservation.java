@@ -82,8 +82,13 @@ public class Reservation implements Serializable {
 
         DateTimeFormatter time_format = DateTimeFormatter.ofPattern("H:mm");
         String time_str = time_format.format(time);
-
-        System.out.printf("|| %-12s|| %-5s|| %-15s|| %-8s || %-3s|| %-5s||\n", date_str, time_str , this.getCustomer().getName(), this.getCustomer().getPhone(), this.getCustomer().getPax(), this.getTableID());
+        String ID;
+        if(tableID==0){
+            ID = "-";
+        }else{
+            ID = String.valueOf(tableID);
+        }
+        System.out.printf("|| %-12s|| %-5s|| %-15s|| %-8s || %-3s|| %-5s||\n", date_str, time_str , this.getCustomer().getName(), this.getCustomer().getPhone(), this.getCustomer().getPax(), ID);
     }
 
 }

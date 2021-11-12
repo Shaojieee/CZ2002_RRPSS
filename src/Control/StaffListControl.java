@@ -80,6 +80,7 @@ public class StaffListControl {
         int choice;
         System.out.print("Enter Staff Name: ");
         String name = sc.nextLine();
+        name = name.trim();
         if (checkStaff(name)){
             System.out.println("Staff already exist");
             return;
