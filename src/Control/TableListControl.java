@@ -481,7 +481,7 @@ public class TableListControl {
         System.out.println("======================Table Details=======================");
         System.out.printf("|| Table ID: %-43s||\n", table.getTableId() );
         if (table.isOccupied()){
-            System.out.println("|| Status: Occupied                                     ||\n");
+            System.out.println("|| Status: Occupied                                     ||");
             if(table.hasOrder()){
                 table.getOrder().printOrder();
             }else{

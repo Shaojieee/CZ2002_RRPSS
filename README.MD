@@ -1,8 +1,8 @@
 # CZ2002 - Restaurant Reservation and Point of Sale System (RRPSS)
 
-##About the Project
+## About the Project
 RRPSS is a terminal-based application to act as a Point of Sales system for a restaurant.
-This project wsa done for CZ2002 Object-Oriented Design and Programming AY2021-2022 Sem 1
+This project was done for CZ2002 Object-Oriented Design and Programming AY2021-2022 Sem 1.
 
 ## Usage
 
