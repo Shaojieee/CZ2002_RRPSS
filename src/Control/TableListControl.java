@@ -129,6 +129,7 @@ public class TableListControl {
                 TableList.getTableList().removeTable(table.getTableId());
                 saveTableList();
                 ReservationListControl.deleteTable(table.getTableId());
+                System.out.println("Table " + table.getTableId() + " has been removed!");
             }else{
                 System.out.println("Unable to delete table as there will be unallocated reservations!");
             }
