@@ -37,6 +37,11 @@ public class ReservationListControl {
             } else {
                 pax = sc.nextInt();
                 sc.nextLine();
+                if(pax<=0){
+                    System.out.println("Invalid pax!");
+                    System.out.println();
+                    return;
+                }
                 break;
             }
         }
@@ -63,7 +68,7 @@ public class ReservationListControl {
                 }
             }catch(DateTimeException e){
                 System.out.println("Invalid reservation date!");
-                System.out.print("Enter Reservation Date (hh-mm): ");
+                System.out.print("Enter Reservation Date (dd/mm/yyyy): ");
             }
         }
 

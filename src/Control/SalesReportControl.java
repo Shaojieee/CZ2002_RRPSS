@@ -87,7 +87,7 @@ public class SalesReportControl {
                         end_str = formatter.format(end);
                         ArrayList<String> keys = sortCalendar(start_str, end_str);
 
-                        printRevenueByDay(keys, start_str, end_str);
+                        printRevenueByMonth(keys, start_str, end_str);
                         System.out.print("Press any key to back ");
                         sc.nextLine();
                         return;
@@ -113,7 +113,7 @@ public class SalesReportControl {
                         end_str = formatter.format(end);
                         ArrayList<String> keys = sortCalendar(start_str, end_str);
 
-                        printRevenueByMonth(keys, start_str, end_str);
+                        printRevenueByDay(keys, start_str, end_str);
                         System.out.print("Press any key to back ");
                         sc.nextLine();
                         return;

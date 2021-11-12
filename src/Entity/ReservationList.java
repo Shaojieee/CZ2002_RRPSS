@@ -49,7 +49,7 @@ public class ReservationList {
      * @param reservation the reservation to remove.
      */
     public void removeFromReservations(Reservation reservation) {
-        list.remove(reservation.getTableID(), reservation);
+        list.get(reservation.getTableID()).remove(reservation);
     }
 
     /**
@@ -92,7 +92,7 @@ public class ReservationList {
 
     /**
      * Gets the list of reservations tagged to the specified table ID.
-     * @param tableID the tbale ID.
+     * @param tableID the table ID.
      * @return the ArrayList of reservations.
      */
     public ArrayList<Reservation> getReservations(int tableID) {

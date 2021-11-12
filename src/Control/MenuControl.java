@@ -208,7 +208,8 @@ public class MenuControl {
             System.out.println("|1. Add Food             |" );
             System.out.println("|2. Remove Food          |" );
             System.out.println("|3. Set Price            |" );
-            System.out.println("|4. View Set             |" );
+            System.out.println("|4. Change Name          |" );
+            System.out.println("|5. View Set             |" );
             System.out.println("|0. Back                 |" );
             System.out.println("==========================");
             System.out.print("Please enter your choice: ");
@@ -351,6 +352,19 @@ public class MenuControl {
                         System.out.println();
                     }
                     case 4 -> {
+                        String old = newSet.getName();
+                        System.out.print("Enter new name: ");
+                        String name = sc.nextLine();
+                        if (getFood(name)!=null){
+                            System.out.println("Duplicate name!");
+                            System.out.println();
+                            break;
+                        }
+                        newSet.setName(name);
+                        System.out.println(old + " has been changed to "+ name + "!");
+                        System.out.println();
+                    }
+                    case 5 -> {
                         System.out.println("====================================================");
                         newSet.printFood();
                         System.out.print("Press any key to back ");

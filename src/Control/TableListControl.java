@@ -234,7 +234,7 @@ public class TableListControl {
         Scanner sc = new Scanner(System.in);
         int choice;
         Table table;
-        boolean member;
+        boolean member = false;
 
         while(true){
             System.out.println("===================Clear Table====================");
@@ -262,63 +262,64 @@ public class TableListControl {
         }
 
         if (table.getCustomer().isMember()){
-            member = table.getCustomer().isMember();
+            member = true;
         }else{
             while(true){
-                System.out.println("==Is customer a member?==");
-                System.out.println("|1. Yes                 |");
-                System.out.println("|2. No                  |");
-                System.out.println("=========================");
-                System.out.print("Please enter your choice: ");
-                if(!sc.hasNextInt()){
-                    System.out.println("Please enter a number!");
-                    System.out.println();
-                    sc.nextLine();
-                    continue;
-                }else {
-                    choice = sc.nextInt();
-                    sc.nextLine();
-                }
-                if(choice==1){
-                    int phone;
-                    while(true){
-                        try{
-                            System.out.print("Enter Customer contact number: ");
-                            if(!sc.hasNextInt()){
-                                System.out.println("Please enter a number!");
-                                System.out.println();
-                                sc.nextLine();
-                            }else {
-                                phone = sc.nextInt();
-                                sc.nextLine();
-                                if (phone < 100000000 && phone > 79999999) {
-                                    break;
-                                } else {
-                                    System.out.println("Invalid phone number!");
+                if(table.getOrder()!=null){
+                    System.out.println("==Is customer a member?==");
+                    System.out.println("|1. Yes                 |");
+                    System.out.println("|2. No                  |");
+                    System.out.println("=========================");
+                    System.out.print("Please enter your choice: ");
+                    if (!sc.hasNextInt()) {
+                        System.out.println("Please enter a number!");
+                        System.out.println();
+                        sc.nextLine();
+                        continue;
+                    } else {
+                        choice = sc.nextInt();
+                        sc.nextLine();
+                    }
+                    if (choice == 1) {
+                        int phone;
+                        while (true) {
+                            try {
+                                System.out.print("Enter Customer contact number: ");
+                                if (!sc.hasNextInt()) {
+                                    System.out.println("Please enter a number!");
                                     System.out.println();
+                                    sc.nextLine();
+                                } else {
+                                    phone = sc.nextInt();
+                                    sc.nextLine();
+                                    if (phone < 100000000 && phone > 79999999) {
+                                        break;
+                                    } else {
+                                        System.out.println("Invalid phone number!");
+                                        System.out.println();
+                                    }
                                 }
+                            } catch (InputMismatchException e) {
+                                System.out.println("Invalid phone number!");
+                                System.out.println();
+                                sc = new Scanner(System.in);
                             }
                         }
-                        catch(InputMismatchException e){
-                            System.out.println("Invalid phone number!");
-                            System.out.println();
-                            sc = new Scanner(System.in);
+                        member = MemberListControl.checkMember(phone);
+                        if (member) {
+                            System.out.println("Customer is a member!");
+                            break;
+                        } else {
+                            System.out.println("Customer is not a member!");
                         }
-                    }
-                    member = MemberListControl.checkMember(phone);
-                    if(member){
-                        System.out.println("Customer is a member!");
+                        System.out.println();
+                    } else if (choice == 2) {
+                        member = false;
                         break;
-                    }else{
-                        System.out.println("Customer is not a member!");
+                    } else {
+                        System.out.println("Invalid Option!");
+                        System.out.println();
                     }
-                    System.out.println();
-                }else if(choice==2){
-                    member = false;
-                    break;
-                } else{
-                    System.out.println("Invalid Option!");
-                    System.out.println();
                 }
 
             }
@@ -369,7 +370,7 @@ public class TableListControl {
      */
     public static boolean allEmpty() {
         for(Table table : TableList.getTableList().getList().values()){
-            if(table.isOccupied()){
+            if(table.isOccupied() || table.isReserved()){
                 return false;
             }
         }

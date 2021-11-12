@@ -52,7 +52,7 @@ public class MemberList {
      * @param phone the phone number to add.
      */
     public void add(int phone){
-        memberList.add(phone);
+        list.add(phone);
     }
 
     /**
@@ -60,7 +60,7 @@ public class MemberList {
      * @param phone the phone number to remove.
      */
     public void remove(int phone){
-        memberList.remove(phone);
+        list.remove(phone);
     }
 
 }
