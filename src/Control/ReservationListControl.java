@@ -358,7 +358,7 @@ public class ReservationListControl {
                 if(reservation.getCustomer().equals(name,phone) && reservation.getTime().isEqual(date_time)){
                     ReservationList.getReservationList().removeFromReservations(reservation);
                     long minutes = LocalDateTime.now().until(reservation.getTime(), ChronoUnit.MINUTES);
-                    if(minutes<30 && reservation.getTableID()!=0){
+                    if(minutes<30 && TableListControl.getTable(reservation.getTableID()).isReserved()){
                         TableListControl.available(TableListControl.getTable(reservation.getTableID()));
                     }
                     saveReservationList();
@@ -400,8 +400,6 @@ public class ReservationListControl {
                         if(table!=null){
                             TableListControl.reserve(table,reservation);
                             reservation.setTableID(table.getTableId());
-                        }else{
-                            reservation.setTableID(0);
                         }
                     }else{
                         TableListControl.reserve(table,reservation);
