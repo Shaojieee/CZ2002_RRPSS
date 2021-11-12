@@ -6,17 +6,17 @@ This project was done for CZ2002 Object-Oriented Design and Programming AY2021-2
 
 ## Usage
 
-### Windows
-
 Run the jar file from the command prompt with:
+
+If you want to use to application: (HomePage class)
 
 `$ java -jar RestaurantApp.jar`
 
-If you want to reset the data back to the default data
+If you want to reset the data back to the default data: (WriteData class)
 
 `$ java -jar ReWriteData.jar`
 
-### Data
+## Data
 
 Data is generated under the WriteData class. 
 There are a total of 34 menu items, 3 staffs, 1 manager, 5 tables and 4 members.
@@ -24,11 +24,11 @@ For the sales report, data is added for 30/09/2021, 10/10/2021, 20/10/2021 and 0
 
 ## Authors
 
-DSAI2
+DSAI2 Group 2
 - Darryl Chia
 - Imax Ooi
 - Kee Kai Teng
-- Sa Zi Heng
+- Sa ZiHeng
 - Zhong Shaojie
 
 ## Documentation
