@@ -18,7 +18,7 @@ public class Customer implements java.io.Serializable{
     /**
      * Number of people with this customer.
      */
-    private int pax;
+    private final int pax;
     /**
      * Membership status of this customer.
      */

@@ -174,7 +174,6 @@ public class OrderControl {
                 Food food = MenuControl.getFood(choice, action);
                 if (food == null) {
                     System.out.println("Invalid Option!");
-                    System.out.println();
                 } else {
                     while(true) {
                         System.out.print("Enter Quantity: ");
@@ -195,11 +194,8 @@ public class OrderControl {
                     }
                     order.addToOrder(food, choice);
                     System.out.println(choice + " " + food.getName() + " has been added!");
-                    System.out.println();
-                    System.out.println("===================Creating Order===================");
-                    MenuControl.printCurrentMenu(action);
-                    System.out.print("Select Food ID to add or " + MenuControl.BACK_OPTION + " to go back: ");
                 }
+                System.out.println();
             }
 
         }
@@ -248,7 +244,8 @@ public class OrderControl {
                         } else {
                             choice = sc.nextInt();
                             sc.nextLine();
-                            if (!(order.getFoodQty(food)<choice)) {
+                            int qty = order.getFoodQty(food);
+                            if (qty<choice || choice<=0) {
                                 System.out.println("Invalid Quantity!");
                                 System.out.println();
                             }else{

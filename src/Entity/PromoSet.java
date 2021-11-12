@@ -88,7 +88,7 @@ public class PromoSet extends Food implements java.io.Serializable{
     }
 
     /**
-     * Gets the quantity of the speicifed food item in this promotion set.
+     * Gets the quantity of the specified food item in this promotion set.
      * @param food the food item to find.
      * @return the quantity in this promotion set.
      */

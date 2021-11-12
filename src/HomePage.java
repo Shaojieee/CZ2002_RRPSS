@@ -1,5 +1,4 @@
 import Control.*;
-import Entity.Role;
 
 import java.util.Scanner;
 
@@ -32,7 +31,7 @@ public class HomePage {
                     }else{
                         System.out.println("Invalid Option!");
                         System.out.println();
-                        continue;
+                        break;
                     }
                     System.out.print("Select your Staff ID: ");
                     if(!sc.hasNextInt()){
@@ -43,7 +42,6 @@ public class HomePage {
                         staffID = sc.nextInt();
                         sc.nextLine();
                         if(StaffListControl.checkRole(staffID, role)){
-
                             while(!exit){
                                 StaffListControl.printAction(staffID);
                                 if(!sc.hasNextInt()){
@@ -56,16 +54,12 @@ public class HomePage {
                                     exit = getAction(action, role, staffID);
                                 }
                             }
-
                         }else{
                             System.out.println("Invalid Option!");
                             System.out.println();
                         }
                     }
                 }
-
-
-
             }
         }
     }

@@ -1,10 +1,8 @@
 package Entity;
 
 import Control.FileEditor;
-
-import java.time.format.DateTimeFormatter;
 import java.util.*;
-import java.time.*;
+
 
 /**
  * This class contains the information of the sales report. <br>
