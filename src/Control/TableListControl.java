@@ -321,6 +321,8 @@ public class TableListControl {
                         System.out.println("Invalid Option!");
                         System.out.println();
                     }
+                }else{
+                    break;
                 }
 
             }
@@ -504,7 +506,7 @@ public class TableListControl {
             System.out.printf("|| Date: %-11s Time: %-5s%-24s||\n", date_str, time_str, "");
             System.out.printf("|| Name: %-15s Contact: %-10s Pax: %-2s%4s||\n",table.getCustomer().getName(), table.getCustomer().getPhone(), table.getPax(), "");
         }else{
-            System.out.printf("|| Status: %-20s Maximum Pax: %-13s||\n", "Available", table.getMaxPax());
+            System.out.printf("|| Status: %-20s Maximum Pax: %-11s||\n", "Available", table.getMaxPax());
 
         }
         System.out.println("==========================================================");
