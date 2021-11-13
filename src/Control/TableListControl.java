@@ -160,7 +160,7 @@ public class TableListControl {
             System.out.println("Sorry kitchen has closed!");
             System.out.println();
             return;
-        }else if(LocalTime.now().isBefore(LocalTime.of(9,00))){
+        }else if(LocalTime.now().isBefore(LocalTime.of(9, 0))){
             System.out.println("Restaurant has not open");
             System.out.println();
             return;
