@@ -160,6 +160,10 @@ public class TableListControl {
             System.out.println("Sorry kitchen has closed!");
             System.out.println();
             return;
+        }else if(LocalTime.now().isBefore(LocalTime.of(9,00))){
+            System.out.println("Restaurant has not open");
+            System.out.println();
+            return;
         }
         while(true){
             System.out.println("=Does the customer have a reservation?=");
