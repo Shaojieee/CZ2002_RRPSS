@@ -8,17 +8,17 @@ This project was done for CZ2002 Object-Oriented Design and Programming AY2021-2
 
 1. Download or clone the project:
 
-`$ git clone https://github.com/Shaojieee/CZ2002_RRPSS.git`
+&emsp;&emsp; `$ git clone https://github.com/Shaojieee/CZ2002_RRPSS.git`
 
 2. Run the jar file from the command prompt with:
 
-If you want to use to application: (HomePage class)
+&emsp;&emsp; If you want to use to application: (HomePage class)
 
-`$ java -jar RestaurantApp.jar`
+&emsp;&emsp; `$ java -jar RestaurantApp.jar`
 
-If you want to reset the data back to the default data: (WriteData class)
+&emsp;&emsp; If you want to reset the data back to the default data: (WriteData class)
 
-`$ java -jar ReWriteData.jar`
+&emsp;&emsp; `$ java -jar ReWriteData.jar`
 
 ## Data
 
