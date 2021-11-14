@@ -337,13 +337,8 @@ public class ReservationListControl {
                     System.out.println("Restaurant closes at 21-00!");
                 }else if(time.isBefore(LocalTime.of(9,0))){
                     System.out.println("Restaurant opens at 09-00!");
-                } else if(today && time.isAfter(LocalTime.now())) {
-                    break;
-                }else if(!today){
-                    break;
                 }else{
-                    System.out.println("Invalid reservation time!");
-                    System.out.print("Enter Reservation Time (hh-mm): ");
+                    break;
                 }
             }catch(DateTimeException e){
                 System.out.println("Invalid reservation time!");
