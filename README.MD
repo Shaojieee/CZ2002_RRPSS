@@ -6,7 +6,11 @@ This project was done for CZ2002 Object-Oriented Design and Programming AY2021-2
 
 ## Usage
 
-Run the jar file from the command prompt with:
+1. Download or clone the project:
+
+`$ git clone https://github.com/Shaojieee/CZ2002_RRPSS.git`
+
+2. Run the jar file from the command prompt with:
 
 If you want to use to application: (HomePage class)
 
